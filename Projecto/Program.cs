@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Projecto
+namespace pew_pew
 {
     /// <summary>
     /// The main class.
