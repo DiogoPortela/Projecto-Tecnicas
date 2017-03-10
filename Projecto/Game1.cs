@@ -11,6 +11,7 @@ namespace Projecto
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        private Texture2D player;
 
         public Game1()
         {
@@ -39,6 +40,7 @@ namespace Projecto
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            player = Content.Load<Texture2D>("Drude.png");
 
             // TODO: use this.Content to load your game content here
         }

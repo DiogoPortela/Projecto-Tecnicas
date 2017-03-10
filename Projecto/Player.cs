@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace pew_pew
+namespace Projecto
 {
     public class Player
     {
