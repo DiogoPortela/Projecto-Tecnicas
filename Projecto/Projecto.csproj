@@ -38,12 +38,13 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Boss.cs" />
+    <Compile Include="Characters\Boss.cs" />
     <Compile Include="CombatMod.cs" />
-    <Compile Include="Enemy.cs" />
+    <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Game1.cs" />
-    <Compile Include="ObjectP.cs" />
-    <Compile Include="Player.cs" />
+    <Compile Include="Graphics\Map.cs" />
+    <Compile Include="Graphics\Tile.cs" />
+    <Compile Include="Characters\Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,10 +66,10 @@
     <Content Include="Content\Drude.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\tile_DarkGreen.png">
+    <Content Include="Content\Tile1.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\tile_LightGreen.png">
+    <Content Include="Content\Tile2.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\tile_TreeBranch.png">

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Content;
 
 namespace Projecto
 {
@@ -9,14 +10,23 @@ namespace Projecto
     /// </summary>
     public class Game1 : Game
     {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        private Texture2D player;
+        static public GraphicsDeviceManager graphics;
+        static public SpriteBatch spriteBatch;
+        static public ContentManager content;
+
+
+
+        #region ZONA TESTE
+        //private Texture2D player;
+        Map map;
+        #endregion
+
 
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            content = Content;
         }
 
         /// <summary>
@@ -27,7 +37,8 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+
+            map = new Map();
 
             base.Initialize();
         }
@@ -40,9 +51,20 @@ namespace Projecto
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            player = Content.Load<Texture2D>("Drude.png");
+            //player = Content.Load<Texture2D>("Drude.png");
 
-            // TODO: use this.Content to load your game content here
+            map.Generate(new int[,]
+                {
+
+                    {0,0,0,1},
+                    {0,0,1,2},
+                    {0,1,2,2},
+                    {1,2,2,2}
+
+                }, 32);
+                
+                
+
         }
 
         /// <summary>
@@ -75,9 +97,13 @@ namespace Projecto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.HotPink);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            map.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }
