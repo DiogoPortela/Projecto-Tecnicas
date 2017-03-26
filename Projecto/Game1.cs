@@ -25,6 +25,8 @@ namespace Projecto
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
+            graphics.PreferredBackBufferWidth = 800;
+            graphics.PreferredBackBufferHeight = 600;
             Content.RootDirectory = "Content";
             content = Content;
         }
@@ -58,7 +60,18 @@ namespace Projecto
                     {1,0,0,1,1},
                     {0,0,1,2,1},
                     {0,1,2,2,0},
-                    {1,2,2,2,1}
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {1,2,2,2,1},
+                    {0,2,2,0,1},
+                    {1,0,0,0,1}
 
                 }, 5);
         }

@@ -44,7 +44,7 @@ namespace Projecto
                     int number = map[y, x];
 
                     if (number > 0)
-                        listOfTiles.Add(new Tile(number, Camera.CalculatePixelRectangle(new Vector2(x * size, (y + 1) * size), new Vector2(size, size)), new Vector2(x + 1, y + 1)));
+                        listOfTiles.Add(new Tile(number, new Vector2(x, y + 1), size));
                     //width = (x + 1) * size;
                     //height = (y + 1) * size;
                 }
