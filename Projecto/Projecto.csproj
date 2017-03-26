@@ -39,10 +39,11 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\Boss.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="GameObject.cs" />
     <Compile Include="CombatMod.cs" />
     <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Game1.cs" />
+    <Compile Include="Graphics\Camera.cs" />
     <Compile Include="Graphics\Map.cs" />
     <Compile Include="Graphics\Tile.cs" />
     <Compile Include="Characters\Player.cs" />

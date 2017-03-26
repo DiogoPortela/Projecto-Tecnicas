@@ -10,13 +10,13 @@ namespace Projecto
 {
     class Map
     {
-        private List<CollisionTiles> collisionTiles;
+        private List<Tile> listOfTiles;
         private int height;
         private int width;
 
-        public List<CollisionTiles> CollisionTiles
+        public List<Tile> ListOfTiles
         {
-            get { return collisionTiles; }
+            get { return listOfTiles; }
         }
         public int Height
         {
@@ -27,11 +27,14 @@ namespace Projecto
             get { return width; }
         }
 
+        //------------->CONSTRUCTORS<-------------//
 
         public Map()
         {
-            collisionTiles = new List<CollisionTiles>();
+            listOfTiles = new List<Tile>();
         }
+
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void Generate(int[,] map, int size)
         {
@@ -41,16 +44,15 @@ namespace Projecto
                     int number = map[y, x];
 
                     if (number > 0)
-                        CollisionTiles.Add(new CollisionTiles(number, new Rectangle(x * size, y * size, size, size)));
-                    width = (x + 1) * size;
-                    height = (y + 1) * size;
+                        listOfTiles.Add(new Tile(number, Camera.CalculatePixelRectangle(new Vector2(x * size, (y + 1) * size), new Vector2(size, size)), new Vector2(x + 1, y + 1)));
+                    //width = (x + 1) * size;
+                    //height = (y + 1) * size;
                 }
         }
         public void Draw(SpriteBatch spriteBatch)
         {
-            foreach (CollisionTiles tile in collisionTiles)
+            foreach (Tile tile in ListOfTiles)
                 tile.Draw(spriteBatch);
-
         }
     }
 }

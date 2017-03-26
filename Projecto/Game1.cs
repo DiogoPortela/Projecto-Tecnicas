@@ -52,19 +52,15 @@ namespace Projecto
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //player = Content.Load<Texture2D>("Drude.png");
-
+            Camera.SetCameraWindow(new Vector2(0, 0), 100f);
             map.Generate(new int[,]
                 {
+                    {1,0,0,1,1},
+                    {0,0,1,2,1},
+                    {0,1,2,2,0},
+                    {1,2,2,2,1}
 
-                    {0,0,0,1},
-                    {0,0,1,2},
-                    {0,1,2,2},
-                    {1,2,2,2}
-
-                }, 32);
-                
-                
-
+                }, 5);
         }
 
         /// <summary>

@@ -16,7 +16,6 @@ namespace Projecto
         public Vector2 Position;
         public Vector2 Size;
         public Vector2 Rotation;
-       
 
         private bool isactive;
         public bool isActive
@@ -41,7 +40,8 @@ namespace Projecto
 
         //Empty constructor, therefore is not active.
         public GameObject()
-        {
+        { 
+            
             isActive = false;
         }
 

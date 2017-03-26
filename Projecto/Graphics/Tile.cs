@@ -9,28 +9,38 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Projecto
 {
-    class Tile
+    class Tile : GameObject
     {
-        protected Texture2D texture;
-        private Rectangle rectangle;
-        public Rectangle Rectangle
+        public Vector2 Coordinates;
+        public bool isSomthingOnTop;
+        public bool isWalkable;
+
+
+        //------------->CONSTRUCTORS<-------------//
+
+        public Tile(int tileNumber, Rectangle newRectangle, Vector2 coordinates)
         {
-            get { return rectangle; }
-            protected set { rectangle = value; }
+            Texture = Game1.content.Load<Texture2D>("Tile" + tileNumber);
+            this.Rectangle = newRectangle;
+            this.Position.X = newRectangle.X;
+            this.Position.Y = newRectangle.Y;
+            this.Coordinates = coordinates;
         }
+
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(texture, rectangle, Color.White);
+            spriteBatch.Draw(Texture, Rectangle, Color.White);
         }
     }
 
-    class CollisionTiles : Tile
-    {
-        public CollisionTiles(int i, Rectangle newRectangle)
-        {            
-            texture = Game1.content.Load<Texture2D>("Tile" + i);
-            this.Rectangle = newRectangle;
-        }
-    }
+    //class CollisionTiles : Tile
+    //{
+    //    public CollisionTiles(int i, Rectangle newRectangle)
+    //    {            
+    //        Texture = Game1.content.Load<Texture2D>("Tile" + i);
+    //        this.Rectangle = newRectangle;
+    //    }
+    //}
 }
