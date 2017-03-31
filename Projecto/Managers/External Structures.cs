@@ -11,7 +11,7 @@ namespace Projecto
     {
         playerOne = 1, playerTwo
     }
-    internal struct MovementInput
+    internal struct MovementInput1
     {
         private ButtonState GetState(Keys key)
         {
@@ -24,6 +24,24 @@ namespace Projecto
         public ButtonState Down { get { return GetState(Keys.S); } }
         public ButtonState Left { get { return GetState(Keys.A); } }
         public ButtonState Right { get { return GetState(Keys.D); } }
+        public ButtonState Start { get { return GetState(Keys.Escape); } }
+        public ButtonState Select { get { return GetState(Keys.Back); } }
+
+        //Buttons1..2..3
+    }
+    internal struct MovementInput2
+    {
+        private ButtonState GetState(Keys key)
+        {
+            if (Keyboard.GetState().IsKeyDown(key))
+                return ButtonState.Pressed;
+            return ButtonState.Released;
+        }
+
+        public ButtonState Up { get { return GetState(Keys.Up); } }
+        public ButtonState Down { get { return GetState(Keys.Down); } }
+        public ButtonState Left { get { return GetState(Keys.Left); } }
+        public ButtonState Right { get { return GetState(Keys.Right); } }
         public ButtonState Start { get { return GetState(Keys.Escape); } }
         public ButtonState Select { get { return GetState(Keys.Back); } }
 

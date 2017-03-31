@@ -96,19 +96,19 @@ namespace Projecto
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            if(InputManager.WASD.Up == ButtonState.Pressed && InputManager.WASD.Down != ButtonState.Pressed)
+            if(InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
             {
                 player.Move(Vector2.UnitY, playerSpeed);
             }
-            if (InputManager.WASD.Right == ButtonState.Pressed && InputManager.WASD.Left != ButtonState.Pressed)
+            if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
             {
                 player.Move(Vector2.UnitX, playerSpeed);
             }
-            if (InputManager.WASD.Down == ButtonState.Pressed && InputManager.WASD.Up != ButtonState.Pressed)
+            if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
             {
                 player.Move(-Vector2.UnitY, playerSpeed);
             }
-            if (InputManager.WASD.Left == ButtonState.Pressed && InputManager.WASD.Right != ButtonState.Pressed)
+            if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
             {
                 player.Move(-Vector2.UnitX, playerSpeed);
             }
