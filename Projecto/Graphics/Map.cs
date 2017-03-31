@@ -56,7 +56,7 @@ namespace Projecto
         public void Draw(SpriteBatch spriteBatch)
         {
             foreach (Tile tile in ListOfTiles)
-                tile.Draw(spriteBatch);
+                tile.DrawTile(spriteBatch);
         }
     }
 }

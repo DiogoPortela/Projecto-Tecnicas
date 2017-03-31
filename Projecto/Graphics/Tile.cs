@@ -18,19 +18,19 @@ namespace Projecto
 
         //------------->CONSTRUCTORS<-------------//
 
-        public Tile(int tileNumber, Vector2 coordinates, int size)
+        public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber,coordinates * size, Vector2.One, 0f)
         {
-            Texture = Game1.content.Load<Texture2D>("Tile" + tileNumber);
+            //Texture = Game1.content.Load<Texture2D>("Tile" + tileNumber);
             this.Rectangle = Camera.CalculatePixelRectangle(new Vector2(coordinates.X * size, coordinates.Y * size),new Vector2(size, size));
             this.Coordinates = coordinates;
-            this.Position = coordinates * size;
-            this.Size = Vector2.One;
-            this.isActive = true;
+            //this.Position = coordinates * size;
+            //this.Size = Vector2.One;
+            //this.isActive = true;
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void DrawTile(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(Texture, Rectangle, Color.White);
         }

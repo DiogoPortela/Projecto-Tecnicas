@@ -15,9 +15,10 @@ namespace Projecto
         static public ContentManager content;
 
 
-
         #region ZONA TESTE
         //private Texture2D player;
+        Player player;
+        float playerSpeed = 0.3f;
         Map map;
         #endregion
 
@@ -39,8 +40,8 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
-
             map = new Map();
+            player = new Player("Drude", new Vector2(10, 10), 5f, PlayerNumber.playerOne);
 
             base.Initialize();
         }
@@ -95,6 +96,22 @@ namespace Projecto
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
+            if(InputManager.WASD.Up == ButtonState.Pressed && InputManager.WASD.Down != ButtonState.Pressed)
+            {
+                player.Move(Vector2.UnitY, playerSpeed);
+            }
+            if (InputManager.WASD.Right == ButtonState.Pressed && InputManager.WASD.Left != ButtonState.Pressed)
+            {
+                player.Move(Vector2.UnitX, playerSpeed);
+            }
+            if (InputManager.WASD.Down == ButtonState.Pressed && InputManager.WASD.Up != ButtonState.Pressed)
+            {
+                player.Move(-Vector2.UnitY, playerSpeed);
+            }
+            if (InputManager.WASD.Left == ButtonState.Pressed && InputManager.WASD.Right != ButtonState.Pressed)
+            {
+                player.Move(-Vector2.UnitX, playerSpeed);
+            }
             // TODO: Add your update logic here
 
             base.Update(gameTime);
@@ -111,6 +128,7 @@ namespace Projecto
             spriteBatch.Begin();
 
             map.Draw(spriteBatch);
+            player.DrawObject(spriteBatch);
 
             spriteBatch.End();
 
