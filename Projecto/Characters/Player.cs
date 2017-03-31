@@ -6,21 +6,16 @@ using System.Threading.Tasks;
 
 namespace Projecto
 {
-    public class Player
+    public class Player : GameObject
     {
+        private int playerNumber;
 
         public int HP { get; set; }
-
         public int MP { get; set; }
-
         public float CDR { get; set; }
-
         public float AoE { get; set; }
-
         public float MS { get; set; }
-
         public double PhysDmg { get; set; }
-
         public double MagicDmg { get; set; }
 
         public Player()

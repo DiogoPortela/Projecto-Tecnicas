@@ -35,7 +35,11 @@ namespace Projecto
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
-
+        /// <summary>
+        /// Generates a map using an array.
+        /// </summary>
+        /// <param name="map">The Array to generate the map.</param>
+        /// <param name="size">Size of each item in the array.</param>
         public void Generate(int[,] map, int size)
         {
             for(int x= 0; x < map.GetLength(1); x++)
