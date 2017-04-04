@@ -14,6 +14,7 @@ namespace Projecto
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
 
+        static GameState gameState;
 
         #region ZONA TESTE
         //private Texture2D player;
@@ -42,6 +43,7 @@ namespace Projecto
         {
             map = new Map();
             player = new Player("Drude", new Vector2(10, 10), 5f, PlayerNumber.playerOne);
+            gameState = new GameState();
 
             base.Initialize();
         }
@@ -55,7 +57,7 @@ namespace Projecto
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //player = Content.Load<Texture2D>("Drude.png");
-            Camera.SetCameraWindow(new Vector2(0, 0), 100f);
+            //Camera.SetCameraWindow(new Vector2(0, 0), 100f);
             map.Generate(new int[,]
                 {
                     {2,2,2,2,2},
@@ -95,24 +97,7 @@ namespace Projecto
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            if(InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
-            {
-                player.Move(Vector2.UnitY, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
-            {
-                player.Move(Vector2.UnitX, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
-            {
-                player.Move(-Vector2.UnitY, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
-            {
-                player.Move(-Vector2.UnitX, playerSpeed);
-            }
-            // TODO: Add your update logic here
+            gameState.StateUpdate(gameTime);
 
             base.Update(gameTime);
         }
@@ -125,10 +110,12 @@ namespace Projecto
         {
             GraphicsDevice.Clear(Color.HotPink);
 
+            gameState.Draw();
+
             spriteBatch.Begin();
 
-            map.Draw(spriteBatch);
-            player.DrawObject(spriteBatch);
+            //map.Draw(spriteBatch);
+            //player.DrawObject();
 
             spriteBatch.End();
 

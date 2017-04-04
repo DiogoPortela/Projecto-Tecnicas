@@ -12,6 +12,7 @@ namespace Projecto
     {
         protected Texture2D Texture;
         protected Vector2 TextureCenter; //For rotations.
+        protected Vector2 DrawSize; //Size of the texture;
         protected Rectangle Rectangle;
 
         public Vector2 Position { get; set; }
@@ -52,9 +53,13 @@ namespace Projecto
         //Constructor with all the atributtes that can be set.
         public GameObject(string texture, Vector2 position, Vector2 size, float rotation)
         {
-            this.Texture = Game1.content.Load<Texture2D>(texture);
-            this.TextureCenter.X = Texture.Width / 2;
-            this.TextureCenter.Y = Texture.Height / 2;
+            if(texture != null)
+            {
+                this.Texture = Game1.content.Load<Texture2D>(texture);
+                this.TextureCenter.X = Texture.Width / 2;
+                this.TextureCenter.Y = Texture.Height / 2;
+                this.DrawSize = new Vector2(Texture.Width, Texture.Height);
+            }            
             this.Position = position;
             this.Size = size;
             this.RotationAngle = rotation;
@@ -88,10 +93,13 @@ namespace Projecto
         {
 
         }
-        public void DrawObject(SpriteBatch spritebatch)
+        public virtual void DrawObject(Camera camera)
         {
-            this.Rectangle = Camera.CalculatePixelRectangle(this.Position, this.Size);
-            spritebatch.Draw(this.Texture, this.Rectangle, Color.White);
+            if(isactive)
+            {
+                this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size * this.DrawSize);
+                Game1.spriteBatch.Draw(this.Texture, this.Rectangle, Color.White);
+            }            
         }
     }
 }

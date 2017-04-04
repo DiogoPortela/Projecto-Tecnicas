@@ -7,9 +7,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+    internal enum ScreenSelect
+    {
+        MainMenu, Playing, ScoreScreen
+    }
     internal enum PlayerNumber
     {
         playerOne = 1, playerTwo
+    }
+    internal enum CurrentInput
+    {
+        NoInput, Up, Down, Right, Left
     }
     internal struct MovementInput1
     {

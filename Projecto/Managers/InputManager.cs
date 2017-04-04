@@ -10,6 +10,5 @@ namespace Projecto
     {
         static public MovementInput1 MovementPlayerOne = new MovementInput1();
         static public MovementInput2 MovementPlayerTwo = new MovementInput2();
-
     }
 }

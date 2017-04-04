@@ -39,6 +39,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\Boss.cs" />
+    <Compile Include="Characters\PlayerManager.cs" />
+    <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Managers\CollisionManager.cs" />
     <Compile Include="Managers\External Structures.cs" />
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Managers\CombatMod.cs" />
@@ -48,7 +51,9 @@
     <Compile Include="Graphics\Map.cs" />
     <Compile Include="Graphics\Tile.cs" />
     <Compile Include="Characters\Player.cs" />
+    <Compile Include="Managers\GameState.cs" />
     <Compile Include="Managers\InputManager.cs" />
+    <Compile Include="Managers\menuState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
