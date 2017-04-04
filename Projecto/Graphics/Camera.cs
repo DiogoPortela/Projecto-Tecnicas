@@ -78,7 +78,7 @@ namespace Projecto
         private float Height;           //User-space Height.
         private float Ratio;            //User-space to Pixe space convertion ratio.
         //public Matrix transform;
-        public Vector2 center;
+        //public Vector2 center;
 
 
         //------------->CONSTRUCTORS<-------------//
@@ -137,20 +137,13 @@ namespace Projecto
 
             return new Rectangle(x, y, width, height);
         }
-        public Rectangle CalculatePixelRectanglePosition(Vector2 position, Vector2 size)
-        {
-            int x, y;
-            CalculatePixelPoint(position, out x, out y);
-
-            return new Rectangle(x, y, size.X, size.Y);
-        }
         /// <summary>
         /// Moves the camera to target position.
         /// </summary>
         /// <param name="position">Position to be moved to.</param>
         public void Update(Vector2 position)    //POR A A DAR
         {
-            center = new Vector2(position.X - (Game1.graphics.PreferredBackBufferWidth / 4), position.Y - (Game1.graphics.PreferredBackBufferHeight / 2));
+            //center = new Vector2(position.X - (Game1.graphics.PreferredBackBufferWidth / 4), position.Y - (Game1.graphics.PreferredBackBufferHeight / 2));
             //transform = Matrix.CreateScale(new Vector3(1, 1, 0)) * Matrix.CreateTranslation(new Vector3(-center.X, -center.Y, 0));
         }
     }

@@ -14,6 +14,8 @@ namespace Projecto
         static public PlayerManager PlayerOne;
         //static public PlayerManager PlayerTwo;
 
+        GameObject teste1;
+
         Viewport defaultView, upView, downView;
         Camera cameraUp, cameraDown;
 
@@ -40,11 +42,12 @@ namespace Projecto
 
             //Initializing cameras.
             cameraUp = new Camera(Vector2.Zero, 100, ((float)upView.Height / upView.Width));
-            cameraDown = new Camera(new Vector2(0,50), 100, ((float)downView.Height / downView.Width));
+            cameraDown = new Camera(new Vector2(0,37.5f), 100, ((float)downView.Height / downView.Width));
             #endregion
 
             #region TestZone
-            PlayerOne = new PlayerManager(new Vector2(0, 10), Vector2.One * 5, PlayerNumber.playerOne);
+            PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
+            teste1 = new GameObject("Tile1", new Vector2(10, 10), Vector2.One, 0f);
             //PlayerTwo = new PlayerManager(new Vector2(0, 60), Vector2.One * 10, PlayerNumber.playerTwo);
             #endregion
 
@@ -91,7 +94,9 @@ namespace Projecto
         {
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-            PlayerOne.DrawObject();
+            teste1.DrawObject(camera);
+
+            PlayerOne.DrawObject(camera);
             //PlayerTwo.DrawObject();
             Game1.spriteBatch.End();
         }

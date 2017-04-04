@@ -53,10 +53,10 @@ namespace Projecto
                     //height = (y + 1) * size;
                 }
         }
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(Camera camera)
         {
             foreach (Tile tile in ListOfTiles)
-                tile.DrawTile(spriteBatch);
+                tile.DrawTile(camera);
         }
     }
 }
