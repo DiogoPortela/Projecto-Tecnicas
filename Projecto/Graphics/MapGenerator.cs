@@ -124,7 +124,7 @@ namespace Projecto
                     for (int y = 0; y < height; y++)
                     {
                         int number = (map[x, y] == 1) ? 1 : 0;
-                        Vector2 pos = new Vector2(-width / 2 + x + .5f, 0);
+                        Vector2 pos = new Vector2(x,y);
                         tile = new Tile(number, pos, 1);
                         tile.DrawTile(spriteBatch);
                     }

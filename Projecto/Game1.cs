@@ -119,6 +119,10 @@ namespace Projecto
                 player.Move(-Vector2.UnitX, playerSpeed);
             }
             // TODO: Add your update logic here
+            if(InputManager.MovementPlayerOne.Left == ButtonState.Pressed)
+            {
+                map.Start();
+            }
 
             base.Update(gameTime);
         }
