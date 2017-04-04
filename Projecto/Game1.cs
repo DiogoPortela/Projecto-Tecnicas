@@ -57,30 +57,10 @@ namespace Projecto
             //player = Content.Load<Texture2D>("Drude.png");
             Camera.SetCameraWindow(new Vector2(0, 0), 100f);
             map.useRandomSeed = true;
-            map.randomFillPercent = 47;
+            map.randomFillPercent = 50;
             map.width = 100;
             map.height = 75;
             map.Start();
-
-            //    map.Generate(new int[,]
-            //        {
-            //            {2,2,2,2,2},
-            //            {0,0,1,2,1},
-            //            {0,1,2,2,0},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {1,2,2,2,1},
-            //            {0,2,2,0,1},
-            //            {1,0,0,0,1}
-
-            //        }, 5);
         }
 
         /// <summary>
@@ -119,7 +99,7 @@ namespace Projecto
                 player.Move(-Vector2.UnitX, playerSpeed);
             }
             // TODO: Add your update logic here
-            if(InputManager.MovementPlayerOne.Left == ButtonState.Pressed)
+            if(InputManager.MovementPlayerOne.Select == ButtonState.Pressed)
             {
                 map.Start();
             }
