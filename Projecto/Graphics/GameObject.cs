@@ -8,14 +8,15 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Projecto
 {
-    class GameObject
+    public class GameObject
     {
         protected Texture2D Texture;
-        protected Vector2 TextureCenter; //For rotations.
+        public Vector2 TextureCenter; //For rotations.
         protected Rectangle Rectangle;
 
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
+        public Vector2 SizeCenter;
         public float RotationAngle { get; set; }
 
         protected float speed;
@@ -52,18 +53,21 @@ namespace Projecto
         //Constructor with all the atributtes that can be set.
         public GameObject(string texture, Vector2 position, Vector2 size, float rotation)
         {
-            this.Texture = Game1.content.Load<Texture2D>(texture);
-            this.TextureCenter.X = Texture.Width / 2;
-            this.TextureCenter.Y = Texture.Height / 2;
+            if(texture != null)
+            {
+                this.Texture = Game1.content.Load<Texture2D>(texture);
+                this.TextureCenter.X = Texture.Width / 2;
+                this.TextureCenter.Y = Texture.Height / 2;
+            }            
             this.Position = position;
             this.Size = size;
+            this.SizeCenter = new Vector2(size.X, -size.Y)/2;
             this.RotationAngle = rotation;
             this.speed = 0f;
             this.speedDirection = Vector2.Zero;
             this.objectDiretion = -Vector2.UnitY;
             this.isActive = true;
         }
-
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -84,14 +88,17 @@ namespace Projecto
         {
             this.Position += direction;
         }
-        public void Rotate()
+        /// <summary>
+        /// Draws an object on screen using a camera.
+        /// </summary>
+        /// <param name="camera">The camera to draw to.</param>
+        public virtual void DrawObject(Camera camera)
         {
-
-        }
-        public void DrawObject(SpriteBatch spritebatch)
-        {
-            this.Rectangle = Camera.CalculatePixelRectangle(this.Position, this.Size);
-            spritebatch.Draw(this.Texture, this.Rectangle, Color.White);
+            if(isactive)
+            {
+                this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size);
+                Game1.spriteBatch.Draw(this.Texture, this.Rectangle, Color.White);
+            }            
         }
     }
 }

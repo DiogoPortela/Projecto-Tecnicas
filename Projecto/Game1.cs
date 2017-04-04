@@ -14,14 +14,7 @@ namespace Projecto
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
 
-
-        #region ZONA TESTE
-        //private Texture2D player;
-        Player player;
-        float playerSpeed = 0.3f;
-        Map map;
-        #endregion
-
+        static GameState gameState;
 
         public Game1()
         {
@@ -40,8 +33,7 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
-            map = new Map();
-            player = new Player("Drude", new Vector2(10, 10), 5f, PlayerNumber.playerOne);
+            gameState = new GameState();
 
             base.Initialize();
         }
@@ -53,28 +45,7 @@ namespace Projecto
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            //player = Content.Load<Texture2D>("Drude.png");
-            Camera.SetCameraWindow(new Vector2(0, 0), 100f);
-            map.Generate(new int[,]
-                {
-                    {2,2,2,2,2},
-                    {0,0,1,2,1},
-                    {0,1,2,2,0},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {0,2,2,0,1},
-                    {1,0,0,0,1}
-
-                }, 5);
+            spriteBatch = new SpriteBatch(GraphicsDevice);            
         }
 
         /// <summary>
@@ -95,24 +66,7 @@ namespace Projecto
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
-            if(InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
-            {
-                player.Move(Vector2.UnitY, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
-            {
-                player.Move(Vector2.UnitX, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
-            {
-                player.Move(-Vector2.UnitY, playerSpeed);
-            }
-            if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
-            {
-                player.Move(-Vector2.UnitX, playerSpeed);
-            }
-            // TODO: Add your update logic here
+            gameState.StateUpdate(gameTime);
 
             base.Update(gameTime);
         }
@@ -125,12 +79,7 @@ namespace Projecto
         {
             GraphicsDevice.Clear(Color.HotPink);
 
-            spriteBatch.Begin();
-
-            map.Draw(spriteBatch);
-            player.DrawObject(spriteBatch);
-
-            spriteBatch.End();
+            gameState.Draw();
 
             base.Draw(gameTime);
         }

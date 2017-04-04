@@ -53,10 +53,14 @@ namespace Projecto
                     //height = (y + 1) * size;
                 }
         }
-        public void Draw(SpriteBatch spriteBatch)
+        /// <summary>
+        /// Draws the map using a camera.
+        /// </summary>
+        /// <param name="camera">Camera to draw to.</param>
+        public void Draw(Camera camera)
         {
             foreach (Tile tile in ListOfTiles)
-                tile.DrawTile(spriteBatch);
+                tile.DrawTile(camera);
         }
     }
 }
