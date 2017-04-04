@@ -16,14 +16,6 @@ namespace Projecto
 
         static GameState gameState;
 
-        #region ZONA TESTE
-        //private Texture2D player;
-        Player player;
-        float playerSpeed = 0.3f;
-        Map map;
-        #endregion
-
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -41,8 +33,6 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
-            map = new Map();
-            player = new Player("Drude", new Vector2(10, 10), 5f, PlayerNumber.playerOne);
             gameState = new GameState();
 
             base.Initialize();
@@ -55,28 +45,7 @@ namespace Projecto
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            //player = Content.Load<Texture2D>("Drude.png");
-            //Camera.SetCameraWindow(new Vector2(0, 0), 100f);
-            map.Generate(new int[,]
-                {
-                    {2,2,2,2,2},
-                    {0,0,1,2,1},
-                    {0,1,2,2,0},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {0,2,2,0,1},
-                    {1,0,0,0,1}
-
-                }, 5);
+            spriteBatch = new SpriteBatch(GraphicsDevice);            
         }
 
         /// <summary>
@@ -111,13 +80,6 @@ namespace Projecto
             GraphicsDevice.Clear(Color.HotPink);
 
             gameState.Draw();
-
-            spriteBatch.Begin();
-
-            //map.Draw(spriteBatch);
-            //player.DrawObject();
-
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }

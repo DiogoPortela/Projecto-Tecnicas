@@ -12,43 +12,43 @@ namespace Projecto
     class GameState : Game
     {
         static public PlayerManager PlayerOne;
-        //static public PlayerManager PlayerTwo;
+        static public PlayerManager PlayerTwo;
+                
+        Viewport defaultView, leftView, rightView;
+        Camera cameraRight, cameraLeft;
 
+        #region ZONA DE TESTE
         GameObject teste1;
+        #endregion
 
-        Viewport defaultView, upView, downView;
-        Camera cameraUp, cameraDown;
 
         //------------->CONSTRUCTORS<-------------//
 
         public GameState()
         {
-            #region map generation
-            //Map mapTop = new Map(Vector2.Zero);
-            //Map mapBottom = new Map(new Vector2(0, 50));
-            //mapateste.Generate();
+            #region Map Generation
+ 
             #endregion
 
             #region Camera. Split screen
-            //Viewports
-            
+            //Viewports           
             defaultView = Game1.graphics.GraphicsDevice.Viewport;
-            upView = downView = defaultView;
+            leftView = rightView = defaultView;
 
             //Dividing it in half, and adjusting the positioning.
-            upView.Height /= 2;
-            downView.Height /= 2;
-            downView.Y = upView.Height;
+            rightView.Width /= 2;
+            leftView.Width /= 2;
+            rightView.X = leftView.Width;
 
             //Initializing cameras.
-            cameraUp = new Camera(Vector2.Zero, 100, ((float)upView.Height / upView.Width));
-            cameraDown = new Camera(new Vector2(0,37.5f), 100, ((float)downView.Height / downView.Width));
+            cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
+            cameraRight = new Camera(new Vector2(50,0), 50, ((float)rightView.Height / rightView.Width));
             #endregion
 
             #region TestZone
             PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
-            teste1 = new GameObject("Tile1", new Vector2(10, 10), Vector2.One, 0f);
-            //PlayerTwo = new PlayerManager(new Vector2(0, 60), Vector2.One * 10, PlayerNumber.playerTwo);
+            teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
+            PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
             #endregion
 
         }
@@ -61,7 +61,9 @@ namespace Projecto
         public void StateUpdate(GameTime gameTime)
         {
             PlayerOne.PlayerMovement(gameTime);
-            //PlayerTwo.PlayerMovement(gameTime);
+            cameraLeft.LookAt(PlayerOne);
+            PlayerTwo.PlayerMovement(gameTime);
+            cameraRight.LookAt(PlayerTwo);
 
         }
         /// <summary>
@@ -70,12 +72,12 @@ namespace Projecto
         public void Draw()
         {
             //Draws the left side
-            Game1.graphics.GraphicsDevice.Viewport = upView;
-            DrawCameraView(cameraUp);
+            Game1.graphics.GraphicsDevice.Viewport = leftView;
+            DrawCameraView(cameraLeft);
 
             //Draws the right side
-            Game1.graphics.GraphicsDevice.Viewport = downView;
-            DrawCameraView(cameraDown);
+            Game1.graphics.GraphicsDevice.Viewport = rightView;
+            DrawCameraView(cameraRight);
 
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
@@ -95,9 +97,8 @@ namespace Projecto
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             teste1.DrawObject(camera);
-
             PlayerOne.DrawObject(camera);
-            //PlayerTwo.DrawObject();
+            PlayerTwo.DrawObject(camera);
             Game1.spriteBatch.End();
         }
     }

@@ -78,6 +78,35 @@ namespace Projecto
                 }
             }
             #endregion
+            #region PlayerTwo
+            if (pNumber == PlayerNumber.playerTwo)
+            {
+                //Movement Controls.
+                if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
+                {
+                    /*if (currentInput != CurrentInput.Right)
+                    {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[3];
+                        currentInput = CurrentInput.Right;
+
+                    }*/
+                    this.Move(Vector2.UnitX * movingSpeed);
+                }
+                if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
+                {
+                    this.Move(-Vector2.UnitX * movingSpeed);
+                }
+                if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
+                {
+                    this.Move(Vector2.UnitY * movingSpeed);
+                }
+                if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
+                {
+                    this.Move(-Vector2.UnitY * movingSpeed);
+                }
+            }
+            #endregion
 
             //this.currentAnimation.Play(gameTime);
         }
@@ -127,6 +156,10 @@ namespace Projecto
             }
 
         }*/
+        /// <summary>
+        /// Draws on screen an object, using a camera.
+        /// </summary>
+        /// <param name="camera">Camera to draw the image at.</param>
         public override void DrawObject(Camera camera)
         {
             if (isActive)

@@ -73,12 +73,11 @@ namespace Projecto
             */
         #endregion  //FOR CHECKING PURPOSE
 
-        private Vector2 WorldOrigin;            //User-space world origin.
+        private Vector2 WorldOrigin;    //User-space world origin.
         private float Width;            //User-space Width.
         private float Height;           //User-space Height.
+        private Vector2 centerCamera;   //Measure of the center of the camera in User-space.
         private float Ratio;            //User-space to Pixe space convertion ratio.
-        //public Matrix transform;
-        //public Vector2 center;
 
 
         //------------->CONSTRUCTORS<-------------//
@@ -91,10 +90,10 @@ namespace Projecto
         public Camera(Vector2 origin, float width, float heighRatio)
         {
             WorldOrigin = origin;
-            //transform = Matrix.CreateScale(new Vector3(1, 1, 0)) * Matrix.CreateTranslation(new Vector3(-center.X, -center.Y, 0));
             Width = width;
             Height = width * heighRatio;
             Ratio = -1;
+            centerCamera = new Vector2(Width / 2, Height / 2);
             cameraWindowToPixelRatio();
         }
 
@@ -104,7 +103,7 @@ namespace Projecto
         {
             if (Ratio < 0f)
             {
-                Ratio = (float)Game1.graphics.PreferredBackBufferWidth / Width;
+                Ratio = (float)Game1.graphics.PreferredBackBufferHeight  / Height;
             }
         }
 
@@ -119,7 +118,7 @@ namespace Projecto
             x = (int)(((objectPosition.X - WorldOrigin.X) * Ratio) + 0.5f);
             y = (int)(((objectPosition.Y - WorldOrigin.Y) * Ratio) + 0.5f);
 
-            y = Game1.graphics.PreferredBackBufferHeight / 2 - y;
+            y = Game1.graphics.PreferredBackBufferHeight - y;
         }
         /// <summary>
         /// Convertes the position and size of a rectangle from User-space to Pixel-space.
@@ -138,13 +137,20 @@ namespace Projecto
             return new Rectangle(x, y, width, height);
         }
         /// <summary>
-        /// Moves the camera to target position.
+        /// Makes the camera look at an object center.
         /// </summary>
-        /// <param name="position">Position to be moved to.</param>
-        public void Update(Vector2 position)    //POR A A DAR
+        /// <param name="obj">Object to be looked at.</param>
+        public void LookAt(GameObject obj)
         {
-            //center = new Vector2(position.X - (Game1.graphics.PreferredBackBufferWidth / 4), position.Y - (Game1.graphics.PreferredBackBufferHeight / 2));
-            //transform = Matrix.CreateScale(new Vector3(1, 1, 0)) * Matrix.CreateTranslation(new Vector3(-center.X, -center.Y, 0));
+            WorldOrigin = obj.Position + obj.SizeCenter - centerCamera;
+        }
+        /// <summary>
+        /// Makes the camera look at a given position.
+        /// </summary>
+        /// <param name="position">Position to look at.</param>
+        public void LookAt(Vector2 position)
+        {
+            WorldOrigin = position - centerCamera;
         }
     }
 }
