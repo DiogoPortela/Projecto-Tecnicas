@@ -18,10 +18,10 @@ namespace Projecto
 
         //------------->CONSTRUCTORS<-------------//
 
-        public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber,coordinates * size, Vector2.One, 0f)
+        public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber, coordinates * size, Vector2.One, 0f)
         {
             //Texture = Game1.content.Load<Texture2D>("Tile" + tileNumber);
-            this.Rectangle = Camera.CalculatePixelRectangle(new Vector2(coordinates.X * size, coordinates.Y * size),new Vector2(size, size));
+            this.Rectangle = Camera.CalculatePixelRectangle(new Vector2(coordinates.X * size, coordinates.Y * size), new Vector2(size, size));
             this.Coordinates = coordinates;
             //this.Position = coordinates * size;
             //this.Size = Vector2.One;
@@ -32,10 +32,9 @@ namespace Projecto
 
         public void DrawTile(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(Texture, Rectangle, Color.White);
+            spriteBatch.Draw(Texture, new Vector2(Rectangle.X, Rectangle.Y));
         }
     }
-
     //class CollisionTiles : Tile
     //{
     //    public CollisionTiles(int i, Rectangle newRectangle)

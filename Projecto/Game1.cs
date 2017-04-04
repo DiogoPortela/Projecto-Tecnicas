@@ -19,7 +19,7 @@ namespace Projecto
         //private Texture2D player;
         Player player;
         float playerSpeed = 0.3f;
-        Map map;
+        MapGenerator map;
         #endregion
 
 
@@ -40,7 +40,7 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
-            map = new Map();
+            map = new MapGenerator();
             player = new Player("Drude", new Vector2(10, 10), 5f, PlayerNumber.playerOne);
 
             base.Initialize();
@@ -56,25 +56,31 @@ namespace Projecto
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //player = Content.Load<Texture2D>("Drude.png");
             Camera.SetCameraWindow(new Vector2(0, 0), 100f);
-            map.Generate(new int[,]
-                {
-                    {2,2,2,2,2},
-                    {0,0,1,2,1},
-                    {0,1,2,2,0},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {1,2,2,2,1},
-                    {0,2,2,0,1},
-                    {1,0,0,0,1}
+            map.useRandomSeed = true;
+            map.randomFillPercent = 47;
+            map.width = 100;
+            map.height = 75;
+            map.Start();
 
-                }, 5);
+            //    map.Generate(new int[,]
+            //        {
+            //            {2,2,2,2,2},
+            //            {0,0,1,2,1},
+            //            {0,1,2,2,0},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {1,2,2,2,1},
+            //            {0,2,2,0,1},
+            //            {1,0,0,0,1}
+
+            //        }, 5);
         }
 
         /// <summary>
