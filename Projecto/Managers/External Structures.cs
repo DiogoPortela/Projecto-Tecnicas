@@ -7,10 +7,19 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+
+    enum Cons
+    {
+        MAXWIDTH=100,
+        MAXHEIGHT=75
+    }
+
     internal enum PlayerNumber
     {
         playerOne = 1, playerTwo
     }
+
+
     internal struct MovementInput1
     {
         private ButtonState GetState(Keys key)
@@ -29,6 +38,8 @@ namespace Projecto
 
         //Buttons1..2..3
     }
+
+
     internal struct MovementInput2
     {
         private ButtonState GetState(Keys key)

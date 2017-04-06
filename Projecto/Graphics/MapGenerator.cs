@@ -44,7 +44,7 @@ namespace Projecto
         void ProcessMap()
         {
             List<List<Coordinate>> wallRegions = GetRegions(1);
-            int wallThreshholdSize = 50;
+            int wallThreshholdSize = 0;
 
             foreach(List<Coordinate> wallRegion in wallRegions)
             {
@@ -58,7 +58,7 @@ namespace Projecto
             }
 
             List<List<Coordinate>> roomRegions = GetRegions(0);
-            int roomThreshholdSize = 50;
+            int roomThreshholdSize = 0;
             List<Room> survivingRooms = new List<Room>();
 
             foreach (List<Coordinate> roomRegion in roomRegions)
@@ -267,17 +267,62 @@ namespace Projecto
                 {
                     if(mapFlags[x,y] == 0 && map[x,y] == tileType)
                     {
-                        List<Coordinate> newRegion = GetRegionTiles(x, y);
+                        //List<Coordinate> newRegion = GetRegionTiles(x, y);
+                        List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
                         regions.Add(newRegion);
 
-                        foreach (Coordinate tile in newRegion)
-                        {
-                            mapFlags[tile.tileX, tile.tileY] = 1;
-                        }
+                        //foreach (Coordinate tile in newRegion)
+                        //{
+                        //    mapFlags[tile.tileX, tile.tileY] = 1;
+                        //}
                     }
                 }
             }
             return regions;
+        }
+
+        List<Coordinate> GetRegionTiles(Coordinate regionOrigin, int[,] mapFlags, int tileType)
+        {
+            List<Coordinate> result = new List<Coordinate>();
+            bool flag1;
+            int i = 0;
+            result.Add(regionOrigin);
+
+            do
+            {
+                Coordinate newCoordinate = result[i];
+                flag1 = false;
+                if (newCoordinate.tileX < width - 1 && map[newCoordinate.tileX + 1, newCoordinate.tileY] == tileType && mapFlags[newCoordinate.tileX + 1, newCoordinate.tileY] == 0)
+                {
+                    result.Add(new Coordinate(newCoordinate.tileX + 1, newCoordinate.tileY));
+                    mapFlags[newCoordinate.tileX + 1, newCoordinate.tileY] = 1;
+                    flag1 = true;
+                }
+                if (newCoordinate.tileX >= 1 && map[newCoordinate.tileX - 1, newCoordinate.tileY] == tileType && mapFlags[newCoordinate.tileX - 1, newCoordinate.tileY] == 0)
+                {
+                    result.Add(new Coordinate(newCoordinate.tileX - 1, newCoordinate.tileY));
+                    mapFlags[newCoordinate.tileX - 1, newCoordinate.tileY] = 1;
+                    flag1 = true;
+
+                }
+                if (newCoordinate.tileY < height - 1 && map[newCoordinate.tileX, newCoordinate.tileY + 1] == tileType && mapFlags[newCoordinate.tileX, newCoordinate.tileY + 1] == 0)
+                {
+                    result.Add(new Coordinate(newCoordinate.tileX, newCoordinate.tileY + 1));
+                    mapFlags[newCoordinate.tileX, newCoordinate.tileY + 1] = 1;
+                    flag1 = true;
+
+                }
+                if (newCoordinate.tileY >= 1 && map[newCoordinate.tileX, newCoordinate.tileY - 1] == tileType && mapFlags[newCoordinate.tileX, newCoordinate.tileY - 1] == 0)
+                {
+                    result.Add(new Coordinate(newCoordinate.tileX, newCoordinate.tileY - 1));
+                    mapFlags[newCoordinate.tileX, newCoordinate.tileY - 1] = 1;
+                    flag1 = true;
+
+                }
+                i++;
+            } while (flag1);
+
+            return result;
         }
 
         List<Coordinate> GetRegionTiles(int startX, int startY)

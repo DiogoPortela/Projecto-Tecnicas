@@ -58,7 +58,7 @@ namespace Projecto
             Camera.SetCameraWindow(new Vector2(0, 0), 100f);
             map.useRandomSeed = true;
             map.randomFillPercent = 50;
-            map.width = 100;
+            map.width = (int)Cons.MAXWIDTH; //100;
             map.height = 75;
             map.Start();
         }
