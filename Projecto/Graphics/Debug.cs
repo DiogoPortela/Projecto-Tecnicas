@@ -15,6 +15,9 @@ namespace Projecto
         static private int MAXLINES = 5;
         static public bool isActive = true;
 
+        static private string textStr;
+        static private int counter;
+
         public static void LoadFont( )
         {
             if(font == null)
@@ -25,18 +28,19 @@ namespace Projecto
         public static void NewLine(string newtext)
         {
             text.Add(newtext);
+
+            textStr = "";
+            counter = (text.Count() > MAXLINES) ? MAXLINES : text.Count();
+            for (int i = 0; i < counter; i++)
+            {
+                textStr += text[text.Count() - i - 1] + "\n";
+            }
         }
         public static void Draw(Camera camera)
         {
             if(isActive)
-            {
-                string aux = "";
-                int counter = (text.Count() > MAXLINES) ? MAXLINES : text.Count();
-                for (int i = 0; i < counter; i++)
-                {
-                    aux += text[text.Count() - i - 1] + "\n";
-                }
-                Game1.spriteBatch.DrawString(font, aux, camera.Position, Color.Black);
+            {            
+                Game1.spriteBatch.DrawString(font, textStr, camera.Position, Color.Black);
             }          
         }
     }
