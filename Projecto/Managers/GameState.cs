@@ -46,7 +46,7 @@ namespace Projecto
             cameraScreen = new Camera(Vector2.Zero, 100, Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth);
             #endregion
 
-            Debug.LoadFont();
+            Debug.LoadFont();   //Starting Debug.
 
             #region TestZone
             PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
@@ -86,7 +86,6 @@ namespace Projecto
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Debug.Draw(cameraScreen);
-
             Game1.spriteBatch.End();
             #endregion
 

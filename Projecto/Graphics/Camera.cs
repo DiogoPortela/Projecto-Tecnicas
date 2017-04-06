@@ -15,9 +15,9 @@ namespace Projecto
         private Vector2 centerCamera;   //Measure of the center of the camera in User-space.
         private float ratio;            //User-space to Pixe space convertion ratio.
 
-        public Vector2 Position { get; }
-        public float Widht { get; }
-        public float Height { get; }
+        public Vector2 Position { get { return position; } }
+        public float Widht { get { return width; } }
+        public float Height { get { return height; } }
     
         //------------->CONSTRUCTORS<-------------//
 

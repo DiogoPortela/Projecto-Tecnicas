@@ -10,14 +10,20 @@ namespace Projecto
 {
     class Debug
     {
-        static private List<string> text = new List<string>();
-        static private SpriteFont font;
-        static private int MAXLINES = 5;
-        static public bool isActive = true;
+        static private List<string> text = new List<string>();  //List with all the debug logs.
+        static private SpriteFont font;                         //Font to use.
+        static private int MAXLINES = 5;                        //Maximum Lines to draw on screen at once.
+        static public bool isActive = true;                     //Should it draw o on screen?
 
-        static private string textStr = "";
+        //AUXILIARY
+        static private string textStr = "";                                                     
         static private int counter;
 
+        //------------->FUNCTIONS && METHODS<-------------//
+
+        /// <summary>
+        /// Loads the Arial font if none is existant.
+        /// </summary>
         public static void LoadFont( )
         {
             if(font == null)
@@ -25,6 +31,10 @@ namespace Projecto
                 font = Game1.content.Load<SpriteFont>("Arial");
             }
         }
+        /// <summary>
+        /// Adds a line to be drawn in the screen.
+        /// </summary>
+        /// <param name="newtext">Line to be drawn.</param>
         public static void NewLine(string newtext)
         {
             text.Add(newtext);
@@ -36,6 +46,10 @@ namespace Projecto
                 textStr += text[text.Count() - i - 1] + "\n";
             }
         }
+        /// <summary>
+        /// Draws the MAXLINES amount of lines on the camera.
+        /// </summary>
+        /// <param name="camera">Camera to draw to.</param>
         public static void Draw(Camera camera)
         {
             if(isActive)
