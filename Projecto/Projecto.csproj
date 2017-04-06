@@ -41,6 +41,7 @@
     <Compile Include="Characters\Boss.cs" />
     <Compile Include="Characters\PlayerManager.cs" />
     <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\Debug.cs" />
     <Compile Include="Managers\CollisionManager.cs" />
     <Compile Include="Managers\External Structures.cs" />
     <Compile Include="Graphics\GameObject.cs" />
@@ -93,6 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <MonoGameContentReference Include="Content\Content.mgcb" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Content\Arial.xnb">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\MonoGame\v3.0\MonoGame.Content.Builder.targets" />
