@@ -15,7 +15,7 @@ namespace Projecto
         static private int MAXLINES = 5;
         static public bool isActive = true;
 
-        static private string textStr;
+        static private string textStr = "";
         static private int counter;
 
         public static void LoadFont( )
