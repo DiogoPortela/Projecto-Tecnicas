@@ -19,6 +19,7 @@ namespace Projecto
 
         #region ZONA DE TESTE
         GameObject teste1;
+        MapGenerator map = new MapGenerator();
         #endregion
 
 
@@ -27,7 +28,11 @@ namespace Projecto
         public GameState()
         {
             #region Map Generation
- 
+            map.useRandomSeed = true;
+            map.randomFillPercent = 50;
+            map.width = (int)Cons.MAXWIDTH; //100;
+            map.height = 75;
+            map.GenerateMap();
             #endregion
 
             #region Camera. Split screen
@@ -99,6 +104,7 @@ namespace Projecto
         {
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
+            map.Draw(camera);
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);

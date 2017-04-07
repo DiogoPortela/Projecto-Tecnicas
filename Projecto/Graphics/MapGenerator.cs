@@ -477,7 +477,7 @@ namespace Projecto
             }
         }
 
-        public void Draw(SpriteBatch spriteBatch)
+        public void Draw(Camera camera)
         {
             if (map != null)
             {
@@ -488,7 +488,7 @@ namespace Projecto
                         int number = (map[x, y] == 1) ? 1 : 0;
                         Vector2 pos = new Vector2(x,y);
                         tile = new Tile(number, pos, 1);
-                        tile.DrawTile(spriteBatch);
+                        tile.DrawTile(camera);
                     }
                 }
             }

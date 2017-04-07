@@ -39,6 +39,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Characters\Boss.cs" />
+    <Compile Include="Characters\PlayerManager.cs" />
+    <Compile Include="Graphics\Animation.cs" />
+    <Compile Include="Graphics\Debug.cs" />
+    <Compile Include="Graphics\MapGenerator.cs" />
+    <Compile Include="Graphics\Room.cs" />
+    <Compile Include="Managers\CollisionManager.cs" />
     <Compile Include="Managers\External Structures.cs" />
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Managers\CombatMod.cs" />
