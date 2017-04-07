@@ -20,6 +20,7 @@ namespace Projecto
         #region ZONA DE TESTE
         GameObject teste1;
         MapGenerator map = new MapGenerator();
+        KeyboardState oldState;
         #endregion
 
 
@@ -28,11 +29,11 @@ namespace Projecto
         public GameState()
         {
             #region Map Generation
-            map.useRandomSeed = true;
-            map.randomFillPercent = 50;
-            map.width = (int)Cons.MAXWIDTH; //100;
-            map.height = 75;
-            map.GenerateMap();
+            map.UseRandomSeed = true;
+            map.RandomFillPercent = 50;
+            map.Width = (int)Cons.MAXWIDTH; //100;
+            map.Height = 75;
+            map.GenerateMap(5);
             #endregion
 
             #region Camera. Split screen
@@ -72,6 +73,14 @@ namespace Projecto
             cameraLeft.LookAt(PlayerOne);
             PlayerTwo.PlayerMovement(gameTime);
             cameraRight.LookAt(PlayerTwo);
+
+            KeyboardState teste = Keyboard.GetState();
+            if(teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
+            {
+                map.GenerateMap(5);
+                Debug.NewLine("New Map");
+            }
+            oldState = teste;
 
         }
         /// <summary>

@@ -7,6 +7,17 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+    internal struct Coordinate
+    {
+        public int tileX;
+        public int tileY;
+
+        public Coordinate(int x, int y)
+        {
+            tileX = x;
+            tileY = y;
+        }
+    }
     internal enum ScreenSelect
     {
         MainMenu, Playing, ScoreScreen

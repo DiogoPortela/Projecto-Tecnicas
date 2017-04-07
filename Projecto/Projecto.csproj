@@ -51,12 +51,10 @@
     <Compile Include="Characters\Enemy.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="Graphics\Camera.cs" />
-    <Compile Include="Graphics\Map.cs" />
     <Compile Include="Graphics\Tile.cs" />
     <Compile Include="Characters\Player.cs" />
     <Compile Include="Managers\GameState.cs" />
     <Compile Include="Managers\InputManager.cs" />
-    <Compile Include="Managers\menuState.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

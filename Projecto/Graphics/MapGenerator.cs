@@ -10,35 +10,76 @@ namespace Projecto
 {
     class MapGenerator
     {
+        public int Width;
+        public int Height;
 
-        public int width;
-        public int height;
+        public string Seed;
+        public bool UseRandomSeed;
 
-        public string seed;
-        public bool useRandomSeed;
+        public int RandomFillPercent;
 
-        public int randomFillPercent;
+        //public Tile tile;
+        public List<Tile> TilesMap;
+        public List<Room> MapRooms;
+        int[,] infoMap;
 
-        public Tile tile;
+        //------------->FUNCTIONS && METHODS<-------------//
 
-        int[,] map;
-
-        public void GenerateMap()
+        public void GenerateMap(int tileSize)
         {
-            map = new int[width, height];
+            TilesMap = new List<Tile>();
+            MapRooms = new List<Room>();
+            infoMap = new int[Width, Height];
             RandomFillMap();
-
             for (int i = 0; i < 5; i++)
             {
                 SmoothMap();
             }
-
             ProcessMap();
+            FillTileMap(tileSize);
         }
 
+        private void RandomFillMap()
+        {
+            if (UseRandomSeed)
+            {
+                Seed = DateTime.Now.ToString();
+            }
 
+            System.Random pseudoRandom = new System.Random(Seed.GetHashCode());
 
-        void ProcessMap()
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (x == 0 || x == Width - 1 || y == 0 || y == Height - 1)
+                    {
+                        infoMap[x, y] = 1;
+                    }
+                    else
+                    {
+                        infoMap[x, y] = (pseudoRandom.Next(0, 100) < RandomFillPercent) ? 1 : 0;
+                    }
+                }
+            }
+        }
+        private void SmoothMap()
+        {
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    int neighbourWallTiles = GetSurroundingWallCount(x, y);
+
+                    if (neighbourWallTiles > 4)
+                        infoMap[x, y] = 1;
+                    else if (neighbourWallTiles < 4)
+                        infoMap[x, y] = 0;
+
+                }
+            }
+        }
+        private void ProcessMap()
         {
             List<List<Coordinate>> wallRegions = GetRegions(1);
             int wallThreshholdSize = 20;
@@ -49,7 +90,7 @@ namespace Projecto
                 {
                     foreach(Coordinate tile in wallRegion)
                     {
-                        map[tile.tileX, tile.tileY] = 0;
+                        infoMap[tile.tileX, tile.tileY] = 0;
                     }
                 }
             }
@@ -64,12 +105,12 @@ namespace Projecto
                 {
                     foreach (Coordinate tile in roomRegion)
                     {
-                        map[tile.tileX, tile.tileY] = 1;
+                        infoMap[tile.tileX, tile.tileY] = 1;
                     }
                 }
                 else
                 {
-                    survivingRooms.Add(new Room(roomRegion, map));
+                    survivingRooms.Add(new Room(roomRegion, infoMap));
                 }
             }
 
@@ -79,8 +120,46 @@ namespace Projecto
 
             ConnectClosestRooms(survivingRooms);
         }
+        private void FillTileMap(int tileSize)
+        {
+            if (infoMap != null)
+            {
+                for (int x = 0; x < Width; x++)
+                {
+                    for (int y = 0; y < Height; y++)
+                    {
+                        int number = (infoMap[x, y] == 1) ? 1 : 0;
+                        Vector2 pos = new Vector2(x, y);
+                        Tile tile = new Tile(number, pos, tileSize);
+                        TilesMap.Add(tile);
+                    }
+                }
+            }
+        }
 
-        void ConnectClosestRooms(List<Room> allRooms, bool forceAccessibilityFromMainRoom = false)
+        private int GetSurroundingWallCount(int gridX, int gridY)
+        {
+            int wallCount = 0;
+            for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
+            {
+                for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
+                {
+                    if (IsInMapRange(neighbourX, neighbourY))
+                    {
+                        if (neighbourX != gridX || neighbourY != gridY)
+                        {
+                            wallCount += infoMap[neighbourX, neighbourY];
+                        }
+                    }
+                    else
+                    {
+                        wallCount++;
+                    }
+                }
+            }
+            return wallCount;
+        }
+        private void ConnectClosestRooms(List<Room> allRooms, bool forceAccessibilityFromMainRoom = false)
         {
             List<Room> roomListA = new List<Room>();
             List<Room> roomListB = new List<Room>();
@@ -165,7 +244,6 @@ namespace Projecto
             }
 
         }
-
         /// <summary>
         /// 
         /// </summary>
@@ -173,7 +251,7 @@ namespace Projecto
         /// <param name="roomB"></param>
         /// <param name="tileA"></param>
         /// <param name="tileB"></param>
-        void CreatePassage(Room roomA, Room roomB, Coordinate tileA, Coordinate tileB)
+        private void CreatePassage(Room roomA, Room roomB, Coordinate tileA, Coordinate tileB)
         {
             Room.ConnectRooms(roomA, roomB);
 
@@ -183,13 +261,12 @@ namespace Projecto
                 DrawCircle(c, 2);
             }
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="c"></param>
         /// <param name="r"></param>
-        void DrawCircle(Coordinate c, int r)
+        private void DrawCircle(Coordinate c, int r)
         {
             for(int x = -r; x <= r; x++)
             {
@@ -201,19 +278,18 @@ namespace Projecto
                         int drawY = c.tileY + y;
 
                         if(IsInMapRange(drawX,drawY))
-                            map[drawX, drawY] = 0;
+                            infoMap[drawX, drawY] = 0;
                     }
                 }
             }
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
         /// <returns></returns>
-        List<Coordinate> GetLine(Coordinate from, Coordinate to)
+        private List<Coordinate> GetLine(Coordinate from, Coordinate to)
         {
             List<Coordinate> line = new List<Coordinate>();
 
@@ -266,33 +342,30 @@ namespace Projecto
 
             return line;
         }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tile"></param>
         /// <returns></returns>
-        Vector2 CoordinateToWorldPoint(Coordinate tile)
+        private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
-            return new Vector2(-width / 2 + 0.5f + tile.tileX, -height / 2 + 0.5f + tile.tileY);
+            return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
         }
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="tileType"></param>
         /// <returns></returns>
-        List<List<Coordinate>> GetRegions(int tileType)
+        private List<List<Coordinate>> GetRegions(int tileType)
         {
             List<List<Coordinate>> regions = new List<List<Coordinate>>();
-            int[,] mapFlags = new int[width, height];
+            int[,] mapFlags = new int[Width, Height];
 
-            for (int x = 0; x < width; x++)
+            for (int x = 0; x < Width; x++)
             {
-                for (int y = 0; y < height; y++)
+                for (int y = 0; y < Height; y++)
                 {
-                    if(mapFlags[x,y] == 0 && map[x,y] == tileType)
+                    if(mapFlags[x,y] == 0 && infoMap[x,y] == tileType)
                     {
                         List<Coordinate> newRegion = GetRegionTiles(x, y);
                         //List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
@@ -307,63 +380,17 @@ namespace Projecto
             }
             return regions;
         }
-
-        List<Coordinate> GetRegionTiles(Coordinate regionOrigin, int[,] mapFlags, int tileType)
-        {
-            List<Coordinate> result = new List<Coordinate>();
-            bool flag1;
-            int i = 0;
-            result.Add(regionOrigin);
-
-            do
-            {
-                Coordinate newCoordinate = result[i];
-                flag1 = false;
-                if (newCoordinate.tileX < width - 1 && map[newCoordinate.tileX + 1, newCoordinate.tileY] == tileType && mapFlags[newCoordinate.tileX + 1, newCoordinate.tileY] == 0)
-                {
-                    result.Add(new Coordinate(newCoordinate.tileX + 1, newCoordinate.tileY));
-                    mapFlags[newCoordinate.tileX + 1, newCoordinate.tileY] = 1;
-                    flag1 = true;
-                }
-                if (newCoordinate.tileX >= 1 && map[newCoordinate.tileX - 1, newCoordinate.tileY] == tileType && mapFlags[newCoordinate.tileX - 1, newCoordinate.tileY] == 0)
-                {
-                    result.Add(new Coordinate(newCoordinate.tileX - 1, newCoordinate.tileY));
-                    mapFlags[newCoordinate.tileX - 1, newCoordinate.tileY] = 1;
-                    flag1 = true;
-
-                }
-                if (newCoordinate.tileY < height - 1 && map[newCoordinate.tileX, newCoordinate.tileY + 1] == tileType && mapFlags[newCoordinate.tileX, newCoordinate.tileY + 1] == 0)
-                {
-                    result.Add(new Coordinate(newCoordinate.tileX, newCoordinate.tileY + 1));
-                    mapFlags[newCoordinate.tileX, newCoordinate.tileY + 1] = 1;
-                    flag1 = true;
-
-                }
-                if (newCoordinate.tileY >= 1 && map[newCoordinate.tileX, newCoordinate.tileY - 1] == tileType && mapFlags[newCoordinate.tileX, newCoordinate.tileY - 1] == 0)
-                {
-                    result.Add(new Coordinate(newCoordinate.tileX, newCoordinate.tileY - 1));
-                    mapFlags[newCoordinate.tileX, newCoordinate.tileY - 1] = 1;
-                    flag1 = true;
-
-                }
-                i++;
-            } while (flag1);
-
-            return result;
-        }
-
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="startX"></param>
         /// <param name="startY"></param>
         /// <returns></returns>
-        List<Coordinate> GetRegionTiles(int startX, int startY)
+        private List<Coordinate> GetRegionTiles(int startX, int startY)
         {
             List<Coordinate> tiles = new List<Coordinate>();
-            int[,] mapFlags = new int[width, height];
-            int tileType = map[startX, startY];
+            int[,] mapFlags = new int[Width, Height];
+            int tileType = infoMap[startX, startY];
 
             Queue<Coordinate> queue = new Queue<Coordinate>();
             queue.Enqueue(new Coordinate(startX, startY));
@@ -381,7 +408,7 @@ namespace Projecto
                     {
                         if (IsInMapRange(x, y) && (x == tile.tileX || y == tile.tileY))
                         {
-                            if (mapFlags[x, y] == 0 && map[x, y] == tileType)
+                            if (mapFlags[x, y] == 0 && infoMap[x, y] == tileType)
                             {
                                 mapFlags[x, y] = 1;
                                 queue.Enqueue(new Coordinate(x, y));
@@ -393,104 +420,16 @@ namespace Projecto
             //Analizar tiles...
             return tiles;
         }
-
-        bool IsInMapRange(int x, int y)
+        private bool IsInMapRange(int x, int y)
         {
-            return x >= 0 && x < width && y >= 0 && y < height;
-        }
-
-
-        void RandomFillMap()
-        {
-            if (useRandomSeed)
-            {
-                seed = DateTime.Now.ToString();
-            }
-
-            System.Random pseudoRandom = new System.Random(seed.GetHashCode());
-
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    if (x == 0 || x == width - 1 || y == 0 || y == height - 1)
-                    {
-                        map[x, y] = 1;
-                    }
-                    else
-                    {
-                        map[x, y] = (pseudoRandom.Next(0, 100) < randomFillPercent) ? 1 : 0;
-                    }
-                }
-            }
-        }
-
-        void SmoothMap()
-        {
-            for (int x = 0; x < width; x++)
-            {
-                for (int y = 0; y < height; y++)
-                {
-                    int neighbourWallTiles = GetSurroundingWallCount(x, y);
-
-                    if (neighbourWallTiles > 4)
-                        map[x, y] = 1;
-                    else if (neighbourWallTiles < 4)
-                        map[x, y] = 0;
-
-                }
-            }
-        }
-
-        int GetSurroundingWallCount(int gridX, int gridY)
-        {
-            int wallCount = 0;
-            for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
-            {
-                for (int neighbourY = gridY - 1; neighbourY <= gridY + 1; neighbourY++)
-                {
-                    if (IsInMapRange(neighbourX,neighbourY))
-                    {
-                        if (neighbourX != gridX || neighbourY != gridY)
-                        {
-                            wallCount += map[neighbourX, neighbourY];
-                        }
-                    }
-                    else
-                    {
-                        wallCount++;
-                    }
-                }
-            }
-            return wallCount;
-        }
-
-        public struct Coordinate
-        {
-            public int tileX;
-            public int tileY;
-
-            public Coordinate(int x, int y)
-            {
-                tileX = x;
-                tileY = y;
-            }
+            return x >= 0 && x < Width && y >= 0 && y < Height;
         }
 
         public void Draw(Camera camera)
         {
-            if (map != null)
+            foreach(Tile tile in TilesMap)
             {
-                for (int x = 0; x < width; x++)
-                {
-                    for (int y = 0; y < height; y++)
-                    {
-                        int number = (map[x, y] == 1) ? 1 : 0;
-                        Vector2 pos = new Vector2(x,y);
-                        tile = new Tile(number, pos, 1);
-                        tile.DrawTile(camera);
-                    }
-                }
+                tile.DrawTile(camera);
             }
         }
     }
