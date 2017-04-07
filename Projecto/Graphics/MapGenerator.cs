@@ -23,12 +23,7 @@ namespace Projecto
 
         int[,] map;
 
-        public void Start()
-        {
-            GenerateMap();
-        }
-
-        void GenerateMap()
+        public void GenerateMap()
         {
             map = new int[width, height];
             RandomFillMap();
@@ -41,10 +36,12 @@ namespace Projecto
             ProcessMap();
         }
 
+
+
         void ProcessMap()
         {
             List<List<Coordinate>> wallRegions = GetRegions(1);
-            int wallThreshholdSize = 0;
+            int wallThreshholdSize = 20;
 
             foreach(List<Coordinate> wallRegion in wallRegions)
             {
@@ -58,7 +55,7 @@ namespace Projecto
             }
 
             List<List<Coordinate>> roomRegions = GetRegions(0);
-            int roomThreshholdSize = 0;
+            int roomThreshholdSize = 20;
             List<Room> survivingRooms = new List<Room>();
 
             foreach (List<Coordinate> roomRegion in roomRegions)
@@ -169,6 +166,13 @@ namespace Projecto
 
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="roomA"></param>
+        /// <param name="roomB"></param>
+        /// <param name="tileA"></param>
+        /// <param name="tileB"></param>
         void CreatePassage(Room roomA, Room roomB, Coordinate tileA, Coordinate tileB)
         {
             Room.ConnectRooms(roomA, roomB);
@@ -180,24 +184,35 @@ namespace Projecto
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="r"></param>
         void DrawCircle(Coordinate c, int r)
         {
             for(int x = -r; x <= r; x++)
             {
                 for (int y = -r; y <= r; y++)
                 {
-                    if(x*x + y*y < r*r)
+                    if(x*x + y*y <= r*r)
                     {
-                        int realX = c.tileX + x;
-                        int realY = c.tileY + y;
+                        int drawX = c.tileX + x;
+                        int drawY = c.tileY + y;
 
-                        if(IsInMapRange(realX,realY))
-                            map[realX, realY] = 0;
+                        if(IsInMapRange(drawX,drawY))
+                            map[drawX, drawY] = 0;
                     }
                 }
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="from"></param>
+        /// <param name="to"></param>
+        /// <returns></returns>
         List<Coordinate> GetLine(Coordinate from, Coordinate to)
         {
             List<Coordinate> line = new List<Coordinate>();
@@ -237,6 +252,7 @@ namespace Projecto
                     x += step;
 
                 gradientAccumulation += shortest;
+
                 if(gradientAccumulation >= longest)
                 {
                     if (inverted)
@@ -251,11 +267,22 @@ namespace Projecto
             return line;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tile"></param>
+        /// <returns></returns>
         Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
             return new Vector2(-width / 2 + 0.5f + tile.tileX, -height / 2 + 0.5f + tile.tileY);
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="tileType"></param>
+        /// <returns></returns>
         List<List<Coordinate>> GetRegions(int tileType)
         {
             List<List<Coordinate>> regions = new List<List<Coordinate>>();
@@ -267,14 +294,14 @@ namespace Projecto
                 {
                     if(mapFlags[x,y] == 0 && map[x,y] == tileType)
                     {
-                        //List<Coordinate> newRegion = GetRegionTiles(x, y);
-                        List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
+                        List<Coordinate> newRegion = GetRegionTiles(x, y);
+                        //List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
                         regions.Add(newRegion);
 
-                        //foreach (Coordinate tile in newRegion)
-                        //{
-                        //    mapFlags[tile.tileX, tile.tileY] = 1;
-                        //}
+                        foreach (Coordinate tile in newRegion)
+                        {
+                            mapFlags[tile.tileX, tile.tileY] = 1;
+                        }
                     }
                 }
             }
@@ -325,6 +352,13 @@ namespace Projecto
             return result;
         }
 
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="startX"></param>
+        /// <param name="startY"></param>
+        /// <returns></returns>
         List<Coordinate> GetRegionTiles(int startX, int startY)
         {
             List<Coordinate> tiles = new List<Coordinate>();
@@ -335,16 +369,17 @@ namespace Projecto
             queue.Enqueue(new Coordinate(startX, startY));
             mapFlags[startX, startY] = 1;
 
-            while(queue.Count > 0)
+            while (queue.Count > 0)
             {
                 Coordinate tile = queue.Dequeue();
                 tiles.Add(tile);
 
-                for(int x = tile.tileX - 1; x <= tile.tileX; x++ )
+                //identiifca tile relacionado com startx e starty
+                for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++)
                 {
-                    for(int y = tile.tileY - 1; y <= tile.tileY; y++)
+                    for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
                     {
-                        if(IsInMapRange(x,y) && (x == tile.tileX || y == tile.tileY))
+                        if (IsInMapRange(x, y) && (x == tile.tileX || y == tile.tileY))
                         {
                             if (mapFlags[x, y] == 0 && map[x, y] == tileType)
                             {
@@ -355,6 +390,7 @@ namespace Projecto
                     }
                 }
             }
+            //Analizar tiles...
             return tiles;
         }
 

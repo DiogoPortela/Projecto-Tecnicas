@@ -25,12 +25,12 @@ namespace Projecto
 
             connectedRooms = new List<Room>();
             edgeTiles = new List<Coordinate>();
+
             foreach(Coordinate tile in tiles)
             {
-
-                for(int x = tile.tileX; x <= tile.tileX + 1; x++)
+                for(int x = tile.tileX -1; x <= tile.tileX + 1; x++)
                 {
-                    for (int y = tile.tileY; y <= tile.tileY + 1; y++)
+                    for (int y = tile.tileY -1; y <= tile.tileY + 1; y++)
                     {
                         if(x == tile.tileX || y == tile.tileY)
                         {

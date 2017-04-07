@@ -60,7 +60,7 @@ namespace Projecto
             map.randomFillPercent = 50;
             map.width = (int)Cons.MAXWIDTH; //100;
             map.height = 75;
-            map.Start();
+            map.GenerateMap();
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Projecto
             // TODO: Add your update logic here
             if(InputManager.MovementPlayerOne.Select == ButtonState.Pressed)
             {
-                map.Start();
+                map.GenerateMap();
             }
 
             base.Update(gameTime);
