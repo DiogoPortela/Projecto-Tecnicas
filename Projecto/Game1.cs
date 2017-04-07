@@ -45,7 +45,14 @@ namespace Projecto
         protected override void LoadContent()
         {
             // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);            
+            spriteBatch = new SpriteBatch(GraphicsDevice);
+            //player = Content.Load<Texture2D>("Drude.png");
+            Camera.SetCameraWindow(new Vector2(0, 0), 100f);
+            map.useRandomSeed = true;
+            map.randomFillPercent = 50;
+            map.width = (int)Cons.MAXWIDTH; //100;
+            map.height = 75;
+            map.GenerateMap();
         }
 
         /// <summary>
