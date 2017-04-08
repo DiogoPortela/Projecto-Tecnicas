@@ -16,8 +16,10 @@ namespace Projecto
         private CurrentInput currentInput;
         protected Animation[] animations;
         public Animation currentAnimation;
-
+        public Collider playerCollider;
+        public Vector2 Coordinates;
         private const float movingSpeed = 0.4f;
+        private Vector2 deltaPosition;
 
         //------------->CONSTRUCTORS<-------------//
 
@@ -26,6 +28,11 @@ namespace Projecto
             this.animations = new Animation[18];
             this.pNumber = number;
             this.currentInput = CurrentInput.NoInput;
+            this.playerCollider = new Collider();
+
+            Coordinates = position / size;
+
+            playerCollider.UpdateCollisions(Coordinates);
 
             if (number == PlayerNumber.playerOne)
             {
@@ -49,6 +56,7 @@ namespace Projecto
         /// <param name="gameTime"></param>
         public void PlayerMovement(GameTime gameTime)
         {
+            deltaPosition = Vector2.Zero;
             #region PlayerOne
             if (pNumber == PlayerNumber.playerOne)
             {                
@@ -62,19 +70,19 @@ namespace Projecto
                         currentInput = CurrentInput.Right;
 
                     }*/
-                    this.Move(Vector2.UnitX * movingSpeed);
+                    deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitX * movingSpeed);
+                    deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
                 {
-                    this.Move(Vector2.UnitY * movingSpeed);
+                    deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitY * movingSpeed);
+                    deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
             }
             #endregion
@@ -91,22 +99,27 @@ namespace Projecto
                         currentInput = CurrentInput.Right;
 
                     }*/
-                    this.Move(Vector2.UnitX * movingSpeed);
+                    deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitX * movingSpeed);
+                    deltaPosition  += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
                 {
-                    this.Move(Vector2.UnitY * movingSpeed);
+                    deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitY * movingSpeed);
+                    deltaPosition += - Vector2.UnitY * movingSpeed;
                 }
             }
             #endregion
+
+            if(deltaPosition != Vector2.Zero)
+            {
+                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, MinBound, MaxBound);
+            }
 
             //this.currentAnimation.Play(gameTime);
         }

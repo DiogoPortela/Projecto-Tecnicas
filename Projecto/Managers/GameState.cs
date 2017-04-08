@@ -59,7 +59,6 @@ namespace Projecto
             teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
             PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
             #endregion
-
         }
 
         //------------->FUNCTIONS && METHODS<-------------//

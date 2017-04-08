@@ -15,12 +15,13 @@ namespace Projecto
         public bool isSomethingOnTop;
         public bool isWalkable;
 
-
         //------------->CONSTRUCTORS<-------------//
 
         public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber, coordinates * size, new Vector2(size, size), 0f)
         {
             this.Coordinates = coordinates;
+            this.isSomethingOnTop = false;
+            this.isWalkable = true;
         }
 
         //------------->FUNCTIONS && METHODS<-------------//

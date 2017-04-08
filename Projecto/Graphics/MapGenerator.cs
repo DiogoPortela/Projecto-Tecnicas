@@ -19,16 +19,16 @@ namespace Projecto
         public int RandomFillPercent;
 
         //public Tile tile;
-        public List<Tile> TilesMap;
-        public List<Room> MapRooms;
-        int[,] infoMap;
+        static public Tile[,] TilesMap;
+        static public Room[,] MapRooms;
+        static int[,] infoMap;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
         public void GenerateMap(int tileSize)
         {
-            TilesMap = new List<Tile>();
-            MapRooms = new List<Room>();
+            TilesMap = new Tile[Width, Height];
+            MapRooms = new Room[Width, Height];
             infoMap = new int[Width, Height];
             RandomFillMap();
             for (int i = 0; i < 5; i++)
@@ -131,7 +131,7 @@ namespace Projecto
                         int number = (infoMap[x, y] == 1) ? 1 : 0;
                         Vector2 pos = new Vector2(x, y);
                         Tile tile = new Tile(number, pos, tileSize);
-                        TilesMap.Add(tile);
+                        TilesMap[x,y] = tile;
                     }
                 }
             }

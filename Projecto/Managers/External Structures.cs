@@ -7,6 +7,23 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+    internal struct CollisionBool
+    {
+        public bool hasCollided;
+        public bool top;
+        public bool bottom;
+        public bool left;
+        public bool right;
+        
+        public void Init()
+        {
+            hasCollided = false;
+            top = false;
+            bottom = false;
+            left = false;
+            right = false;
+        }
+    }
     internal struct Coordinate
     {
         public int tileX;
@@ -22,13 +39,11 @@ namespace Projecto
     {
         MainMenu, Playing, ScoreScreen
     }
-
     enum Cons
     {
         MAXWIDTH=100,
         MAXHEIGHT=75
     }
-
     internal enum PlayerNumber
     {
         playerOne = 1, playerTwo
@@ -55,8 +70,6 @@ namespace Projecto
 
         //Buttons1..2..3
     }
-
-
     internal struct MovementInput2
     {
         private ButtonState GetState(Keys key)

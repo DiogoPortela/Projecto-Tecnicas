@@ -13,14 +13,16 @@ namespace Projecto
         protected Texture2D Texture;            //Texture image.
         public Vector2 TextureCenter;           //For rotations.
         protected Rectangle Rectangle;          //Rectangle to draw to.
+        public Vector2 MinBound;
+        public Vector2 MaxBound;
 
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
         public Vector2 SizeCenter;
         public float RotationAngle { get; set; }
 
-        protected float speed;
-        protected Vector2 speedDirection;
+        //protected float speed;
+        //protected Vector2 speedDirection;
         protected Vector2 objectDiretion;
 
         private bool isactive;
@@ -61,10 +63,13 @@ namespace Projecto
             }            
             this.Position = position;
             this.Size = size;
-            this.SizeCenter = new Vector2(size.X, -size.Y)/2;
             this.RotationAngle = rotation;
-            this.speed = 0f;
-            this.speedDirection = Vector2.Zero;
+
+            this.MinBound = position - new Vector2(0, size.Y);
+            this.MaxBound = position + new Vector2(size.X, 0);
+            this.SizeCenter = new Vector2(size.X, -size.Y)/2;
+            //this.speed = 0f;
+            //this.speedDirection = Vector2.Zero;
             this.objectDiretion = -Vector2.UnitY;
             this.isActive = true;
         }
@@ -79,6 +84,7 @@ namespace Projecto
         public void Move(Vector2 direction, float speed)
         {
             this.Position += direction * speed;
+            this.objectDiretion = direction;
         }
         /// <summary>
         /// Moves the object in a given direction.
@@ -87,6 +93,7 @@ namespace Projecto
         public void Move(Vector2 direction)
         {
             this.Position += direction;
+            this.objectDiretion = direction;
         }
         /// <summary>
         /// Draws an object on screen using a camera.
