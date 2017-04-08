@@ -22,6 +22,7 @@ namespace Projecto
         static public Tile[,] TilesMap;
         static public Room[,] MapRooms;
         static int[,] infoMap;
+        public Vector2 PlayerStart;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -37,6 +38,7 @@ namespace Projecto
             }
             ProcessMap();
             FillTileMap(tileSize);
+            GetPlayerStartingPosition();
         }
 
         private void RandomFillMap()
@@ -423,6 +425,20 @@ namespace Projecto
         private bool IsInMapRange(int x, int y)
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
+        }
+        private void GetPlayerStartingPosition()
+        {
+
+            for (int x = 0; x < Width; x++)
+            {
+                for (int y = 0; y < Height; y++)
+                {
+                    if (infoMap[x, y] == 0)
+                    {
+                        PlayerStart = new Vector2(x,y);
+                    }
+                }
+            }
         }
 
         public void Draw(Camera camera)
