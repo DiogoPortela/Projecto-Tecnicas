@@ -34,6 +34,7 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
 
             this.playerCollider = new Collider(Coordinates, size);
+            this.playerCollider.InitTiles(Coordinates);
 
             if (number == PlayerNumber.playerOne)
             {

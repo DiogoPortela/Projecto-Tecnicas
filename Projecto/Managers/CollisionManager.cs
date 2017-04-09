@@ -19,16 +19,17 @@ namespace Projecto
         {
             this.MinBound = coordinates * size - new Vector2(0, size.Y);
             this.MaxBound = coordinates * size + new Vector2(size.X, 0);
+        }
 
+        //------------->FUNCTIONS && METHODS<-------------//
+        public void InitTiles(Vector2 coordinates)
+        {
             Tiles[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y];
             Tiles[1] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y + 1];
             Tiles[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y];
             Tiles[3] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y - 1];
             MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = true;
         }
-
-        //------------->FUNCTIONS && METHODS<-------------//
-
         private void UpdateTiles(ref Vector2 coordinates, Vector2 nextPosition)
         {
             //Rounds the position to coordinates;
