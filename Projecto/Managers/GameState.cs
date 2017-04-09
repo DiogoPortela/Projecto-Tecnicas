@@ -31,8 +31,8 @@ namespace Projecto
             #region Map Generation
             map.UseRandomSeed = true;
             map.RandomFillPercent = 50;
-            map.Width = (int)Cons.MAXWIDTH; //100;
-            map.Height = 75;
+            MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
+            MapGenerator.Height = 75;
             map.GenerateMap(5);
             #endregion
 
@@ -55,7 +55,7 @@ namespace Projecto
             Debug.LoadFont();   //Starting Debug.
 
             #region TestZone
-            PlayerOne = new PlayerManager(new Vector2(50, 30) * 5, Vector2.One * 5, PlayerNumber.playerOne);
+            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne);
             teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
             //PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
             #endregion

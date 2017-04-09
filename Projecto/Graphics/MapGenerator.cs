@@ -10,8 +10,8 @@ namespace Projecto
 {
     class MapGenerator
     {
-        public int Width;
-        public int Height;
+        static public int Width;
+        static public int Height;
 
         public string Seed;
         public bool UseRandomSeed;
@@ -99,7 +99,6 @@ namespace Projecto
 
             List<List<Coordinate>> roomRegions = GetRegions(0);
             int roomThreshholdSize = 20;
-            List<Room> survivingRooms = new List<Room>();
 
             foreach (List<Coordinate> roomRegion in roomRegions)
             {
@@ -112,15 +111,14 @@ namespace Projecto
                 }
                 else
                 {
-                    survivingRooms.Add(new Room(roomRegion, infoMap));
+                    MapRooms.Add(new Room(roomRegion, infoMap));
                 }
             }
+            MapRooms.Sort();
+            MapRooms[0].isMainRoom = true;
+            MapRooms[0].isAccessibleFromMainRoom = true;
 
-            survivingRooms.Sort();
-            survivingRooms[0].isMainRoom = true;
-            survivingRooms[0].isAccessibleFromMainRoom = true;
-
-            ConnectClosestRooms(survivingRooms);
+            ConnectClosestRooms(MapRooms);
         }
         private void FillTileMap(int tileSize)
         {
@@ -139,7 +137,7 @@ namespace Projecto
             }
         }
 
-        private int GetSurroundingWallCount(int gridX, int gridY)
+        static private int GetSurroundingWallCount(int gridX, int gridY)
         {
             int wallCount = 0;
             for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -422,25 +420,28 @@ namespace Projecto
             //Analizar tiles...
             return tiles;
         }
-        private bool IsInMapRange(int x, int y)
+        static private bool IsInMapRange(int x, int y)
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
-        private void GetPlayerStartingPosition(List<Room> allRooms)
+        static public Vector2 GetPlayerStartingPosition()
         {
+            Vector2 result = Vector2.Zero;
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    foreach (Room r in allRooms)
+                    foreach (Room r in MapRooms)
                     {
                         if (infoMap[x, y] == 0 && GetSurroundingWallCount(x, y) == 0 && r.tiles.Contains(new Coordinate(x, y)))
                         {
-                            PlayerStart = new Vector2(x, y);
+                            result = new Vector2(x, y);
+                            break;
                         }
                     }
                 }
             }
+            return result;
         }
 
         public void Draw(Camera camera)
