@@ -30,24 +30,24 @@ namespace Projecto
             Tiles[3] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y - 1];
             MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = true;
         }
-        private void UpdateTiles(ref Vector2 coordinates, Vector2 nextPosition)
+        private void UpdateTiles(ref Vector2 coordinates, Vector2 nextCoordinates)
         {
             //Rounds the position to coordinates;
-            Vector2 coorAux = new Vector2((int)nextPosition.X, (int)nextPosition.Y);
-            
+            Vector2 coorAux = new Vector2((int)nextCoordinates.X, (int)nextCoordinates.Y);
+
             //If the coordinates have changed then so too should the Tile array.
-            if(coorAux != coordinates)
+            if (coorAux != coordinates)
             {
                 MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = false;
-                Tiles[0] = MapGenerator.TilesMap[(int)coorAux.X + 1,    (int)coorAux.Y];
-                Tiles[1] = MapGenerator.TilesMap[(int)coorAux.X,        (int)coorAux.Y + 1];
-                Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1,    (int)coorAux.Y];
-                Tiles[3] = MapGenerator.TilesMap[(int)coorAux.X,        (int)coorAux.Y - 1];
+                Tiles[0] = MapGenerator.TilesMap[(int)coorAux.X + 1, (int)coorAux.Y];
+                Tiles[1] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y + 1];
+                Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y];
+                Tiles[3] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y - 1];
                 MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
 
                 coordinates = coorAux;
             }
-            
+
         }
         /// <summary>
         /// Returns a struct that store whether if there has been a colision and where.
@@ -67,7 +67,7 @@ namespace Projecto
             {
                 result.hasCollided = result.top = true;
             }
-            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.Y)
+            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.X)
             {
                 result.hasCollided = result.left = true;
             }
@@ -82,9 +82,9 @@ namespace Projecto
             Vector2 minAux = MinBound + deltaPosition;
             Vector2 maxAux = MaxBound + deltaPosition;
             CollisionBool testCollisions = CollisionDirection(minAux, maxAux);
-            if(testCollisions.hasCollided)
+            if (testCollisions.hasCollided)
             {
-                if(testCollisions.right && deltaPosition.X > 0)
+                if (testCollisions.right && deltaPosition.X > 0)
                 {
                     deltaPosition.X = 0;
                 }
@@ -100,18 +100,18 @@ namespace Projecto
                 {
                     deltaPosition.Y = 0;
                 }
-                UpdateTiles(ref coordinates, deltaPosition + position);
-                MinBound += deltaPosition;
-                MaxBound += deltaPosition;
-            }        
+            }
+            UpdateTiles(ref coordinates, (deltaPosition + position) / 5);
+            MinBound += deltaPosition;
+            MaxBound += deltaPosition;
             return deltaPosition;
         }
     }
 
     static class CollisionManager
-    {       
+    {
         public static bool TouchingTopOf(this Rectangle rect1, Rectangle rect2)
-        { 
+        {
             return (rect1.Bottom >= rect2.Top - 1 &&
                     rect1.Bottom <= rect2.Top + (rect2.Height / 2) &&
                     rect1.Right >= rect2.Left + rect2.Width / 5 &&

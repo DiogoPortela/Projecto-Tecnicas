@@ -29,7 +29,7 @@ namespace Projecto
             this.pNumber = number;
             this.currentInput = CurrentInput.NoInput;
 
-            Coordinates = (position / size);
+            Coordinates = ((position + size/2) / size);
             Coordinates.X = (int)Coordinates.X;
             Coordinates.Y = (int)Coordinates.Y;
 
@@ -120,8 +120,11 @@ namespace Projecto
 
             if(deltaPosition != Vector2.Zero)
             {
-                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position);
+                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position + Size / 2);
                 this.Move(deltaPosition);
+                //Coordinates.X = (int)(Position.X / this.Size.X);
+                //Coordinates.Y = (int)(Position.Y / this.Size.Y);
+
             }
             //this.currentAnimation.Play(gameTime);
         }
