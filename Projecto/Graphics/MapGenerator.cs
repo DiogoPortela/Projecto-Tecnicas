@@ -22,6 +22,10 @@ namespace Projecto
         public Tile tile;
 
         int[,] map;
+        // AI
+        public Vector2 ArraySize; // guarda o tamanho do mapa
+        public List<Rectangle> AStarCollisionObjects; // Lista para as colisões     
+        public List<Rectangle> CollisionObjects; // Lista para objetos intrespassáveis
 
         public void GenerateMap()
         {

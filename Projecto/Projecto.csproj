@@ -38,6 +38,11 @@
     <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\Astar.cs" />
+    <Compile Include="AI\AstarManager.cs" />
+    <Compile Include="AI\AstarThreadWorker.cs" />
+    <Compile Include="AI\Node.cs" />
+    <Compile Include="AI\Waypoint.cs" />
     <Compile Include="Characters\Boss.cs" />
     <Compile Include="Characters\PlayerManager.cs" />
     <Compile Include="Graphics\Animation.cs" />

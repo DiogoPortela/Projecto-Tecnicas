@@ -27,6 +27,8 @@ namespace Projecto
             get { return width; }
         }
 
+        public Vector2 ArraySize; // guar
+
         //------------->CONSTRUCTORS<-------------//
 
         public Map()
