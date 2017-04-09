@@ -20,7 +20,7 @@ namespace Projecto
 
         //public Tile tile;
         static public Tile[,] TilesMap;
-        static public Room[,] MapRooms;
+        static public List<Room> MapRooms;
         static int[,] infoMap;
         public Vector2 PlayerStart;
 
@@ -29,7 +29,7 @@ namespace Projecto
         public void GenerateMap(int tileSize)
         {
             TilesMap = new Tile[Width, Height];
-            MapRooms = new Room[Width, Height];
+            MapRooms = new List<Room>();
             infoMap = new int[Width, Height];
             RandomFillMap();
             for (int i = 0; i < 5; i++)
@@ -38,7 +38,7 @@ namespace Projecto
             }
             ProcessMap();
             FillTileMap(tileSize);
-            GetPlayerStartingPosition();
+            //GetPlayerStartingPosition();
         }
 
         private void RandomFillMap()
@@ -426,16 +426,18 @@ namespace Projecto
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
-        private void GetPlayerStartingPosition()
+        private void GetPlayerStartingPosition(List<Room> allRooms)
         {
-
             for (int x = 0; x < Width; x++)
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    if (infoMap[x, y] == 0)
+                    foreach (Room r in allRooms)
                     {
-                        PlayerStart = new Vector2(x,y);
+                        if (infoMap[x, y] == 0 && GetSurroundingWallCount(x, y) == 0 && r.tiles.Contains(new Coordinate(x, y)))
+                        {
+                            PlayerStart = new Vector2(x, y);
+                        }
                     }
                 }
             }

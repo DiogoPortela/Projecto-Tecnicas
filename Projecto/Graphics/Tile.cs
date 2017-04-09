@@ -12,6 +12,7 @@ namespace Projecto
     class Tile : GameObject
     {
         public Vector2 Coordinates;
+        public Collider Collider;
         public bool isSomethingOnTop;
         public bool isWalkable;
 
@@ -22,6 +23,12 @@ namespace Projecto
             this.Coordinates = coordinates;
             this.isSomethingOnTop = false;
             this.isWalkable = true;
+            this.Collider = new Collider(coordinates, new Vector2(size, size));
+
+            if(tileNumber == 0)
+            {
+
+            }
         }
 
         //------------->FUNCTIONS && METHODS<-------------//

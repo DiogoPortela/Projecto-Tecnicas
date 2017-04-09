@@ -28,11 +28,12 @@ namespace Projecto
             this.animations = new Animation[18];
             this.pNumber = number;
             this.currentInput = CurrentInput.NoInput;
-            this.playerCollider = new Collider();
 
-            Coordinates = position / size;
+            Coordinates = (position / size);
+            Coordinates.X = (int)Coordinates.X;
+            Coordinates.Y = (int)Coordinates.Y;
 
-            playerCollider.UpdateCollisions(Coordinates);
+            this.playerCollider = new Collider(Coordinates, size);
 
             if (number == PlayerNumber.playerOne)
             {
@@ -118,9 +119,9 @@ namespace Projecto
 
             if(deltaPosition != Vector2.Zero)
             {
-                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, MinBound, MaxBound);
+                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position);
+                this.Move(deltaPosition);
             }
-
             //this.currentAnimation.Play(gameTime);
         }
         /*

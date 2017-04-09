@@ -10,19 +10,31 @@ namespace Projecto
     class Collider
     {
         protected Tile[] Tiles = new Tile[4];
-        public void UpdateCollisions(Vector2 coordinates)
+        protected Vector2 MinBound;
+        protected Vector2 MaxBound;
+
+        //------------->CONSTRUCTORS<-------------//
+
+        public Collider(Vector2 coordinates, Vector2 size)
         {
+            this.MinBound = coordinates * size - new Vector2(0, size.Y);
+            this.MaxBound = coordinates * size + new Vector2(size.X, 0);
+
             Tiles[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y];
             Tiles[1] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y + 1];
             Tiles[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y];
             Tiles[3] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y - 1];
             MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = true;
         }
-        public void UpdateCollisions(Vector2 coordinates, Vector2 deltaPosition, Vector2 position)
-        {
-            Vector2 aux = deltaPosition + position;
-            Vector2 coorAux = new Vector2((int)aux.X, (int)aux.Y);
 
+        //------------->FUNCTIONS && METHODS<-------------//
+
+        private void UpdateTiles(ref Vector2 coordinates, Vector2 nextPosition)
+        {
+            //Rounds the position to coordinates;
+            Vector2 coorAux = new Vector2((int)nextPosition.X, (int)nextPosition.Y);
+            
+            //If the coordinates have changed then so too should the Tile array.
             if(coorAux != coordinates)
             {
                 MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = false;
@@ -31,34 +43,44 @@ namespace Projecto
                 Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1,    (int)coorAux.Y];
                 Tiles[3] = MapGenerator.TilesMap[(int)coorAux.X,        (int)coorAux.Y - 1];
                 MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
+
+                coordinates = coorAux;
             }
             
         }
-        public CollisionBool CollisionDirection(Vector2 minBound, Vector2 maxBound)
+        /// <summary>
+        /// Returns a struct that store whether if there has been a colision and where.
+        /// </summary>
+        /// <param name="minAux">MinBound with deltaPostion</param>
+        /// <param name="maxAux">MaxBound with deltaPosition</param>
+        /// <returns></returns>
+        private CollisionBool CollisionDirection(Vector2 minAux, Vector2 maxAux)
         {
             CollisionBool result = new CollisionBool();
             result.Init();
-            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].MinBound.X < maxBound.X)
+            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X)
             {
                 result.hasCollided = result.right = true;
             }
-            if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].MinBound.Y < maxBound.Y)
+            if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < maxAux.Y)
             {
                 result.hasCollided = result.top = true;
             }
-            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].MaxBound.X > minBound.Y)
+            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.Y)
             {
                 result.hasCollided = result.left = true;
             }
-            if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].MaxBound.Y > minBound.Y)
+            if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y)
             {
                 result.hasCollided = result.bottom = true;
             }
             return result;
         }
-        public Vector2 UpdateDeltaWithCollisions(Vector2 deltaPosition, Vector2 minBound, Vector2 maxBound)
+        public Vector2 UpdateDeltaWithCollisions(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position)
         {
-            CollisionBool testCollisions = CollisionDirection(minBound, maxBound);
+            Vector2 minAux = MinBound + deltaPosition;
+            Vector2 maxAux = MaxBound + deltaPosition;
+            CollisionBool testCollisions = CollisionDirection(minAux, maxAux);
             if(testCollisions.hasCollided)
             {
                 if(testCollisions.right && deltaPosition.X > 0)
@@ -77,7 +99,10 @@ namespace Projecto
                 {
                     deltaPosition.Y = 0;
                 }
-            }
+                UpdateTiles(ref coordinates, deltaPosition + position);
+                MinBound += deltaPosition;
+                MaxBound += deltaPosition;
+            }        
             return deltaPosition;
         }
     }

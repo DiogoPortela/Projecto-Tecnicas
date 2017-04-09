@@ -59,7 +59,6 @@ namespace Projecto
                 }
             }
         }
-
         public static void ConnectRooms(Room roomA, Room roomB)
         {
             if(roomA.isAccessibleFromMainRoom)
@@ -73,12 +72,10 @@ namespace Projecto
             roomA.connectedRooms.Add(roomB);
             roomB.connectedRooms.Add(roomA);
         }
-
         public bool IsConnected(Room otherRoom)
         {
             return connectedRooms.Contains(otherRoom);
         }
-
         public int CompareTo(Room otherRoom)
         {
             return otherRoom.roomSize.CompareTo(roomSize);

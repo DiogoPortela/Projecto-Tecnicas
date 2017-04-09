@@ -13,8 +13,6 @@ namespace Projecto
         protected Texture2D Texture;            //Texture image.
         public Vector2 TextureCenter;           //For rotations.
         protected Rectangle Rectangle;          //Rectangle to draw to.
-        public Vector2 MinBound;
-        public Vector2 MaxBound;
 
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }
@@ -65,8 +63,6 @@ namespace Projecto
             this.Size = size;
             this.RotationAngle = rotation;
 
-            this.MinBound = position - new Vector2(0, size.Y);
-            this.MaxBound = position + new Vector2(size.X, 0);
             this.SizeCenter = new Vector2(size.X, -size.Y)/2;
             //this.speed = 0f;
             //this.speedDirection = Vector2.Zero;
