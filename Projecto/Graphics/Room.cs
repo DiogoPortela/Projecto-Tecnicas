@@ -21,6 +21,7 @@ namespace Projecto
 
         public Room(List<Coordinate> roomTiles, int[,] map)
         {
+            int[,] mapFlag = new int[MapGenerator.Width, MapGenerator.Height];
             tiles = roomTiles;
             roomSize = tiles.Count;
 
@@ -33,12 +34,13 @@ namespace Projecto
                 {
                     for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
                     {
-                        if (x == tile.tileX || y == tile.tileY)
+                        if (x == tile.tileX || y == tile.tileY && mapFlag[x,y] == 0)
                         {
                             {
                                 if (map[x, y] == 1)
                                 {
-                                    edgeTiles.Add(tile);
+                                    edgeTiles.Add(new Coordinate(x,y));
+                                    mapFlag[x, y] = 1;
                                 }
                             }
                         }

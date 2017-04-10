@@ -12,7 +12,7 @@ namespace Projecto
     class GameState : Game
     {
         static public PlayerManager PlayerOne;
-        //static public PlayerManager PlayerTwo;
+        static public PlayerManager PlayerTwo;
                 
         Viewport defaultView, leftView, rightView;
         Camera cameraRight, cameraLeft, cameraScreen;
@@ -57,7 +57,7 @@ namespace Projecto
             #region TestZone
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne);
             teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
-            //PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
+            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo);
             #endregion
         }
 
@@ -70,8 +70,8 @@ namespace Projecto
         {
             PlayerOne.PlayerMovement(gameTime);
             cameraLeft.LookAt(PlayerOne);
-            //PlayerTwo.PlayerMovement(gameTime);
-            //cameraRight.LookAt(PlayerTwo);
+            PlayerTwo.PlayerMovement(gameTime);
+            cameraRight.LookAt(PlayerTwo);
 
             KeyboardState teste = Keyboard.GetState();
             if(teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
@@ -115,7 +115,7 @@ namespace Projecto
             map.Draw(camera);
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
-            //PlayerTwo.DrawObject(camera);
+            PlayerTwo.DrawObject(camera);
             Game1.spriteBatch.End();
         }
     }

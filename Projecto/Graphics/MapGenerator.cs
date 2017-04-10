@@ -12,6 +12,7 @@ namespace Projecto
     {
         static public int Width;
         static public int Height;
+        static public int TileSize;
 
         public string Seed;
         public bool UseRandomSeed;
@@ -29,6 +30,7 @@ namespace Projecto
 
         public void GenerateMap(int tileSize)
         {
+            TileSize = tileSize;
             TilesMap = new Tile[Width, Height];
             MapRooms = new List<Room>();
             infoMap = new int[Width, Height];
@@ -38,7 +40,7 @@ namespace Projecto
                 SmoothMap();
             }
             ProcessMap();
-            FillTileMap(tileSize);
+            FillTileMap();
             FindSpawn();
             //GetPlayerStartingPosition();
         }
@@ -122,7 +124,7 @@ namespace Projecto
 
             ConnectClosestRooms(MapRooms);
         }
-        private void FillTileMap(int tileSize)
+        private void FillTileMap()
         {
             if (infoMap != null)
             {
@@ -130,9 +132,7 @@ namespace Projecto
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        int number = (infoMap[x, y] == 1) ? 1 : 0;
-                        Vector2 pos = new Vector2(x, y);
-                        Tile tile = new Tile(number, pos, tileSize);
+                        Tile tile = new Tile(infoMap[x, y], new Vector2(x, y), TileSize);
                         TilesMap[x, y] = tile;
                     }
                 }
@@ -458,7 +458,7 @@ namespace Projecto
             //}
             //return result;
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
-            return new Vector2(aux.tileX, aux.tileY);
+            return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
         }
 
         public void Draw(Camera camera)
