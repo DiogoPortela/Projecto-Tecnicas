@@ -10,15 +10,16 @@ namespace Projecto
     class Collider
     {
         protected Tile[] Tiles = new Tile[4];
+        protected Tile[] TilesDiagonal = new Tile[4];
         protected Vector2 MinBound;
         protected Vector2 MaxBound;
 
         //------------->CONSTRUCTORS<-------------//
 
-        public Collider(Vector2 coordinates, Vector2 size)
+        public Collider(Vector2 position, Vector2 size)
         {
-            this.MinBound = coordinates * size - new Vector2(0, size.Y);
-            this.MaxBound = coordinates * size + new Vector2(size.X, 0);
+            this.MinBound = position - new Vector2(0, size.Y);
+            this.MaxBound = position + new Vector2(size.X, 0);
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -28,6 +29,10 @@ namespace Projecto
             Tiles[1] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y + 1];
             Tiles[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y];
             Tiles[3] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y - 1];
+            TilesDiagonal[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y + 1];
+            TilesDiagonal[1] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y + 1];
+            TilesDiagonal[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y - 1];
+            TilesDiagonal[3] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y - 1];
             MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = true;
         }
         private void UpdateTiles(ref Vector2 coordinates, Vector2 nextCoordinates)
@@ -43,6 +48,10 @@ namespace Projecto
                 Tiles[1] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y + 1];
                 Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y];
                 Tiles[3] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y - 1];
+                TilesDiagonal[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y + 1];
+                TilesDiagonal[1] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y + 1];
+                TilesDiagonal[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y - 1];
+                TilesDiagonal[3] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y - 1];
                 MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
 
                 coordinates = coorAux;
@@ -74,7 +83,7 @@ namespace Projecto
             if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y)
             {
                 result.hasCollided = result.bottom = true;
-            }
+            }            
             return result;
         }
         public Vector2 UpdateDeltaWithCollisions(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position)

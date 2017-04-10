@@ -33,7 +33,7 @@ namespace Projecto
             Coordinates.X = (int)Coordinates.X;
             Coordinates.Y = (int)Coordinates.Y;
 
-            this.playerCollider = new Collider(Coordinates, size);
+            this.playerCollider = new Collider(position, size);
             this.playerCollider.InitTiles(Coordinates);
 
             if (number == PlayerNumber.playerOne)

@@ -25,7 +25,7 @@ namespace Projecto
             this.Coordinates = coordinates;
             this.isSomethingOnTop = false;
             this.isWalkable = true;
-            this.Collider = new Collider(coordinates, new Vector2(size, size));
+            this.Collider = new Collider(coordinates * size, new Vector2(size, size));
 
             if(tileNumber == 1)
             {

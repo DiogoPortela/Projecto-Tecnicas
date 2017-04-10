@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using System;
 
 namespace Projecto
 {
@@ -13,6 +14,7 @@ namespace Projecto
         static public GraphicsDeviceManager graphics;
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
+        static public Random random;
 
         static GameState gameState;
 
@@ -23,6 +25,7 @@ namespace Projecto
             graphics.PreferredBackBufferHeight = 600;
             Content.RootDirectory = "Content";
             content = Content;
+            random = new Random();
         }
 
         /// <summary>

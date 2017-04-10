@@ -21,6 +21,7 @@ namespace Projecto
         //public Tile tile;
         static public Tile[,] TilesMap;
         static public List<Room> MapRooms;
+        static public Room Spawn;
         static int[,] infoMap;
         public Vector2 PlayerStart;
 
@@ -38,6 +39,7 @@ namespace Projecto
             }
             ProcessMap();
             FillTileMap(tileSize);
+            FindSpawn();
             //GetPlayerStartingPosition();
         }
 
@@ -86,11 +88,11 @@ namespace Projecto
             List<List<Coordinate>> wallRegions = GetRegions(1);
             int wallThreshholdSize = 20;
 
-            foreach(List<Coordinate> wallRegion in wallRegions)
+            foreach (List<Coordinate> wallRegion in wallRegions)
             {
-                if(wallRegion.Count < wallThreshholdSize)
+                if (wallRegion.Count < wallThreshholdSize)
                 {
-                    foreach(Coordinate tile in wallRegion)
+                    foreach (Coordinate tile in wallRegion)
                     {
                         infoMap[tile.tileX, tile.tileY] = 0;
                     }
@@ -131,7 +133,7 @@ namespace Projecto
                         int number = (infoMap[x, y] == 1) ? 1 : 0;
                         Vector2 pos = new Vector2(x, y);
                         Tile tile = new Tile(number, pos, tileSize);
-                        TilesMap[x,y] = tile;
+                        TilesMap[x, y] = tile;
                     }
                 }
             }
@@ -164,11 +166,11 @@ namespace Projecto
             List<Room> roomListA = new List<Room>();
             List<Room> roomListB = new List<Room>();
 
-            if(forceAccessibilityFromMainRoom)
+            if (forceAccessibilityFromMainRoom)
             {
-                foreach(Room room in allRooms)
+                foreach (Room room in allRooms)
                 {
-                    if(room.isAccessibleFromMainRoom)
+                    if (room.isAccessibleFromMainRoom)
                     {
                         roomListB.Add(room);
                     }
@@ -183,7 +185,7 @@ namespace Projecto
                 roomListA = allRooms;
                 roomListB = allRooms;
             }
-                
+
 
             int bestDistance = 0;
             Coordinate bestTileA = new Coordinate();
@@ -192,12 +194,12 @@ namespace Projecto
             Room bestRoomB = new Room();
             bool possibleConnectionFound = false;
 
-            foreach(Room roomA in roomListA)
+            foreach (Room roomA in roomListA)
             {
-                if(!forceAccessibilityFromMainRoom)
+                if (!forceAccessibilityFromMainRoom)
                 {
                     possibleConnectionFound = false;
-                    if(roomA.connectedRooms.Count > 0)
+                    if (roomA.connectedRooms.Count > 0)
                         continue;
                 }
                 foreach (Room roomB in roomListB)
@@ -205,7 +207,7 @@ namespace Projecto
                     if (roomA == roomB || roomA.IsConnected(roomB))
                         continue;
 
-                    for(int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++)
+                    for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++)
                     {
                         for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.Count; tileIndexB++)
                         {
@@ -213,7 +215,7 @@ namespace Projecto
                             Coordinate tileB = roomB.edgeTiles[tileIndexB];
                             int distanceBetweenRooms = (int)(Math.Pow(tileA.tileX - tileB.tileX, 2) + Math.Pow(tileA.tileY - tileB.tileY, 2));
 
-                            if(distanceBetweenRooms < bestDistance || !possibleConnectionFound)
+                            if (distanceBetweenRooms < bestDistance || !possibleConnectionFound)
                             {
                                 bestDistance = distanceBetweenRooms;
                                 possibleConnectionFound = true;
@@ -226,7 +228,7 @@ namespace Projecto
                     }
                 }
 
-                if(possibleConnectionFound && !forceAccessibilityFromMainRoom)
+                if (possibleConnectionFound && !forceAccessibilityFromMainRoom)
                 {
                     CreatePassage(bestRoomA, bestRoomB, bestTileA, bestTileB);
                 }
@@ -256,7 +258,7 @@ namespace Projecto
             Room.ConnectRooms(roomA, roomB);
 
             List<Coordinate> line = GetLine(tileA, tileB);
-            foreach(Coordinate c in line)
+            foreach (Coordinate c in line)
             {
                 DrawCircle(c, 2);
             }
@@ -268,16 +270,16 @@ namespace Projecto
         /// <param name="r"></param>
         private void DrawCircle(Coordinate c, int r)
         {
-            for(int x = -r; x <= r; x++)
+            for (int x = -r; x <= r; x++)
             {
                 for (int y = -r; y <= r; y++)
                 {
-                    if(x*x + y*y <= r*r)
+                    if (x * x + y * y <= r * r)
                     {
                         int drawX = c.tileX + x;
                         int drawY = c.tileY + y;
 
-                        if(IsInMapRange(drawX,drawY))
+                        if (IsInMapRange(drawX, drawY))
                             infoMap[drawX, drawY] = 0;
                     }
                 }
@@ -306,7 +308,7 @@ namespace Projecto
             int longest = Math.Abs(dx);
             int shortest = Math.Abs(dy);
 
-            if(longest < shortest)
+            if (longest < shortest)
             {
                 inverted = true;
                 longest = Math.Abs(dy);
@@ -318,7 +320,7 @@ namespace Projecto
 
             int gradientAccumulation = longest / 2;
 
-            for(int i = 0; i < longest; i++)
+            for (int i = 0; i < longest; i++)
             {
                 line.Add(new Coordinate(x, y));
 
@@ -329,7 +331,7 @@ namespace Projecto
 
                 gradientAccumulation += shortest;
 
-                if(gradientAccumulation >= longest)
+                if (gradientAccumulation >= longest)
                 {
                     if (inverted)
                         x += gradientStep;
@@ -365,7 +367,7 @@ namespace Projecto
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    if(mapFlags[x,y] == 0 && infoMap[x,y] == tileType)
+                    if (mapFlags[x, y] == 0 && infoMap[x, y] == tileType)
                     {
                         List<Coordinate> newRegion = GetRegionTiles(x, y);
                         //List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
@@ -424,29 +426,44 @@ namespace Projecto
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
-        static public Vector2 GetPlayerStartingPosition()
+        static private void FindSpawn()
         {
-            Vector2 result = Vector2.Zero;
-            for (int x = 0; x < Width; x++)
+            int minX = Width;
+            foreach (Room r in MapRooms)
             {
-                for (int y = 0; y < Height; y++)
-                {
-                    foreach (Room r in MapRooms)
+                if (!r.isMainRoom)
+                    foreach (Coordinate c in r.tiles)
                     {
-                        if (infoMap[x, y] == 0 && GetSurroundingWallCount(x, y) == 0 && r.tiles.Contains(new Coordinate(x, y)))
+                        if (c.tileX < minX)
                         {
-                            result = new Vector2(x, y);
-                            break;
+                            minX = c.tileX;
+                            Spawn = r;
                         }
                     }
-                }
             }
-            return result;
+            Spawn.isSpawn = true;
+        }
+        static public Vector2 GetPlayerStartingPosition()
+        {
+            //Vector2 result = Vector2.Zero;
+            //for (int x = 0; x < Width; x++)
+            //{
+            //    for (int y = 0; y < Height; y++)
+            //    {
+            //        if (infoMap[x, y] == 0 && GetSurroundingWallCount(x, y) >= 2)
+            //        {
+            //            return result = new Vector2(x, y);                        
+            //        }
+            //    }
+            //}
+            //return result;
+            Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
+            return new Vector2(aux.tileX, aux.tileY);
         }
 
         public void Draw(Camera camera)
         {
-            foreach(Tile tile in TilesMap)
+            foreach (Tile tile in TilesMap)
             {
                 tile.DrawTile(camera);
             }

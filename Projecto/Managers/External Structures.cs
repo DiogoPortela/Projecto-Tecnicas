@@ -14,7 +14,12 @@ namespace Projecto
         public bool bottom;
         public bool left;
         public bool right;
-        
+
+        public bool topLeft;
+        public bool topRight;
+        public bool bottomLeft;
+        public bool bottomRight;
+
         public void Init()
         {
             hasCollided = false;
