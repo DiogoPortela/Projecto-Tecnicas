@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework;
 
 namespace Projecto.AI
 {
-    class Node
+    class Node // tile
     {
         #region Node class variables
         /// <summary>
