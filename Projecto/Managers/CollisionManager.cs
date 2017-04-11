@@ -68,7 +68,7 @@ namespace Projecto
         {
             CollisionBool result = new CollisionBool();
             result.Init();
-            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X)
+            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X )
             {
                 result.hasCollided = result.right = true;
             }
@@ -90,29 +90,59 @@ namespace Projecto
         {
             Vector2 minAux = MinBound + deltaPosition;
             Vector2 maxAux = MaxBound + deltaPosition;
-            CollisionBool testCollisions = CollisionDirection(minAux, maxAux);
-            if (testCollisions.hasCollided)
-            {
-                if (testCollisions.right && deltaPosition.X > 0)
-                {
-                    deltaPosition.X = 0;
-                }
-                if (testCollisions.top && deltaPosition.Y > 0)
-                {
-                    deltaPosition.Y = 0;
-                }
-                if (testCollisions.left && deltaPosition.X < 0)
-                {
-                    deltaPosition.X = 0;
-                }
-                if (testCollisions.bottom && deltaPosition.Y < 0)
-                {
-                    deltaPosition.Y = 0;
-                }
-            }
+            deltaPosition = Teste(deltaPosition, minAux, maxAux);
+            //CollisionBool testCollisions = CollisionDirection(minAux, maxAux);
+            //if (testCollisions.hasCollided)
+            //{
+            //    if (testCollisions.right && deltaPosition.X > 0)
+            //    {
+            //        deltaPosition.X = 0;
+            //    }
+            //    if (testCollisions.top && deltaPosition.Y > 0)
+            //    {
+            //        deltaPosition.Y = 0;
+            //    }
+            //    if (testCollisions.left && deltaPosition.X < 0)
+            //    {
+            //        deltaPosition.X = 0;
+            //    }
+            //    if (testCollisions.bottom && deltaPosition.Y < 0)
+            //    {
+            //        deltaPosition.Y = 0;
+            //    }
+            //}
             UpdateTiles(ref coordinates, (deltaPosition + position) / 5);
             MinBound += deltaPosition;
             MaxBound += deltaPosition;
+            return deltaPosition;
+        }
+        private Vector2 Teste(Vector2 deltaPosition, Vector2 minAux, Vector2 maxAux)
+        {
+            if(deltaPosition.X > 0 && (((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X) ||
+                                       ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < maxAux.Y) ||
+                                       ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > minAux.Y)))
+            {
+                deltaPosition.X = 0;
+            }
+            if (deltaPosition.X < 0 && (((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.X) ||
+                                       ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MinBound.Y < maxAux.Y) ||
+                                       ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > minAux.Y)))
+            {
+                deltaPosition.X = 0;
+            }
+            if (deltaPosition.Y > 0 && (((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < maxAux.Y) ||
+                                      ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < maxAux.X) ||
+                                      ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > minAux.X)))
+            {
+                deltaPosition.Y = 0;
+            }
+            if (deltaPosition.Y < 0 && (((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y) ||
+                                      ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > minAux.X) ||
+                                      ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < maxAux.X)))
+            {
+                deltaPosition.Y = 0;
+            }
+
             return deltaPosition;
         }
     }
