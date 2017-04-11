@@ -46,6 +46,19 @@ namespace Projecto
                 textStr += text[text.Count() - i - 1] + "\n";
             }
         }
+
+        public static void DrawColliders(Camera camera, GameObject gameObject, Collider collider)
+        {
+            Rectangle rect1 = camera.CalculatePixelRectangle(new Vector2(collider.MinBound.X, collider.MinBound.Y), new Vector2(5, 0.2f));
+            Rectangle rect2 = camera.CalculatePixelRectangle(new Vector2(collider.MaxBound.X - 0.2f, collider.MaxBound.Y), new Vector2(0.2f, 5));
+            Rectangle rect3 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2(5, 0.2f));
+            Rectangle rect4 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2(0.2f, 5));
+            DrawLine(camera, rect1);
+            DrawLine(camera, rect2);
+            DrawLine(camera, rect3);
+            DrawLine(camera, rect4);           
+        }
+
         /// <summary>
         /// Draws the MAXLINES amount of lines on the camera.
         /// </summary>
@@ -56,6 +69,15 @@ namespace Projecto
             {            
                 Game1.spriteBatch.DrawString(font, textStr, camera.Position, Color.Black);
             }          
+        }
+
+        public static void DrawLine(Camera camera, Rectangle rect)
+        {
+            if(isActive)
+            {
+                Texture2D debugTexture = Game1.content.Load<Texture2D>("DebugPixel");
+                Game1.spriteBatch.Draw(debugTexture, rect, Color.LightGreen);
+            }
         }
     }
 }

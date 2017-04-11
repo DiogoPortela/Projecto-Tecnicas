@@ -16,7 +16,7 @@ namespace Projecto
         static public List<Enemy> EnemyList;
                 
         Viewport defaultView, leftView, rightView;
-        Camera cameraRight, cameraLeft, cameraScreen;
+        static public Camera cameraRight, cameraLeft, cameraScreen;
 
         #region ZONA DE TESTE
         GameObject teste1;
@@ -118,6 +118,7 @@ namespace Projecto
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
+            Debug.DrawColliders(cameraLeft, PlayerOne, PlayerOne.playerCollider);
             Game1.spriteBatch.End();
         }
     }

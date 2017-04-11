@@ -11,8 +11,8 @@ namespace Projecto
     {
         protected Tile[] Tiles = new Tile[4];
         protected Tile[] TilesDiagonal = new Tile[4];
-        protected Vector2 MinBound;
-        protected Vector2 MaxBound;
+        internal Vector2 MinBound;
+        internal Vector2 MaxBound;
 
         //------------->CONSTRUCTORS<-------------//
 
@@ -118,7 +118,7 @@ namespace Projecto
         }
         private Vector2 Teste(Vector2 deltaPosition, Vector2 minAux, Vector2 maxAux)
         {
-            if(deltaPosition.X > 0 && (((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X) ||
+            if (deltaPosition.X > 0 && (((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X) ||
                                        ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < maxAux.Y) ||
                                        ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > minAux.Y)))
             {
