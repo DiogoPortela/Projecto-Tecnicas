@@ -24,6 +24,7 @@ namespace Projecto
         static public List<Room> MapRooms;
         static public Room Spawn;
         static int[,] infoMap;
+        static private int WalkableTiles;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -41,7 +42,7 @@ namespace Projecto
             ProcessMap();
             FillTileMap();
             FindPlayerSpawn();
-            //GetPlayerStartingPosition();
+            FindMapWalkableTiles();
         }
 
         private void RandomFillMap()
@@ -123,6 +124,7 @@ namespace Projecto
 
             ConnectClosestRooms(MapRooms);
         }
+
         /// <summary>
         /// Transforms a number (0,1) into a Tile.
         /// </summary>
@@ -362,7 +364,7 @@ namespace Projecto
         /// </summary>
         /// <param name="tile"></param>
         /// <returns>A Vector2 with the given Coordinates</returns>
-        private Vector2 CoordinateToWorldPoint(Coordinate tile)
+        static private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
             return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
         }
@@ -468,28 +470,40 @@ namespace Projecto
         /// <summary>
         /// Finds the rooms in which monsters can spawn.
         /// </summary>
-        static private void FindMonsterSpawn()
+        static private void FindMapWalkableTiles()
         {
-            int minX = Width;
-            foreach()
             foreach (Room r in MapRooms)
             {
-                if (!r.isMainRoom)
-                    foreach (Coordinate c in r.tiles)
-                    {
-                        if (c.tileX < minX)
-                        {
-                            minX = c.tileX;
-                            Spawn = r;
-                        }
-                    }
+                if (!r.isSpawn)
+                {
+                    WalkableTiles += r.roomSize;
+                }
             }
-            Spawn.isSpawn = true;
         }
         /// <summary>
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
+
+        static public Vector2 FindEnemyPosition()
+        {
+            Vector2 positionToSpawnTo = Vector2.Zero;
+            Room RoomToSpawnTo = new Room();
+            int rand = Game1.random.Next(WalkableTiles);
+            foreach(Room r in MapRooms)
+            {
+                if(rand <= r.roomSize)
+                {
+                    RoomToSpawnTo = r;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            rand = Game1.random.Next(RoomToSpawnTo.roomSize);
+            return positionToSpawnTo = CoordinateToWorldPoint(RoomToSpawnTo.tiles[rand]);
+        }
         static public Vector2 GetPlayerStartingPosition()
         {
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
