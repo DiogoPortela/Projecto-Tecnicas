@@ -24,7 +24,6 @@ namespace Projecto
         static public List<Room> MapRooms;
         static public Room Spawn;
         static int[,] infoMap;
-        public Vector2 PlayerStart;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -41,7 +40,7 @@ namespace Projecto
             }
             ProcessMap();
             FillTileMap();
-            FindSpawn();
+            FindPlayerSpawn();
             //GetPlayerStartingPosition();
         }
 
@@ -124,6 +123,9 @@ namespace Projecto
 
             ConnectClosestRooms(MapRooms);
         }
+        /// <summary>
+        /// Transforms a number (0,1) into a Tile.
+        /// </summary>
         private void FillTileMap()
         {
             if (infoMap != null)
@@ -138,7 +140,12 @@ namespace Projecto
                 }
             }
         }
-
+        /// <summary>
+        /// Given two Coordinates of the map, gets the count of walls around it.
+        /// </summary>
+        /// <param name="gridX"></param>
+        /// <param name="gridY"></param>
+        /// <returns>The count of walls</returns>
         static private int GetSurroundingWallCount(int gridX, int gridY)
         {
             int wallCount = 0;
@@ -161,6 +168,11 @@ namespace Projecto
             }
             return wallCount;
         }
+        /// <summary>
+        /// Given the List of all rooms in our map, connects each one with the closest.
+        /// </summary>
+        /// <param name="allRooms"></param>
+        /// <param name="forceAccessibilityFromMainRoom"></param>
         private void ConnectClosestRooms(List<Room> allRooms, bool forceAccessibilityFromMainRoom = false)
         {
             List<Room> roomListA = new List<Room>();
@@ -247,7 +259,8 @@ namespace Projecto
 
         }
         /// <summary>
-        /// 
+        /// Given two Rooms and two Coordinates, calls the GetLine function to get a line between the given rooms and then calls DrawCircle for each of the Coordinates in the Line.
+        /// This creates a passage with the DrawCircle radius as width.
         /// </summary>
         /// <param name="roomA"></param>
         /// <param name="roomB"></param>
@@ -264,7 +277,7 @@ namespace Projecto
             }
         }
         /// <summary>
-        /// 
+        /// Given a Coordinate and a radius, this function draws a circle around the Coordinate.
         /// </summary>
         /// <param name="c"></param>
         /// <param name="r"></param>
@@ -286,11 +299,11 @@ namespace Projecto
             }
         }
         /// <summary>
-        /// 
+        /// This function creates a line between two Coordinates.
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns></returns>
+        /// <returns>A list of Coordinates (representing a line).</returns>
         private List<Coordinate> GetLine(Coordinate from, Coordinate to)
         {
             List<Coordinate> line = new List<Coordinate>();
@@ -345,19 +358,20 @@ namespace Projecto
             return line;
         }
         /// <summary>
-        /// 
+        /// Transforms a Coordinate into a Vector2.
         /// </summary>
         /// <param name="tile"></param>
-        /// <returns></returns>
+        /// <returns>A Vector2 with the given Coordinates</returns>
         private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
             return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
         }
         /// <summary>
-        /// 
+        /// Given the tileType, this function gets all the regions in the map. 
+        /// Uses GetRegionTiles function for each new possible region it finds.
         /// </summary>
         /// <param name="tileType"></param>
-        /// <returns></returns>
+        /// <returns>A List of Lists of Coordinates. These represent a Region of our map.</returns>
         private List<List<Coordinate>> GetRegions(int tileType)
         {
             List<List<Coordinate>> regions = new List<List<Coordinate>>();
@@ -370,7 +384,6 @@ namespace Projecto
                     if (mapFlags[x, y] == 0 && infoMap[x, y] == tileType)
                     {
                         List<Coordinate> newRegion = GetRegionTiles(x, y);
-                        //List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
                         regions.Add(newRegion);
 
                         foreach (Coordinate tile in newRegion)
@@ -383,11 +396,11 @@ namespace Projecto
             return regions;
         }
         /// <summary>
-        /// 
+        /// Gets a list of tiles given a starting position. Checks for the tileType of that given position and looks for similar tiles in the same area.
         /// </summary>
         /// <param name="startX"></param>
         /// <param name="startY"></param>
-        /// <returns></returns>
+        /// <returns>A list of Coordinates that forms a region </returns>
         private List<Coordinate> GetRegionTiles(int startX, int startY)
         {
             List<Coordinate> tiles = new List<Coordinate>();
@@ -422,11 +435,20 @@ namespace Projecto
             //Analizar tiles...
             return tiles;
         }
+        /// <summary>
+        /// Checks if a given Coordinate is inside map boundaris.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>Returns a bool that confirms or denies the condition</returns>
         static private bool IsInMapRange(int x, int y)
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
-        static private void FindSpawn()
+        /// <summary>
+        /// Finds the room in which the Player(s) can spawn.
+        /// </summary>
+        static private void FindPlayerSpawn()
         {
             int minX = Width;
             foreach (Room r in MapRooms)
@@ -443,24 +465,40 @@ namespace Projecto
             }
             Spawn.isSpawn = true;
         }
+        /// <summary>
+        /// Finds the rooms in which monsters can spawn.
+        /// </summary>
+        static private void FindMonsterSpawn()
+        {
+            int minX = Width;
+            foreach()
+            foreach (Room r in MapRooms)
+            {
+                if (!r.isMainRoom)
+                    foreach (Coordinate c in r.tiles)
+                    {
+                        if (c.tileX < minX)
+                        {
+                            minX = c.tileX;
+                            Spawn = r;
+                        }
+                    }
+            }
+            Spawn.isSpawn = true;
+        }
+        /// <summary>
+        /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
+        /// </summary>
+        /// <returns>A vector2 in which the player will spawn</returns>
         static public Vector2 GetPlayerStartingPosition()
         {
-            //Vector2 result = Vector2.Zero;
-            //for (int x = 0; x < Width; x++)
-            //{
-            //    for (int y = 0; y < Height; y++)
-            //    {
-            //        if (infoMap[x, y] == 0 && GetSurroundingWallCount(x, y) >= 2)
-            //        {
-            //            return result = new Vector2(x, y);                        
-            //        }
-            //    }
-            //}
-            //return result;
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
             return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
         }
-
+        /// <summary>
+        /// Draws the finished map on the given camera.
+        /// </summary>
+        /// <param name="camera"></param>
         public void Draw(Camera camera)
         {
             foreach (Tile tile in TilesMap)
