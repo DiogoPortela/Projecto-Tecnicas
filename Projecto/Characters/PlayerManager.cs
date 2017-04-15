@@ -18,7 +18,6 @@ namespace Projecto
         public Animation currentAnimation;
 
         private const float movingSpeed = 0.4f;
-
         //------------->CONSTRUCTORS<-------------//
 
         public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number) : base("Drude", position, size, 0f)
@@ -76,6 +75,21 @@ namespace Projecto
                 {
                     this.Move(-Vector2.UnitY * movingSpeed);
                 }
+                //attack def button
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                {
+                    //animação de attack
+                    this.Atackrange(-Vector2.UnitY,2f);
+                    Attack();
+                }
+                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                {
+                    //animação de defense
+                    Defense();
+                    
+                }
+
+
             }
             #endregion
             #region PlayerTwo
@@ -105,11 +119,38 @@ namespace Projecto
                 {
                     this.Move(-Vector2.UnitY * movingSpeed);
                 }
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                {
+                    //o que fazer no attack
+                }
+                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                {
+                    //o que fazer no DEFESA
+                }
+
             }
             #endregion
 
+
             //this.currentAnimation.Play(gameTime);
         }
+        #region
+        //para detetar collisão de attack
+        public Rectangle playercollison()
+        {
+            return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
+        }
+
+        
+      
+        public bool intersect(Rectangle rectangle)
+        {
+            return Rectangle.Intersects(rectangle);
+        }
+
+        #endregion
+
+
         /*
         public void Collision(Rectangle newRectangle, int xOffset, int yOffset)
         {
@@ -156,6 +197,8 @@ namespace Projecto
             }
 
         }*/
+
+
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>

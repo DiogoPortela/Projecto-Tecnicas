@@ -8,6 +8,8 @@ namespace Projecto
 {
     public class Enemy
     {
+        public List<Enemy> enemies = new List<Enemy>();
+
         public int HP { get; set; }
 
         public int MP { get; set; }

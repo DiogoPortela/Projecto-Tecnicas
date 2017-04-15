@@ -55,4 +55,18 @@ namespace Projecto
 
         //Buttons1..2..3
     }
+
+    internal struct AttackDefenseinput1
+    {
+        private ButtonState GetState(Keys key)
+        {
+            if (Keyboard.GetState().IsKeyDown(key))
+                return ButtonState.Pressed;
+            return ButtonState.Released;
+        }
+
+        public ButtonState Space { get { return GetState(Keys.Space); } }
+        public ButtonState Q { get { return GetState(Keys.Q); } }
+
+    }
 }
