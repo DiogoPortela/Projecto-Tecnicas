@@ -10,9 +10,9 @@ namespace Projecto
 {
     public class GameObject
     {
-        protected Texture2D Texture;
-        public Vector2 TextureCenter; //For rotations.
-        protected Rectangle Rectangle;
+        protected Texture2D Texture;            //Texture image.
+        public Vector2 TextureCenter;           //For rotations.
+        protected Rectangle Rectangle;          //Rectangle to draw to.
 
         public Vector2 Position { get; set; }
         public Vector2 Size { get; set; }

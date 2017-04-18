@@ -7,10 +7,28 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+    internal struct Coordinate
+    {
+        public int tileX;
+        public int tileY;
+
+        public Coordinate(int x, int y)
+        {
+            tileX = x;
+            tileY = y;
+        }
+    }
     internal enum ScreenSelect
     {
         MainMenu, Playing, ScoreScreen
     }
+
+    enum Cons
+    {
+        MAXWIDTH=100,
+        MAXHEIGHT=75
+    }
+
     internal enum PlayerNumber
     {
         playerOne = 1, playerTwo
@@ -37,6 +55,8 @@ namespace Projecto
 
         //Buttons1..2..3
     }
+
+
     internal struct MovementInput2
     {
         private ButtonState GetState(Keys key)

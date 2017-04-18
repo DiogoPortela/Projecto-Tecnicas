@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Projecto
-{
-    
+{   
     static class CollisionManager
     {       
         public static bool TouchingTopOf(this Rectangle rect1, Rectangle rect2)

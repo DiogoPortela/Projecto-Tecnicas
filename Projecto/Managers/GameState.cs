@@ -15,10 +15,12 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
                 
         Viewport defaultView, leftView, rightView;
-        Camera cameraRight, cameraLeft;
+        Camera cameraRight, cameraLeft, cameraScreen;
 
         #region ZONA DE TESTE
         GameObject teste1;
+        MapGenerator map = new MapGenerator();
+        KeyboardState oldState;
         #endregion
 
 
@@ -27,7 +29,11 @@ namespace Projecto
         public GameState()
         {
             #region Map Generation
- 
+            map.UseRandomSeed = true;
+            map.RandomFillPercent = 50;
+            map.Width = (int)Cons.MAXWIDTH; //100;
+            map.Height = 75;
+            map.GenerateMap(5);
             #endregion
 
             #region Camera. Split screen
@@ -43,7 +49,10 @@ namespace Projecto
             //Initializing cameras.
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
             cameraRight = new Camera(new Vector2(50,0), 50, ((float)rightView.Height / rightView.Width));
+            cameraScreen = new Camera(Vector2.Zero, 100, Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth);
             #endregion
+
+            Debug.LoadFont();   //Starting Debug.
 
             #region TestZone
             PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
@@ -65,6 +74,14 @@ namespace Projecto
             PlayerTwo.PlayerMovement(gameTime);
             cameraRight.LookAt(PlayerTwo);
 
+            KeyboardState teste = Keyboard.GetState();
+            if(teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
+            {
+                map.GenerateMap(5);
+                Debug.NewLine("New Map");
+            }
+            oldState = teste;
+
         }
         /// <summary>
         /// Draws the whole gamestate.
@@ -82,7 +99,7 @@ namespace Projecto
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-
+            Debug.Draw(cameraScreen);
             Game1.spriteBatch.End();
             #endregion
 
@@ -96,6 +113,7 @@ namespace Projecto
         {
             //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
+            map.Draw(camera);
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
