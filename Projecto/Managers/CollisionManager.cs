@@ -23,6 +23,11 @@ namespace Projecto
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
+        public void UpdateBounds(Vector2 position, Vector2 size)
+        {
+            MaxBound = new Vector2(position.X + size.X, position.Y);
+            MinBound = new Vector2(position.X, position.Y + size.Y);
+        }
         public void InitTiles(Vector2 coordinates)
         {
             Tiles[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y];
@@ -43,7 +48,7 @@ namespace Projecto
             //If the coordinates have changed then so too should the Tile array.
             if (coorAux != coordinates)
             {
-                MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = false;
+                //MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = false;
                 Tiles[0] = MapGenerator.TilesMap[(int)coorAux.X + 1, (int)coorAux.Y];
                 Tiles[1] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y + 1];
                 Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y];
@@ -52,7 +57,7 @@ namespace Projecto
                 TilesDiagonal[1] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y + 1];
                 TilesDiagonal[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y - 1];
                 TilesDiagonal[3] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y - 1];
-                MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
+                //MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
 
                 coordinates = coorAux;
             }
@@ -68,7 +73,7 @@ namespace Projecto
         {
             CollisionBool result = new CollisionBool();
             result.Init();
-            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X )
+            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X)
             {
                 result.hasCollided = result.right = true;
             }
@@ -83,7 +88,7 @@ namespace Projecto
             if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y)
             {
                 result.hasCollided = result.bottom = true;
-            }            
+            }
             return result;
         }
         public Vector2 UpdateDeltaWithCollisions(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position)
@@ -116,6 +121,14 @@ namespace Projecto
             MaxBound += deltaPosition;
             return deltaPosition;
         }
+        public Vector2 UpdateDeltaWithCollisions2(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position, Vector2 size)
+        {
+            deltaPosition = Teste2(deltaPosition, position, size);
+            UpdateTiles(ref coordinates, (deltaPosition + position) / 5);
+            UpdateBounds(position, size);
+            return deltaPosition;
+        }
+
         private Vector2 Teste(Vector2 deltaPosition, Vector2 minAux, Vector2 maxAux)
         {
             if (deltaPosition.X > 0 && (((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X) ||
@@ -123,28 +136,112 @@ namespace Projecto
                                        ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > minAux.Y)))
             {
                 deltaPosition.X = 0;
+                Debug.NewLine("Stop Right");
             }
             if (deltaPosition.X < 0 && (((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.X) ||
                                        ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MinBound.Y < maxAux.Y) ||
                                        ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > minAux.Y)))
             {
                 deltaPosition.X = 0;
+                Debug.NewLine("Stop Left");
             }
             if (deltaPosition.Y > 0 && (((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < maxAux.Y) ||
                                       ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < maxAux.X) ||
                                       ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > minAux.X)))
             {
                 deltaPosition.Y = 0;
+                Debug.NewLine("Stop Top");
             }
             if (deltaPosition.Y < 0 && (((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y) ||
                                       ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > minAux.X) ||
                                       ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < maxAux.X)))
             {
                 deltaPosition.Y = 0;
+                Debug.NewLine("Stop Bottom");
             }
 
             return deltaPosition;
         }
+        private Vector2 Teste2(Vector2 deltaPosition, Vector2 position, Vector2 size)
+        {
+            if (deltaPosition.X > 0)
+            {
+                if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < MaxBound.X)
+                {
+                    //position.X = Tiles[0].Collider.MinBound.X - size.X;
+                    deltaPosition.X = MaxBound.X - Tiles[0].Collider.MinBound.X;
+                    Debug.NewLine("Stop Right");
+                }
+                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X)
+                {
+                    deltaPosition.X = MaxBound.X - TilesDiagonal[0].Collider.MinBound.X;
+                    Debug.NewLine("Stop Right");
+                }
+                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X)
+                {
+                    deltaPosition.X = MaxBound.X - TilesDiagonal[3].Collider.MinBound.X;
+                    Debug.NewLine("Stop Right");
+                }
+            }
+
+            if (deltaPosition.X < 0)
+            {
+                if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > MinBound.X)
+                {
+                    deltaPosition.X = MinBound.X - Tiles[2].Collider.MaxBound.X;
+                    Debug.NewLine("Stop Left");
+                }
+                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X)
+                {
+                    deltaPosition.X = MinBound.X - TilesDiagonal[1].Collider.MaxBound.X;
+                    Debug.NewLine("Stop Left");
+                }
+                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X)
+                {
+                    deltaPosition.X = MinBound.X - TilesDiagonal[2].Collider.MaxBound.X;
+                    Debug.NewLine("Stop Left");
+                }
+            }
+            if (deltaPosition.Y > 0)
+            {
+                if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < MaxBound.Y)
+                {
+                    deltaPosition.Y = MaxBound.Y - Tiles[1].Collider.MinBound.Y;
+                    Debug.NewLine("Stop Top");
+                }
+                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y)
+                {
+                    deltaPosition.Y = MaxBound.Y - TilesDiagonal[0].Collider.MinBound.Y;
+                    Debug.NewLine("Stop Top");
+                }
+                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X && TilesDiagonal[1].Collider.MinBound.Y < MaxBound.Y)
+                {
+                    deltaPosition.Y = MaxBound.Y - TilesDiagonal[0].Collider.MinBound.Y;
+                    Debug.NewLine("Stop Top");
+                }
+            }
+            if (deltaPosition.Y < 0)
+            {
+                if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > MinBound.Y)
+                {
+                    deltaPosition.Y = MinBound.Y - Tiles[3].Collider.MaxBound.Y;
+                    Debug.NewLine("Stop Bottom");
+                }
+                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y)
+                {
+                    deltaPosition.Y = MinBound.Y - TilesDiagonal[2].Collider.MaxBound.Y;
+                    Debug.NewLine("Stop Bottom");
+                }
+                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y)
+                {
+                    deltaPosition.Y = MinBound.Y - TilesDiagonal[2].Collider.MaxBound.Y;
+                    Debug.NewLine("Stop Bottom");
+                }
+            }
+
+            return deltaPosition;
+        }
+
     }
 
     static class CollisionManager

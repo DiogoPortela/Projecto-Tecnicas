@@ -120,7 +120,7 @@ namespace Projecto
 
             if(deltaPosition != Vector2.Zero)
             {
-                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position + Size / 2);
+                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position);
                 this.Move(deltaPosition);
                 //Coordinates.X = (int)(Position.X / this.Size.X);
                 //Coordinates.Y = (int)(Position.Y / this.Size.Y);

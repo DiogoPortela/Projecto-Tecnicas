@@ -12,7 +12,7 @@ namespace Projecto
     {
         static private List<string> text = new List<string>();  //List with all the debug logs.
         static private SpriteFont font;                         //Font to use.
-        static private int MAXLINES = 5;                        //Maximum Lines to draw on screen at once.
+        static private int MAXLINES = 30;                        //Maximum Lines to draw on screen at once.
         static public bool isActive = true;                     //Should it draw o on screen?
 
         //AUXILIARY
@@ -67,7 +67,7 @@ namespace Projecto
         {
             if(isActive)
             {            
-                Game1.spriteBatch.DrawString(font, textStr, camera.Position, Color.Black);
+                Game1.spriteBatch.DrawString(font, textStr, camera.Position, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }          
         }
 

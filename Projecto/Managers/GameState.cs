@@ -118,7 +118,7 @@ namespace Projecto
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
-            Debug.DrawColliders(cameraLeft, PlayerOne, PlayerOne.playerCollider);
+            Debug.DrawColliders(camera, PlayerOne, PlayerOne.playerCollider);
             Game1.spriteBatch.End();
         }
     }
