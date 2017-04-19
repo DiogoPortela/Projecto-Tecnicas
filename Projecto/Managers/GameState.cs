@@ -100,7 +100,8 @@ namespace Projecto
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-            Debug.Draw(cameraScreen);
+            Debug.DrawText(cameraScreen);
+            Debug.DrawInfo(cameraScreen, PlayerOne.Position, PlayerOne.Coordinates, PlayerOne.playerCollider.MinBound, PlayerOne.playerCollider.MaxBound);
             Game1.spriteBatch.End();
             #endregion
 

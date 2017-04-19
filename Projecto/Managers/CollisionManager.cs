@@ -18,261 +18,186 @@ namespace Projecto
 
         public Collider(Vector2 position, Vector2 size)
         {
-            this.MinBound = position - new Vector2(0, size.Y);
-            this.MaxBound = position + new Vector2(size.X, 0);
+            UpdateBounds(position, size);
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
-        public void UpdateBounds(Vector2 position, Vector2 size)
-        {
-            MaxBound = new Vector2(position.X + size.X, position.Y);
-            MinBound = new Vector2(position.X, position.Y + size.Y);
-        }
-        public void InitTiles(Vector2 coordinates)
-        {
-            Tiles[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y];
-            Tiles[1] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y + 1];
-            Tiles[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y];
-            Tiles[3] = MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y - 1];
-            TilesDiagonal[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y + 1];
-            TilesDiagonal[1] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y + 1];
-            TilesDiagonal[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y - 1];
-            TilesDiagonal[3] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y - 1];
-            MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = true;
-        }
-        private void UpdateTiles(ref Vector2 coordinates, Vector2 nextCoordinates)
+        /// <summary>
+        /// Updates the list of tiles surrounding an object.
+        /// </summary>
+        /// <param name="position">Position of the object.</param>
+        /// <param name="size">Size of the object.</param>
+        /// <returns></returns>
+        public Vector2 UpdateTiles(Vector2 position, Vector2 size)
         {
             //Rounds the position to coordinates;
-            Vector2 coorAux = new Vector2((int)nextCoordinates.X, (int)nextCoordinates.Y);
-
-            //If the coordinates have changed then so too should the Tile array.
-            if (coorAux != coordinates)
+            Vector2 coorAux = new Vector2((int)(position.X / size.X + 0.5), (int)(position.Y / size.X + 0.5));
+            try
             {
-                //MapGenerator.TilesMap[(int)coordinates.X, (int)coordinates.Y].isSomethingOnTop = false;
                 Tiles[0] = MapGenerator.TilesMap[(int)coorAux.X + 1, (int)coorAux.Y];
                 Tiles[1] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y + 1];
                 Tiles[2] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y];
                 Tiles[3] = MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y - 1];
-                TilesDiagonal[0] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y + 1];
-                TilesDiagonal[1] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y + 1];
-                TilesDiagonal[2] = MapGenerator.TilesMap[(int)coordinates.X - 1, (int)coordinates.Y - 1];
-                TilesDiagonal[3] = MapGenerator.TilesMap[(int)coordinates.X + 1, (int)coordinates.Y - 1];
-                //MapGenerator.TilesMap[(int)coorAux.X, (int)coorAux.Y].isSomethingOnTop = true;
-
-                coordinates = coorAux;
+                TilesDiagonal[0] = MapGenerator.TilesMap[(int)coorAux.X + 1, (int)coorAux.Y + 1];
+                TilesDiagonal[1] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y + 1];
+                TilesDiagonal[2] = MapGenerator.TilesMap[(int)coorAux.X - 1, (int)coorAux.Y - 1];
+                TilesDiagonal[3] = MapGenerator.TilesMap[(int)coorAux.X + 1, (int)coorAux.Y - 1];
+            }
+            catch
+            {
+                Debug.NewLine("Out of World bounds.");
             }
 
+            return coorAux;
         }
         /// <summary>
-        /// Returns a struct that store whether if there has been a colision and where.
+        /// Updates the MinBound and Maxbound of an object. (use after movement)
         /// </summary>
-        /// <param name="minAux">MinBound with deltaPostion</param>
-        /// <param name="maxAux">MaxBound with deltaPosition</param>
-        /// <returns></returns>
-        private CollisionBool CollisionDirection(Vector2 minAux, Vector2 maxAux)
+        /// <param name="position">Position of the object.</param>
+        /// <param name="size">Size of the object.</param>
+        public void UpdateBounds(Vector2 position, Vector2 size)
         {
-            CollisionBool result = new CollisionBool();
-            result.Init();
-            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X)
-            {
-                result.hasCollided = result.right = true;
-            }
-            if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < maxAux.Y)
-            {
-                result.hasCollided = result.top = true;
-            }
-            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.X)
-            {
-                result.hasCollided = result.left = true;
-            }
-            if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y)
-            {
-                result.hasCollided = result.bottom = true;
-            }
-            return result;
+            MaxBound = new Vector2(position.X + size.X, position.Y);
+            MinBound = new Vector2(position.X, position.Y - size.Y);
         }
-        public Vector2 UpdateDeltaWithCollisions(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position)
-        {
-            Vector2 minAux = MinBound + deltaPosition;
-            Vector2 maxAux = MaxBound + deltaPosition;
-            deltaPosition = Teste(deltaPosition, minAux, maxAux);
-            //CollisionBool testCollisions = CollisionDirection(minAux, maxAux);
-            //if (testCollisions.hasCollided)
-            //{
-            //    if (testCollisions.right && deltaPosition.X > 0)
-            //    {
-            //        deltaPosition.X = 0;
-            //    }
-            //    if (testCollisions.top && deltaPosition.Y > 0)
-            //    {
-            //        deltaPosition.Y = 0;
-            //    }
-            //    if (testCollisions.left && deltaPosition.X < 0)
-            //    {
-            //        deltaPosition.X = 0;
-            //    }
-            //    if (testCollisions.bottom && deltaPosition.Y < 0)
-            //    {
-            //        deltaPosition.Y = 0;
-            //    }
-            //}
-            UpdateTiles(ref coordinates, (deltaPosition + position) / 5);
-            MinBound += deltaPosition;
-            MaxBound += deltaPosition;
-            return deltaPosition;
-        }
-        public Vector2 UpdateDeltaWithCollisions2(Vector2 deltaPosition, ref Vector2 coordinates, Vector2 position, Vector2 size)
-        {
-            deltaPosition = Teste2(deltaPosition, position, size);
-            UpdateTiles(ref coordinates, (deltaPosition + position) / 5);
-            UpdateBounds(position, size);
-            return deltaPosition;
-        }
-
-        private Vector2 Teste(Vector2 deltaPosition, Vector2 minAux, Vector2 maxAux)
-        {
-            if (deltaPosition.X > 0 && (((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < maxAux.X) ||
-                                       ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < maxAux.Y) ||
-                                       ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > minAux.Y)))
-            {
-                deltaPosition.X = 0;
-                Debug.NewLine("Stop Right");
-            }
-            if (deltaPosition.X < 0 && (((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > minAux.X) ||
-                                       ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MinBound.Y < maxAux.Y) ||
-                                       ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > minAux.Y)))
-            {
-                deltaPosition.X = 0;
-                Debug.NewLine("Stop Left");
-            }
-            if (deltaPosition.Y > 0 && (((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < maxAux.Y) ||
-                                      ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < maxAux.X) ||
-                                      ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > minAux.X)))
-            {
-                deltaPosition.Y = 0;
-                Debug.NewLine("Stop Top");
-            }
-            if (deltaPosition.Y < 0 && (((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > minAux.Y) ||
-                                      ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > minAux.X) ||
-                                      ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < maxAux.X)))
-            {
-                deltaPosition.Y = 0;
-                Debug.NewLine("Stop Bottom");
-            }
-
-            return deltaPosition;
-        }
-        private Vector2 Teste2(Vector2 deltaPosition, Vector2 position, Vector2 size)
+        /// <summary>
+        /// Updates the transformation delta using the tiles that surround the object.
+        /// </summary>
+        /// <param name="deltaPosition">The delta to be updated.</param>
+        public void UpdateDelta(ref Vector2 deltaPosition)
         {
             if (deltaPosition.X > 0)
             {
-                if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < MaxBound.X)
+                if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X <= MaxBound.X)
                 {
                     //position.X = Tiles[0].Collider.MinBound.X - size.X;
-                    deltaPosition.X = MaxBound.X - Tiles[0].Collider.MinBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Right");
                 }
-                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X)
+                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[0].Collider.MinBound.X <= MaxBound.X)
                 {
-                    deltaPosition.X = MaxBound.X - TilesDiagonal[0].Collider.MinBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Right");
                 }
-                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X)
+                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[3].Collider.MinBound.X <= MaxBound.X)
                 {
-                    deltaPosition.X = MaxBound.X - TilesDiagonal[3].Collider.MinBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Right");
                 }
             }
 
             if (deltaPosition.X < 0)
             {
-                if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > MinBound.X)
+                if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X >= MinBound.X)
                 {
-                    deltaPosition.X = MinBound.X - Tiles[2].Collider.MaxBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Left");
                 }
-                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X)
+                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[1].Collider.MaxBound.X >= MinBound.X)
                 {
-                    deltaPosition.X = MinBound.X - TilesDiagonal[1].Collider.MaxBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Left");
                 }
-                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X)
+                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[2].Collider.MaxBound.X >= MinBound.X)
                 {
-                    deltaPosition.X = MinBound.X - TilesDiagonal[2].Collider.MaxBound.X;
+                    deltaPosition.X = 0;
                     Debug.NewLine("Stop Left");
                 }
             }
             if (deltaPosition.Y > 0)
             {
-                if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < MaxBound.Y)
+                if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y <= MaxBound.Y)
                 {
-                    deltaPosition.Y = MaxBound.Y - Tiles[1].Collider.MinBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Top");
                 }
-                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y)
+                else if ((!TilesDiagonal[0].isWalkable || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X && TilesDiagonal[0].Collider.MinBound.Y <= MaxBound.Y)
                 {
-                    deltaPosition.Y = MaxBound.Y - TilesDiagonal[0].Collider.MinBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Top");
                 }
-                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X && TilesDiagonal[1].Collider.MinBound.Y < MaxBound.Y)
+                else if ((!TilesDiagonal[1].isWalkable || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X && TilesDiagonal[1].Collider.MinBound.Y <= MaxBound.Y)
                 {
-                    deltaPosition.Y = MaxBound.Y - TilesDiagonal[0].Collider.MinBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Top");
                 }
             }
             if (deltaPosition.Y < 0)
             {
-                if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > MinBound.Y)
+                if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y >= MinBound.Y)
                 {
-                    deltaPosition.Y = MinBound.Y - Tiles[3].Collider.MaxBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Bottom");
                 }
-                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y)
+                else if ((!TilesDiagonal[2].isWalkable || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X && TilesDiagonal[2].Collider.MaxBound.Y >= MinBound.Y)
                 {
-                    deltaPosition.Y = MinBound.Y - TilesDiagonal[2].Collider.MaxBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Bottom");
                 }
-                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y)
+                else if ((!TilesDiagonal[3].isWalkable || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X && TilesDiagonal[3].Collider.MaxBound.Y >= MinBound.Y)
                 {
-                    deltaPosition.Y = MinBound.Y - TilesDiagonal[2].Collider.MaxBound.Y;
+                    deltaPosition.Y = 0;
                     Debug.NewLine("Stop Bottom");
                 }
             }
-
-            return deltaPosition;
         }
-
+        /// <summary>
+        /// Updates the position of an object. Forces it to not go "beyond" colliders.
+        /// </summary>
+        /// <param name="position">Position of the object.</param>
+        /// <param name="size">Size of the obejct.</param>
+        /// <returns></returns>
+        public Vector2 UpdatePosition(Vector2 position, Vector2 size)
+        {
+            if ((!Tiles[0].isWalkable || Tiles[0].isSomethingOnTop) && Tiles[0].Collider.MinBound.X < MaxBound.X)
+            {
+                position.X = Tiles[0].Collider.MinBound.X - size.X;
+            }
+            if ((!Tiles[1].isWalkable || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y < MaxBound.Y)
+            {
+                position.Y = Tiles[1].Collider.MinBound.Y;
+            }
+            if ((!Tiles[2].isWalkable || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X > MinBound.X)
+            {
+                position.X = Tiles[2].Collider.MaxBound.X;
+            }
+            if ((!Tiles[3].isWalkable || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y > MinBound.Y)
+            {
+                position.Y = Tiles[3].Collider.MaxBound.Y + size.Y;
+            }
+            return position;
+        }      
     }
 
-    static class CollisionManager
-    {
-        public static bool TouchingTopOf(this Rectangle rect1, Rectangle rect2)
-        {
-            return (rect1.Bottom >= rect2.Top - 1 &&
-                    rect1.Bottom <= rect2.Top + (rect2.Height / 2) &&
-                    rect1.Right >= rect2.Left + rect2.Width / 5 &&
-                    rect1.Left <= rect2.Right - rect2.Width / 5);
-        }
-        public static bool TouchingBottomOf(this Rectangle rect1, Rectangle rect2)
-        {
-            return (rect1.Top <= rect2.Bottom + (rect2.Height / 5) &&
-                    rect1.Top >= rect2.Bottom - 1 &&
-                    rect1.Right >= rect2.Left + (rect2.Width / 5) &&
-                    rect1.Left <= rect2.Right - (rect2.Width / 5));
-        }
-        public static bool TouchingLeftOf(this Rectangle rect1, Rectangle rect2)
-        {
-            return (rect1.Right <= rect2.Right &&
-                    rect1.Right >= rect2.Left - 5 &&
-                    rect1.Top <= rect2.Bottom - (rect2.Width / 4) &&
-                    rect1.Bottom >= rect2.Top + (rect2.Width / 4));
-        }
-        public static bool TouchingRightOf(this Rectangle rect1, Rectangle rect2)
-        {
-            return (rect1.Left >= rect2.Left &&
-                    rect1.Left <= rect2.Right + 5 &&
-                    rect1.Top <= rect2.Bottom - (rect2.Width / 4) &&
-                    rect1.Bottom >= rect2.Top + (rect2.Width / 4));
-        }
-    }
+    //static class CollisionManager
+    //{
+    //    public static bool TouchingTopOf(this Rectangle rect1, Rectangle rect2)
+    //    {
+    //        return (rect1.Bottom >= rect2.Top - 1 &&
+    //                rect1.Bottom <= rect2.Top + (rect2.Height / 2) &&
+    //                rect1.Right >= rect2.Left + rect2.Width / 5 &&
+    //                rect1.Left <= rect2.Right - rect2.Width / 5);
+    //    }
+    //    public static bool TouchingBottomOf(this Rectangle rect1, Rectangle rect2)
+    //    {
+    //        return (rect1.Top <= rect2.Bottom + (rect2.Height / 5) &&
+    //                rect1.Top >= rect2.Bottom - 1 &&
+    //                rect1.Right >= rect2.Left + (rect2.Width / 5) &&
+    //                rect1.Left <= rect2.Right - (rect2.Width / 5));
+    //    }
+    //    public static bool TouchingLeftOf(this Rectangle rect1, Rectangle rect2)
+    //    {
+    //        return (rect1.Right <= rect2.Right &&
+    //                rect1.Right >= rect2.Left - 5 &&
+    //                rect1.Top <= rect2.Bottom - (rect2.Width / 4) &&
+    //                rect1.Bottom >= rect2.Top + (rect2.Width / 4));
+    //    }
+    //    public static bool TouchingRightOf(this Rectangle rect1, Rectangle rect2)
+    //    {
+    //        return (rect1.Left >= rect2.Left &&
+    //                rect1.Left <= rect2.Right + 5 &&
+    //                rect1.Top <= rect2.Bottom - (rect2.Width / 4) &&
+    //                rect1.Bottom >= rect2.Top + (rect2.Width / 4));
+    //    }
+    //}
 }

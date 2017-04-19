@@ -29,13 +29,12 @@ namespace Projecto
             this.pNumber = number;
             this.currentInput = CurrentInput.NoInput;
 
-            Coordinates = ((position + size/2) / size);
+            Coordinates = (position / size);
             Coordinates.X = (int)Coordinates.X;
             Coordinates.Y = (int)Coordinates.Y;
 
             this.playerCollider = new Collider(position, size);
-            this.playerCollider.InitTiles(Coordinates);
-
+            this.playerCollider.UpdateTiles(position, size);
             if (number == PlayerNumber.playerOne)
             {
                 //animations[2] = new Animation("walkAdult", "Walk Final P1", Vector2.One * 64, 8, 100f);
@@ -51,7 +50,6 @@ namespace Projecto
 
         //------------->FUNCTIONS && METHODS<-------------//
 
-
         /// <summary>
         /// Deals with all the movement and animations.
         /// </summary>
@@ -61,7 +59,7 @@ namespace Projecto
             deltaPosition = Vector2.Zero;
             #region PlayerOne
             if (pNumber == PlayerNumber.playerOne)
-            {                
+            {
                 //Movement Controls.
                 if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
                 {
@@ -105,7 +103,7 @@ namespace Projecto
                 }
                 if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
                 {
-                    deltaPosition  += -Vector2.UnitX * movingSpeed;
+                    deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
                 {
@@ -113,67 +111,26 @@ namespace Projecto
                 }
                 if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
                 {
-                    deltaPosition += - Vector2.UnitY * movingSpeed;
+                    deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
             }
             #endregion
 
-            if(deltaPosition != Vector2.Zero)
+            if (deltaPosition != Vector2.Zero)
             {
-                deltaPosition = playerCollider.UpdateDeltaWithCollisions(deltaPosition, ref Coordinates, Position);
-                this.Move(deltaPosition);
-                //Coordinates.X = (int)(Position.X / this.Size.X);
-                //Coordinates.Y = (int)(Position.Y / this.Size.Y);
-
+                this.playerCollider.UpdateDelta(ref deltaPosition);
+                if(deltaPosition != Vector2.Zero)
+                {
+                    this.Move(deltaPosition);
+                    this.Coordinates = playerCollider.UpdateTiles(Position, Size);
+                    this.playerCollider.UpdateBounds(Position, Size);
+                    this.Position = this.playerCollider.UpdatePosition(Position, Size);
+                    this.Coordinates = playerCollider.UpdateTiles(Position, Size);
+                    this.playerCollider.UpdateBounds(Position, Size);
+                }             
             }
             //this.currentAnimation.Play(gameTime);
         }
-        /*
-        public void Collision(Rectangle newRectangle, int xOffset, int yOffset)
-        {
-            if (Rectangle.TouchingTopOf(newRectangle))
-            {
-                Rectangle.Y = newRectangle.Y - Rectangle.Height;
-                speedDirection.Y = 0f;
-                hasJumped = false;
-            }
-
-            if (Rectangle.TouchingLeftOf(newRectangle))
-            {
-                position.X = newRectangle.X - Rectangle.Width - 2;
-            }
-
-            if (Rectangle.TouchingRightOf(newRectangle))
-            {
-                position.X = newRectangle.X + newRectangle.Width + 2;
-            }
-
-            if (Rectangle.TouchingBottomOf(newRectangle))
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.X < 0)
-            {
-                position.X = 0;
-            }
-
-            if (position.X > xOffset - Rectangle.Width)
-            {
-                position.X = xOffset - Rectangle.Width;
-            }
-
-            if (position.Y < 0)
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.Y > yOffset - Rectangle.Height)
-            {
-                position.Y = yOffset - Rectangle.Height;
-            }
-
-        }*/
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>
