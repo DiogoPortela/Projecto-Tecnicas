@@ -75,21 +75,6 @@ namespace Projecto
                 {
                     this.Move(-Vector2.UnitY * movingSpeed);
                 }
-                //attack def button
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                {
-                    //animação de attack
-                    this.Atackrange(-Vector2.UnitY,2f);
-                    Attack();
-                }
-                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
-                {
-                    //animação de defense
-                    Defense();
-                    
-                }
-
-
             }
             #endregion
             #region PlayerTwo
@@ -119,15 +104,6 @@ namespace Projecto
                 {
                     this.Move(-Vector2.UnitY * movingSpeed);
                 }
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                {
-                    //o que fazer no attack
-                }
-                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
-                {
-                    //o que fazer no DEFESA
-                }
-
             }
             #endregion
 
@@ -197,13 +173,76 @@ namespace Projecto
             }
 
         }*/
-
-
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>
         /// <param name="camera">Camera to draw the image at.</param>
         public override void DrawObject(Camera camera)
+=======
+
+        public void CombatMod(PlayerNumber player, List<Enemy> enemies)
+        {
+            player = player;
+            enemies = new List<Enemy>();
+        }
+
+        // Use this method to resolve attacks between Figures
+        public void Attack(PlayerNumber player, Enemy defender)
+        {
+            if (PhysDmg >= defender.PhysDmgRes)
+            {
+                // Lower the defender's health by the amount of damage
+                defender.HP -= (int)(PhysDmg - PhysDmgRes);
+                // Write a combat message to the debug log.ideia
+                /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
+                   attacker.Name, defender.Name, damage, defender.Health);*/
+                if (defender.HP <= 0)
+                {
+                    if (defender is Enemy)
+                    {
+                        var enemy = defender as Enemy;
+                        // When an enemies health dropped below 0 they died
+                        // Remove that enemy from the game
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            else if (MagicDmg >= defender.MagicDmgRes)
+            {
+                defender.HP -= (int)(MagicDmg - defender.MagicDmgRes);
+                if (defender.HP <= 0)
+                {
+                    if (defender is Enemy)
+                    {
+                        var enemy = defender as Enemy;
+                        // When an enemies health dropped below 0 they died
+                        // Remove that enemy from the game
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            else
+            {
+                // Show the miss message in the Debug log for now
+               // Debug.WriteLine("{0} missed {1}", attacker.Name, defender.HP);
+            }
+        }
+
+        public void Defense(PlayerNumber defensive)
+        {
+            defensive.HP = defensive.HP;
+        }
+
+
+    }
+
+
+    /// <summary>
+    /// Draws on screen an object, using a camera.
+    /// </summary>
+    /// <param name="camera">Camera to draw the image at.</param>
+    public override void DrawObject(Camera camera)
+>>>>>>> Stashed changes
         {
             if (isActive)
             {
@@ -213,4 +252,30 @@ namespace Projecto
             }
         }
     }
-}
+
+                //attack def button
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                {
+                    //animação de attack
+                    this.Atackrange(-Vector2.UnitY,2f);
+                    Attack();
+                }
+                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                {
+                    //animação de defense
+                    Defense();
+                    
+                }
+
+
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                {
+                    //o que fazer no attack
+                }
+                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                {
+                    //o que fazer no DEFESA
+                }
+
+
+
