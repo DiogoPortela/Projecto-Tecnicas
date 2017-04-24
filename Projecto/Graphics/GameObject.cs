@@ -22,6 +22,10 @@ namespace Projecto
         //protected float speed;
         //protected Vector2 speedDirection;
         protected Vector2 objectDiretion;
+        public static CombatMod combatmod;
+
+
+       
 
         private bool isactive;
         public bool isActive
@@ -72,6 +76,8 @@ namespace Projecto
 
         //------------->FUNCTIONS && METHODS<-------------//
 
+            public virtual void Update(GameTime gametime, List<GameObject> enemies)
+        { }
         /// <summary>
         /// Moves the object in a given direction, with a given speed.
         /// </summary>
@@ -91,6 +97,12 @@ namespace Projecto
             this.Position += direction;
             this.objectDiretion = direction;
         }
+
+        public void Atackrange(Vector2 direction, float Range)
+        {
+            this.Position += direction * Range;
+        }
+
         /// <summary>
         /// Draws an object on screen using a camera.
         /// </summary>
