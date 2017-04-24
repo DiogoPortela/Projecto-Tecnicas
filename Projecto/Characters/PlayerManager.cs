@@ -18,7 +18,7 @@ namespace Projecto
         public Animation currentAnimation;
         private const float movingSpeed = 0.4f;
         private PlayerNumber playerNumber;
-        private readonly PlayerManager player;
+        private int range = 2;
 
 
         #region Atribute Stats
@@ -247,7 +247,7 @@ namespace Projecto
         {
             Vector2 v = (this.Position) - (enemy.Position);
             float distance = Math.Abs(v.Length());
-            if ((this.Size.X + 2) + enemy.Size.X < distance) return true;
+            if ((this.Size.X + range) + enemy.Size.X < distance) return true;
             return false;
         }
         /// <summary>
