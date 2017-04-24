@@ -10,8 +10,9 @@ namespace Projecto
 {
     class MapGenerator
     {
-        public int Width;
-        public int Height;
+        static public int Width;
+        static public int Height;
+        static public int TileSize;
 
         public string Seed;
         public bool UseRandomSeed;
@@ -19,15 +20,18 @@ namespace Projecto
         public int RandomFillPercent;
 
         //public Tile tile;
-        public List<Tile> TilesMap;
-        public List<Room> MapRooms;
-        int[,] infoMap;
+        static public Tile[,] TilesMap;
+        static public List<Room> MapRooms;
+        static public Room Spawn;
+        static int[,] infoMap;
+        static private int WalkableTiles;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
         public void GenerateMap(int tileSize)
         {
-            TilesMap = new List<Tile>();
+            TileSize = tileSize;
+            TilesMap = new Tile[Width, Height];
             MapRooms = new List<Room>();
             infoMap = new int[Width, Height];
             RandomFillMap();
@@ -36,7 +40,9 @@ namespace Projecto
                 SmoothMap();
             }
             ProcessMap();
-            FillTileMap(tileSize);
+            FillTileMap();
+            FindPlayerSpawn();
+            FindMapWalkableTiles();
         }
 
         private void RandomFillMap()
@@ -84,11 +90,11 @@ namespace Projecto
             List<List<Coordinate>> wallRegions = GetRegions(1);
             int wallThreshholdSize = 20;
 
-            foreach(List<Coordinate> wallRegion in wallRegions)
+            foreach (List<Coordinate> wallRegion in wallRegions)
             {
-                if(wallRegion.Count < wallThreshholdSize)
+                if (wallRegion.Count < wallThreshholdSize)
                 {
-                    foreach(Coordinate tile in wallRegion)
+                    foreach (Coordinate tile in wallRegion)
                     {
                         infoMap[tile.tileX, tile.tileY] = 0;
                     }
@@ -97,7 +103,6 @@ namespace Projecto
 
             List<List<Coordinate>> roomRegions = GetRegions(0);
             int roomThreshholdSize = 20;
-            List<Room> survivingRooms = new List<Room>();
 
             foreach (List<Coordinate> roomRegion in roomRegions)
             {
@@ -110,17 +115,20 @@ namespace Projecto
                 }
                 else
                 {
-                    survivingRooms.Add(new Room(roomRegion, infoMap));
+                    MapRooms.Add(new Room(roomRegion, infoMap));
                 }
             }
+            MapRooms.Sort();
+            MapRooms[0].isMainRoom = true;
+            MapRooms[0].isAccessibleFromMainRoom = true;
 
-            survivingRooms.Sort();
-            survivingRooms[0].isMainRoom = true;
-            survivingRooms[0].isAccessibleFromMainRoom = true;
-
-            ConnectClosestRooms(survivingRooms);
+            ConnectClosestRooms(MapRooms);
         }
-        private void FillTileMap(int tileSize)
+
+        /// <summary>
+        /// Transforms a number (0,1) into a Tile.
+        /// </summary>
+        private void FillTileMap()
         {
             if (infoMap != null)
             {
@@ -128,16 +136,19 @@ namespace Projecto
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        int number = (infoMap[x, y] == 1) ? 1 : 0;
-                        Vector2 pos = new Vector2(x, y);
-                        Tile tile = new Tile(number, pos, tileSize);
-                        TilesMap.Add(tile);
+                        Tile tile = new Tile(infoMap[x, y], new Vector2(x, y), TileSize);
+                        TilesMap[x, y] = tile;
                     }
                 }
             }
         }
-
-        private int GetSurroundingWallCount(int gridX, int gridY)
+        /// <summary>
+        /// Given two Coordinates of the map, gets the count of walls around it.
+        /// </summary>
+        /// <param name="gridX"></param>
+        /// <param name="gridY"></param>
+        /// <returns>The count of walls</returns>
+        static private int GetSurroundingWallCount(int gridX, int gridY)
         {
             int wallCount = 0;
             for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -159,16 +170,21 @@ namespace Projecto
             }
             return wallCount;
         }
+        /// <summary>
+        /// Given the List of all rooms in our map, connects each one with the closest.
+        /// </summary>
+        /// <param name="allRooms"></param>
+        /// <param name="forceAccessibilityFromMainRoom"></param>
         private void ConnectClosestRooms(List<Room> allRooms, bool forceAccessibilityFromMainRoom = false)
         {
             List<Room> roomListA = new List<Room>();
             List<Room> roomListB = new List<Room>();
 
-            if(forceAccessibilityFromMainRoom)
+            if (forceAccessibilityFromMainRoom)
             {
-                foreach(Room room in allRooms)
+                foreach (Room room in allRooms)
                 {
-                    if(room.isAccessibleFromMainRoom)
+                    if (room.isAccessibleFromMainRoom)
                     {
                         roomListB.Add(room);
                     }
@@ -183,7 +199,7 @@ namespace Projecto
                 roomListA = allRooms;
                 roomListB = allRooms;
             }
-                
+
 
             int bestDistance = 0;
             Coordinate bestTileA = new Coordinate();
@@ -192,12 +208,12 @@ namespace Projecto
             Room bestRoomB = new Room();
             bool possibleConnectionFound = false;
 
-            foreach(Room roomA in roomListA)
+            foreach (Room roomA in roomListA)
             {
-                if(!forceAccessibilityFromMainRoom)
+                if (!forceAccessibilityFromMainRoom)
                 {
                     possibleConnectionFound = false;
-                    if(roomA.connectedRooms.Count > 0)
+                    if (roomA.connectedRooms.Count > 0)
                         continue;
                 }
                 foreach (Room roomB in roomListB)
@@ -205,7 +221,7 @@ namespace Projecto
                     if (roomA == roomB || roomA.IsConnected(roomB))
                         continue;
 
-                    for(int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++)
+                    for (int tileIndexA = 0; tileIndexA < roomA.edgeTiles.Count; tileIndexA++)
                     {
                         for (int tileIndexB = 0; tileIndexB < roomB.edgeTiles.Count; tileIndexB++)
                         {
@@ -213,7 +229,7 @@ namespace Projecto
                             Coordinate tileB = roomB.edgeTiles[tileIndexB];
                             int distanceBetweenRooms = (int)(Math.Pow(tileA.tileX - tileB.tileX, 2) + Math.Pow(tileA.tileY - tileB.tileY, 2));
 
-                            if(distanceBetweenRooms < bestDistance || !possibleConnectionFound)
+                            if (distanceBetweenRooms < bestDistance || !possibleConnectionFound)
                             {
                                 bestDistance = distanceBetweenRooms;
                                 possibleConnectionFound = true;
@@ -226,7 +242,7 @@ namespace Projecto
                     }
                 }
 
-                if(possibleConnectionFound && !forceAccessibilityFromMainRoom)
+                if (possibleConnectionFound && !forceAccessibilityFromMainRoom)
                 {
                     CreatePassage(bestRoomA, bestRoomB, bestTileA, bestTileB);
                 }
@@ -245,7 +261,8 @@ namespace Projecto
 
         }
         /// <summary>
-        /// 
+        /// Given two Rooms and two Coordinates, calls the GetLine function to get a line between the given rooms and then calls DrawCircle for each of the Coordinates in the Line.
+        /// This creates a passage with the DrawCircle radius as width.
         /// </summary>
         /// <param name="roomA"></param>
         /// <param name="roomB"></param>
@@ -256,39 +273,39 @@ namespace Projecto
             Room.ConnectRooms(roomA, roomB);
 
             List<Coordinate> line = GetLine(tileA, tileB);
-            foreach(Coordinate c in line)
+            foreach (Coordinate c in line)
             {
                 DrawCircle(c, 2);
             }
         }
         /// <summary>
-        /// 
+        /// Given a Coordinate and a radius, this function draws a circle around the Coordinate.
         /// </summary>
         /// <param name="c"></param>
         /// <param name="r"></param>
         private void DrawCircle(Coordinate c, int r)
         {
-            for(int x = -r; x <= r; x++)
+            for (int x = -r; x <= r; x++)
             {
                 for (int y = -r; y <= r; y++)
                 {
-                    if(x*x + y*y <= r*r)
+                    if (x * x + y * y <= r * r)
                     {
                         int drawX = c.tileX + x;
                         int drawY = c.tileY + y;
 
-                        if(IsInMapRange(drawX,drawY))
+                        if (IsInMapRange(drawX, drawY))
                             infoMap[drawX, drawY] = 0;
                     }
                 }
             }
         }
         /// <summary>
-        /// 
+        /// This function creates a line between two Coordinates.
         /// </summary>
         /// <param name="from"></param>
         /// <param name="to"></param>
-        /// <returns></returns>
+        /// <returns>A list of Coordinates (representing a line).</returns>
         private List<Coordinate> GetLine(Coordinate from, Coordinate to)
         {
             List<Coordinate> line = new List<Coordinate>();
@@ -306,7 +323,7 @@ namespace Projecto
             int longest = Math.Abs(dx);
             int shortest = Math.Abs(dy);
 
-            if(longest < shortest)
+            if (longest < shortest)
             {
                 inverted = true;
                 longest = Math.Abs(dy);
@@ -318,7 +335,7 @@ namespace Projecto
 
             int gradientAccumulation = longest / 2;
 
-            for(int i = 0; i < longest; i++)
+            for (int i = 0; i < longest; i++)
             {
                 line.Add(new Coordinate(x, y));
 
@@ -329,7 +346,7 @@ namespace Projecto
 
                 gradientAccumulation += shortest;
 
-                if(gradientAccumulation >= longest)
+                if (gradientAccumulation >= longest)
                 {
                     if (inverted)
                         x += gradientStep;
@@ -343,19 +360,20 @@ namespace Projecto
             return line;
         }
         /// <summary>
-        /// 
+        /// Transforms a Coordinate into a Vector2.
         /// </summary>
         /// <param name="tile"></param>
-        /// <returns></returns>
-        private Vector2 CoordinateToWorldPoint(Coordinate tile)
+        /// <returns>A Vector2 with the given Coordinates</returns>
+        static private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
             return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
         }
         /// <summary>
-        /// 
+        /// Given the tileType, this function gets all the regions in the map. 
+        /// Uses GetRegionTiles function for each new possible region it finds.
         /// </summary>
         /// <param name="tileType"></param>
-        /// <returns></returns>
+        /// <returns>A List of Lists of Coordinates. These represent a Region of our map.</returns>
         private List<List<Coordinate>> GetRegions(int tileType)
         {
             List<List<Coordinate>> regions = new List<List<Coordinate>>();
@@ -365,10 +383,9 @@ namespace Projecto
             {
                 for (int y = 0; y < Height; y++)
                 {
-                    if(mapFlags[x,y] == 0 && infoMap[x,y] == tileType)
+                    if (mapFlags[x, y] == 0 && infoMap[x, y] == tileType)
                     {
                         List<Coordinate> newRegion = GetRegionTiles(x, y);
-                        //List<Coordinate> newRegion = GetRegionTiles(new Coordinate(x, y), mapFlags, tileType);
                         regions.Add(newRegion);
 
                         foreach (Coordinate tile in newRegion)
@@ -381,11 +398,11 @@ namespace Projecto
             return regions;
         }
         /// <summary>
-        /// 
+        /// Gets a list of tiles given a starting position. Checks for the tileType of that given position and looks for similar tiles in the same area.
         /// </summary>
         /// <param name="startX"></param>
         /// <param name="startY"></param>
-        /// <returns></returns>
+        /// <returns>A list of Coordinates that forms a region </returns>
         private List<Coordinate> GetRegionTiles(int startX, int startY)
         {
             List<Coordinate> tiles = new List<Coordinate>();
@@ -420,14 +437,88 @@ namespace Projecto
             //Analizar tiles...
             return tiles;
         }
-        private bool IsInMapRange(int x, int y)
+        /// <summary>
+        /// Checks if a given Coordinate is inside map boundaris.
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns>Returns a bool that confirms or denies the condition</returns>
+        static private bool IsInMapRange(int x, int y)
         {
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
-
+        /// <summary>
+        /// Finds the room in which the Player(s) can spawn.
+        /// </summary>
+        static private void FindPlayerSpawn()
+        {
+            int minX = Width;
+            foreach (Room r in MapRooms)
+            {
+                if (!r.isMainRoom)
+                    foreach (Coordinate c in r.tiles)
+                    {
+                        if (c.tileX < minX)
+                        {
+                            minX = c.tileX;
+                            Spawn = r;
+                        }
+                    }
+            }
+            Spawn.isSpawn = true;
+        }
+        /// <summary>
+        /// Finds the rooms in which monsters can spawn.
+        /// </summary>
+        static private void FindMapWalkableTiles()
+        {
+            foreach (Room r in MapRooms)
+            {
+                if (!r.isSpawn)
+                {
+                    WalkableTiles += r.roomSize;
+                }
+            }
+        }
+        /// <summary>
+        /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
+        /// </summary>
+        /// <returns>A vector2 in which the player will spawn</returns>
+        static public Vector2 FindEnemyPosition()
+        {
+            Vector2 positionToSpawnTo = Vector2.Zero;
+            Room RoomToSpawnTo = new Room();
+            int rand = Game1.random.Next(WalkableTiles);
+            foreach(Room r in MapRooms)
+            {
+                if(rand <= r.roomSize)
+                {
+                    RoomToSpawnTo = r;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            rand = Game1.random.Next(RoomToSpawnTo.roomSize);
+            return positionToSpawnTo = CoordinateToWorldPoint(RoomToSpawnTo.tiles[rand]);
+        }
+        /// <summary>
+        /// This function calculates a position in the spawn for the player.
+        /// </summary>
+        /// <returns></returns>
+        static public Vector2 GetPlayerStartingPosition()
+        {
+            Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
+            return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
+        }
+        /// <summary>
+        /// Draws the finished map on the given camera.
+        /// </summary>
+        /// <param name="camera"></param>
         public void Draw(Camera camera)
         {
-            foreach(Tile tile in TilesMap)
+            foreach (Tile tile in TilesMap)
             {
                 tile.DrawTile(camera);
             }

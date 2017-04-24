@@ -1,23 +1,39 @@
 ﻿using System;
+
 using System.Collections.Generic;
+
 using System.Linq;
+
 using System.Text;
+
 using System.Threading.Tasks;
+
 using Microsoft.Xna.Framework;
+
 using Microsoft.Xna.Framework.Input;
+
 using Microsoft.Xna.Framework.Graphics;
+
 using System.Collections;
 
+
+
 namespace Projecto
+
 {
+
     internal class PlayerManager : GameObject
+
     {
         public PlayerNumber pNumber;
         private CurrentInput currentInput;
         protected Animation[] animations;
         public Animation currentAnimation;
-
+        public Collider playerCollider;
+        public Vector2 Coordinates;
         private const float movingSpeed = 0.4f;
+        private Vector2 deltaPosition;
+
         //------------->CONSTRUCTORS<-------------//
 
         public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number) : base("Drude", position, size, 0f)
@@ -25,6 +41,11 @@ namespace Projecto
             this.animations = new Animation[18];
             this.pNumber = number;
             this.currentInput = CurrentInput.NoInput;
+            Coordinates = (position / size);
+            Coordinates.X = (int)Coordinates.X;
+            Coordinates.Y = (int)Coordinates.Y;
+            this.playerCollider = new Collider(position, size);
+            this.playerCollider.UpdateTiles(position, size);
 
             if (number == PlayerNumber.playerOne)
             {
@@ -41,55 +62,68 @@ namespace Projecto
 
         //------------->FUNCTIONS && METHODS<-------------//
 
-
         /// <summary>
         /// Deals with all the movement and animations.
         /// </summary>
         /// <param name="gameTime"></param>
         public void PlayerMovement(GameTime gameTime)
         {
+            deltaPosition = Vector2.Zero;
+
             #region PlayerOne
             if (pNumber == PlayerNumber.playerOne)
-            {                
+            {
                 //Movement Controls.
                 if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
                 {
-                    /*if (currentInput != CurrentInput.Right)
+                    if (currentInput != CurrentInput.Right)
                     {
-                        this.currentAnimation.Stop();
-                        this.currentAnimation = animations[3];
+                        //this.currentAnimation.Stop();
+                        //this.currentAnimation = animations[3];
+                        this.objectDiretion = Vector2.UnitX;
                         currentInput = CurrentInput.Right;
-
-                    }*/
-                    this.Move(Vector2.UnitX * movingSpeed);
+                    }
+                    deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitX * movingSpeed);
+                    if (currentInput != CurrentInput.Left)
+                    {
+                        this.objectDiretion = -Vector2.UnitX;
+                        currentInput = CurrentInput.Left;
+                    }
+                    deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
                 {
-                    this.Move(Vector2.UnitY * movingSpeed);
+                    if (currentInput != CurrentInput.Up)
+                    {
+                        this.objectDiretion = Vector2.UnitY;
+                        currentInput = CurrentInput.Up;
+                    }
+                    deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitY * movingSpeed);
+                    if (currentInput != CurrentInput.Down)
+                    {
+                        this.objectDiretion = -Vector2.UnitY;
+                        currentInput = CurrentInput.Down;
+                    }
+                    deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
                 //attack def button
                 if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
                 {
                     //animação de attack
-                    this.Atackrange(-Vector2.UnitY,2f);
-                    Attack();
+                    this.Atackrange(-Vector2.UnitY, 2f);
+                    //Attack();
                 }
                 if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
                 {
                     //animação de defense
-                    Defense();
-                    
+                    //Defense();
                 }
-
-
             }
             #endregion
             #region PlayerTwo
@@ -98,26 +132,41 @@ namespace Projecto
                 //Movement Controls.
                 if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
                 {
-                    /*if (currentInput != CurrentInput.Right)
+                    if (currentInput != CurrentInput.Right)
                     {
-                        this.currentAnimation.Stop();
-                        this.currentAnimation = animations[3];
+                        this.objectDiretion = Vector2.UnitX;
+                        //this.currentAnimation.Stop();
+                        //this.currentAnimation = animations[3];
                         currentInput = CurrentInput.Right;
-
-                    }*/
-                    this.Move(Vector2.UnitX * movingSpeed);
+                    }
+                    deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitX * movingSpeed);
+                    if (currentInput != CurrentInput.Left)
+                    {
+                        this.objectDiretion = -Vector2.UnitX;
+                        currentInput = CurrentInput.Left;
+                    }
+                    deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
                 {
-                    this.Move(Vector2.UnitY * movingSpeed);
+                    if (currentInput != CurrentInput.Up)
+                    {
+                        this.objectDiretion = Vector2.UnitY;
+                        currentInput = CurrentInput.Up;
+                    }
+                    deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
                 {
-                    this.Move(-Vector2.UnitY * movingSpeed);
+                    if (currentInput != CurrentInput.Down)
+                    {
+                        this.objectDiretion = -Vector2.UnitY;
+                        currentInput = CurrentInput.Down;
+                    }
+                    deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
                 {
@@ -127,77 +176,24 @@ namespace Projecto
                 {
                     //o que fazer no DEFESA
                 }
-
             }
             #endregion
 
-
+            if (deltaPosition != Vector2.Zero)
+            {
+                this.playerCollider.UpdateDelta(ref deltaPosition);
+                if (deltaPosition != Vector2.Zero)
+                {
+                    this.Move(deltaPosition);
+                    this.Coordinates = playerCollider.UpdateTiles(Position, Size);
+                    this.playerCollider.UpdateBounds(Position, Size);
+                    this.Position = this.playerCollider.UpdatePosition(Position, Size);
+                    this.Coordinates = playerCollider.UpdateTiles(Position, Size);
+                    this.playerCollider.UpdateBounds(Position, Size);
+                }
+            }
             //this.currentAnimation.Play(gameTime);
         }
-        #region
-        //para detetar collisão de attack
-        public Rectangle playercollison()
-        {
-            return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
-        }
-
-        
-      
-        public bool intersect(Rectangle rectangle)
-        {
-            return Rectangle.Intersects(rectangle);
-        }
-
-        #endregion
-
-
-        /*
-        public void Collision(Rectangle newRectangle, int xOffset, int yOffset)
-        {
-            if (Rectangle.TouchingTopOf(newRectangle))
-            {
-                Rectangle.Y = newRectangle.Y - Rectangle.Height;
-                speedDirection.Y = 0f;
-                hasJumped = false;
-            }
-
-            if (Rectangle.TouchingLeftOf(newRectangle))
-            {
-                position.X = newRectangle.X - Rectangle.Width - 2;
-            }
-
-            if (Rectangle.TouchingRightOf(newRectangle))
-            {
-                position.X = newRectangle.X + newRectangle.Width + 2;
-            }
-
-            if (Rectangle.TouchingBottomOf(newRectangle))
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.X < 0)
-            {
-                position.X = 0;
-            }
-
-            if (position.X > xOffset - Rectangle.Width)
-            {
-                position.X = xOffset - Rectangle.Width;
-            }
-
-            if (position.Y < 0)
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.Y > yOffset - Rectangle.Height)
-            {
-                position.Y = yOffset - Rectangle.Height;
-            }
-
-        }*/
-
 
         /// <summary>
         /// Draws on screen an object, using a camera.
@@ -214,3 +210,4 @@ namespace Projecto
         }
     }
 }
+

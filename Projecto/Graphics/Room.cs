@@ -15,33 +15,34 @@ namespace Projecto
         public int roomSize;
         public bool isAccessibleFromMainRoom;
         public bool isMainRoom;
+        public bool isSpawn;
 
-        public Room(){}
+        public Room() { }
 
         public Room(List<Coordinate> roomTiles, int[,] map)
         {
+            int[,] mapFlag = new int[MapGenerator.Width, MapGenerator.Height];
             tiles = roomTiles;
             roomSize = tiles.Count;
 
             connectedRooms = new List<Room>();
             edgeTiles = new List<Coordinate>();
 
-            foreach(Coordinate tile in tiles)
+            foreach (Coordinate tile in tiles)
             {
-                for(int x = tile.tileX -1; x <= tile.tileX + 1; x++)
+                for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++)
                 {
-                    for (int y = tile.tileY -1; y <= tile.tileY + 1; y++)
+                    for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
                     {
-                        if(x == tile.tileX || y == tile.tileY)
+                        if (x == tile.tileX || y == tile.tileY && mapFlag[x,y] == 0)
                         {
-                           // try
                             {
                                 if (map[x, y] == 1)
                                 {
-                                    edgeTiles.Add(tile);
+                                    edgeTiles.Add(new Coordinate(x,y));
+                                    mapFlag[x, y] = 1;
                                 }
                             }
-                            //catch { }
                         }
                     }
                 }
@@ -50,35 +51,32 @@ namespace Projecto
 
         public void SetAccessibleFromMainRoom()
         {
-            if(!isAccessibleFromMainRoom)
+            if (!isAccessibleFromMainRoom)
             {
                 isAccessibleFromMainRoom = true;
-                foreach(Room connectedRoom in connectedRooms)
+                foreach (Room connectedRoom in connectedRooms)
                 {
                     connectedRoom.SetAccessibleFromMainRoom();
                 }
             }
         }
-
         public static void ConnectRooms(Room roomA, Room roomB)
         {
-            if(roomA.isAccessibleFromMainRoom)
+            if (roomA.isAccessibleFromMainRoom)
             {
                 roomB.SetAccessibleFromMainRoom();
             }
-            else if(roomB.isAccessibleFromMainRoom)
+            else if (roomB.isAccessibleFromMainRoom)
             {
                 roomA.SetAccessibleFromMainRoom();
             }
             roomA.connectedRooms.Add(roomB);
             roomB.connectedRooms.Add(roomA);
         }
-
         public bool IsConnected(Room otherRoom)
         {
             return connectedRooms.Contains(otherRoom);
         }
-
         public int CompareTo(Room otherRoom)
         {
             return otherRoom.roomSize.CompareTo(roomSize);

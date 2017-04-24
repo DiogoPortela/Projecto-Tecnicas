@@ -19,13 +19,10 @@ namespace Projecto
         public Vector2 SizeCenter;
         public float RotationAngle { get; set; }
 
-        protected float speed;
-        protected Vector2 speedDirection;
+        //protected float speed;
+        //protected Vector2 speedDirection;
         protected Vector2 objectDiretion;
-        public static CombatMod combatmod;
-
-
-       
+        //public static CombatMod combatmod;
 
         private bool isactive;
         public bool isActive
@@ -65,10 +62,11 @@ namespace Projecto
             }            
             this.Position = position;
             this.Size = size;
-            this.SizeCenter = new Vector2(size.X, -size.Y)/2;
             this.RotationAngle = rotation;
-            this.speed = 0f;
-            this.speedDirection = Vector2.Zero;
+
+            this.SizeCenter = new Vector2(size.X, -size.Y)/2;
+            //this.speed = 0f;
+            //this.speedDirection = Vector2.Zero;
             this.objectDiretion = -Vector2.UnitY;
             this.isActive = true;
         }
@@ -85,6 +83,7 @@ namespace Projecto
         public void Move(Vector2 direction, float speed)
         {
             this.Position += direction * speed;
+            this.objectDiretion = direction;
         }
         /// <summary>
         /// Moves the object in a given direction.
@@ -93,6 +92,7 @@ namespace Projecto
         public void Move(Vector2 direction)
         {
             this.Position += direction;
+            this.objectDiretion = direction;
         }
 
         public void Atackrange(Vector2 direction, float Range)

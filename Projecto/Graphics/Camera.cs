@@ -60,6 +60,19 @@ namespace Projecto
             y = Game1.graphics.PreferredBackBufferHeight - y;
         }
         /// <summary>
+        /// Transforms a point to pixel-position. (doesn't invert Y)
+        /// </summary>
+        /// <param name="position">Position on screen to draw to.</param>
+        /// <returns></returns>
+        public Vector2 CalculatePixelPoint(Vector2 position)
+        {
+            position.X = (int)((position.X * ratio) + 0.5f);
+            position.Y = (int)((position.Y * ratio) + 0.5f);
+
+            //position.Y = Game1.graphics.PreferredBackBufferHeight - position.Y;
+            return position;
+        }
+        /// <summary>
         /// Convertes the position and size of a rectangle from User-space to Pixel-space.
         /// </summary>
         /// <param name="position"> Position of the rectangle in User-space. </param>

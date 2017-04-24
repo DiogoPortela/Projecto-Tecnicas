@@ -13,9 +13,13 @@ namespace Projecto
     {
         static public PlayerManager PlayerOne;
         static public PlayerManager PlayerTwo;
+        static public List<Enemy> EnemyList;
                 
-        Viewport defaultView, leftView, rightView;
-        Camera cameraRight, cameraLeft, cameraScreen;
+        private Viewport defaultView, leftView, rightView;
+        static public Camera cameraRight, cameraLeft, cameraScreen;
+
+        private Vector2 debugPlayerOnePosition;
+        private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
         GameObject teste1;
@@ -31,8 +35,8 @@ namespace Projecto
             #region Map Generation
             map.UseRandomSeed = true;
             map.RandomFillPercent = 50;
-            map.Width = (int)Cons.MAXWIDTH; //100;
-            map.Height = 75;
+            MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
+            MapGenerator.Height = 75;
             map.GenerateMap(5);
             #endregion
 
@@ -48,18 +52,20 @@ namespace Projecto
 
             //Initializing cameras.
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
-            cameraRight = new Camera(new Vector2(50,0), 50, ((float)rightView.Height / rightView.Width));
-            cameraScreen = new Camera(Vector2.Zero, 100, Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth);
+            cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
+            cameraScreen = new Camera(Vector2.Zero, 100,(float)(Game1.graphics.PreferredBackBufferHeight / (float)Game1.graphics.PreferredBackBufferWidth));
             #endregion
 
+            debugPlayerOnePosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 0));
+            debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
             Debug.LoadFont();   //Starting Debug.
 
             #region TestZone
-            PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
+            EnemyList = new List<Enemy>();
+            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne);
             teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
-            PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
+            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo);
             #endregion
-
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -99,7 +105,9 @@ namespace Projecto
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-            Debug.Draw(cameraScreen);
+            Debug.DrawText();
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne);
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo);
             Game1.spriteBatch.End();
             #endregion
 
@@ -117,6 +125,7 @@ namespace Projecto
             teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
+            Debug.DrawColliders(camera, PlayerOne, PlayerOne.playerCollider);
             Game1.spriteBatch.End();
         }
     }
