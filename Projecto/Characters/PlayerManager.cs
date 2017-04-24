@@ -263,7 +263,7 @@ namespace Projecto
                 if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
                 {
                     //animação de defense
-                    Defense();
+                    
                     
                 }
 
@@ -272,7 +272,7 @@ namespace Projecto
                 {
                     //o que fazer no attack
                 }
-                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                if (InputManager.attckdefOne.K == ButtonState.Pressed && InputManager.attckdefOne.K != ButtonState.Pressed)
                 {
                     //o que fazer no DEFESA
                 }

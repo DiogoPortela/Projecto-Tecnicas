@@ -20,6 +20,10 @@ namespace Projecto
 
         public double MagicDmg { get; set; }
 
+        public double PhysDmgRes { get; set; }
+
+        public double MagicDmgRes { get; set; }
+
         public Enemy()
         {
             this.HP = 30;
@@ -27,6 +31,8 @@ namespace Projecto
             this.MS = 0.8f;
             this.PhysDmg = 10;
             this.MagicDmg = 5;
+            this.PhysDmgRes = 1;
+            this.MagicDmgRes = 1;
         }
 
     }

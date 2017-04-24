@@ -87,6 +87,7 @@ namespace Projecto
 
         public ButtonState Space { get { return GetState(Keys.Space); } }
         public ButtonState Q { get { return GetState(Keys.Q); } }
-
+        public ButtonState L { get { return GetState(Keys.L); } }
+        public ButtonState K { get { return GetState(Keys.K); } }
     }
 }

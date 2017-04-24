@@ -98,6 +98,7 @@ namespace Projecto
         public void Atackrange(Vector2 direction, float Range)
         {
             this.Position += direction * Range;
+           
         }
 
         /// <summary>

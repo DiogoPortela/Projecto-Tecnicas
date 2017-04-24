@@ -10,6 +10,8 @@ namespace Projecto
     class Player : GameObject
     {
         private PlayerNumber playerNumber;
+        private readonly PlayerNumber player;
+        private readonly List<Enemy> enemies;
 
         #region Atribute Stats
         private int maxHP;
@@ -20,6 +22,8 @@ namespace Projecto
         public float MS { get; set; }
         public double PhysDmg { get; set; }
         public double MagicDmg { get; set; }
+        public double PhysDmgRes { get; set; }
+        public double MagicDmgRes { get; set; }
         public Circle Range { get; set; }
         #endregion
 
@@ -83,14 +87,75 @@ namespace Projecto
             this.MS = 1.0f;
             this.PhysDmg = 18.0;
             this.MagicDmg = 8.0;
+            this.PhysDmgRes = 5.0;
+            this.MagicDmgRes = 5.0;
             this.Range = new Circle();
             #endregion
         }
-        public void checkcollision(PlayerNumber one, List<Enemy> enemies)
+        public void checkcollision(PlayerNumber playernumber, List<Enemy> enemies)
         {
 
         }
 
+    
+
+        // When we construct the CombatManager class we want to pass in references
+        // to the player and the list of enemies.
+        public void CombatMod(Player player, List<Enemy> enemies)
+        {
+            player = player;
+            enemies = new List<Enemy>();
+        }
+
+        // Use this method to resolve attacks between Figures
+        public void Attack(Player player, Enemy defender)
+        {
+            if (PhysDmg >= defender.PhysDmgRes)
+            {
+                // Lower the defender's health by the amount of damage
+                defender.HP -= (int)(PhysDmg - PhysDmgRes);
+                // Write a combat message to the debug log.ideia
+                /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
+                   attacker.Name, defender.Name, damage, defender.Health);*/
+                if (defender.HP <= 0)
+                {
+                    if (defender is Enemy)
+                    {
+                        var enemy = defender as Enemy;
+                        // When an enemies health dropped below 0 they died
+                        // Remove that enemy from the game
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            else if(MagicDmg>=defender.MagicDmgRes)
+            {
+                defender.HP -= (int)(MagicDmg - defender.MagicDmgRes);
+                if (defender.HP <= 0)
+                {
+                    if (defender is Enemy)
+                    {
+                        var enemy = defender as Enemy;
+                        // When an enemies health dropped below 0 they died
+                        // Remove that enemy from the game
+                        enemies.Remove(enemy);
+                    }
+                }
+            }
+            else
+            {
+                // Show the miss message in the Debug log for now
+                //Debug.WriteLine("{0} missed {1}", attacker.Name, defender.Name);
+            }
+        }
+
+        public void Defense(Player defensive)
+        {
+            defensive.HP = defensive.HP;
+        }
+
 
     }
+
+
 }
