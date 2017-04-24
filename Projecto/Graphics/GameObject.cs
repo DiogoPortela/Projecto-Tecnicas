@@ -22,10 +22,7 @@ namespace Projecto
         //protected float speed;
         //protected Vector2 speedDirection;
         protected Vector2 objectDiretion;
-        public static CombatMod combatmod;
-
-
-       
+        //public static CombatMod combatmod;
 
         private bool isactive;
         public bool isActive
