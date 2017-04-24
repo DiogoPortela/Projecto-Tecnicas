@@ -70,29 +70,27 @@ namespace Projecto
         /// Draws the MAXLINES amount of lines on the camera.
         /// </summary>
         /// <param name="camera">Camera to draw to.</param>
-        public static void DrawText(Camera camera)
+        public static void DrawText()
         {
             if(isActive)
             {            
-                Game1.spriteBatch.DrawString(font, textStr, camera.Position, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, textStr, Vector2.Zero, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }          
         }
         /// <summary>
         /// Draws some important info on screen.
         /// </summary>
         /// <param name="camera">Camera to draw to.</param>
-        /// <param name="position"></param>
-        /// <param name="coordinates"></param>
-        /// <param name="minBound"></param>
-        /// <param name="maxBound"></param>
-        public static void DrawInfo(Camera camera, Vector2 position, Vector2 coordinates, Vector2 minBound, Vector2 maxBound)
+        /// <param name="drawPosition">Position to draw to.</param>
+        /// <param name="player">Player information.</param>
+        public static void DrawPlayerInfo(Camera camera,Vector2 drawPosition, PlayerManager player)
         {
             if(isActive)
             {
-                Game1.spriteBatch.DrawString(font, "X:" + position.X + " Y:" + position.Y, camera.Position + new Vector2((camera.Widht - 40) * 8, 0), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "Coor X:" + coordinates.X + " Coor Y:" + coordinates.Y, camera.Position + new Vector2((camera.Widht - 40) * 8, 15), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "MinBound X:" + minBound.X + " MinBound Y:" + minBound.Y, camera.Position + new Vector2((camera.Widht - 40) * 8, 30), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "MaxBound X:" + maxBound.X + " MaxBound Y:" + maxBound.Y, camera.Position + new Vector2((camera.Widht - 40) * 8, 45), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, "X:" + player.Position.X + " Y:" + player.Position.Y, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, "Coor X:" + player.Coordinates.X + " Coor Y:" + player.Coordinates.Y,drawPosition + new Vector2(0 , 15), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y,drawPosition + new Vector2(0, 30), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y,drawPosition + new Vector2(0, 45), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>

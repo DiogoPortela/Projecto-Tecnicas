@@ -15,8 +15,11 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
                 
-        Viewport defaultView, leftView, rightView;
+        private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft, cameraScreen;
+
+        private Vector2 debugPlayerOnePosition;
+        private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
         GameObject teste1;
@@ -49,10 +52,12 @@ namespace Projecto
 
             //Initializing cameras.
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
-            cameraRight = new Camera(new Vector2(50,0), 50, ((float)rightView.Height / rightView.Width));
-            cameraScreen = new Camera(Vector2.Zero, 100, Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth);
+            cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
+            cameraScreen = new Camera(Vector2.Zero, 100,(float)(Game1.graphics.PreferredBackBufferHeight / (float)Game1.graphics.PreferredBackBufferWidth));
             #endregion
 
+            debugPlayerOnePosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 0));
+            debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
             Debug.LoadFont();   //Starting Debug.
 
             #region TestZone
@@ -100,8 +105,9 @@ namespace Projecto
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-            Debug.DrawText(cameraScreen);
-            Debug.DrawInfo(cameraScreen, PlayerOne.Position, PlayerOne.Coordinates, PlayerOne.playerCollider.MinBound, PlayerOne.playerCollider.MaxBound);
+            Debug.DrawText();
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne);
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo);
             Game1.spriteBatch.End();
             #endregion
 

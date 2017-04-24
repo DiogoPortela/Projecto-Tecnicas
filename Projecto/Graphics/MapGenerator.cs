@@ -484,7 +484,6 @@ namespace Projecto
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
-
         static public Vector2 FindEnemyPosition()
         {
             Vector2 positionToSpawnTo = Vector2.Zero;
@@ -504,6 +503,10 @@ namespace Projecto
             rand = Game1.random.Next(RoomToSpawnTo.roomSize);
             return positionToSpawnTo = CoordinateToWorldPoint(RoomToSpawnTo.tiles[rand]);
         }
+        /// <summary>
+        /// This function calculates a position in the spawn for the player.
+        /// </summary>
+        /// <returns></returns>
         static public Vector2 GetPlayerStartingPosition()
         {
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];

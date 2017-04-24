@@ -63,25 +63,41 @@ namespace Projecto
                 //Movement Controls.
                 if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
                 {
-                    /*if (currentInput != CurrentInput.Right)
+                    if (currentInput != CurrentInput.Right)
                     {
-                        this.currentAnimation.Stop();
-                        this.currentAnimation = animations[3];
+                        //this.currentAnimation.Stop();
+                        //this.currentAnimation = animations[3];
+                        this.objectDiretion = Vector2.UnitX;
                         currentInput = CurrentInput.Right;
 
-                    }*/
+                    }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Left)
+                    {
+                        this.objectDiretion = -Vector2.UnitX;
+                        currentInput = CurrentInput.Left;
+                    }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Up)
+                    {
+                        this.objectDiretion = Vector2.UnitY;
+                        currentInput = CurrentInput.Up;
+                    }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Down)
+                    {
+                        this.objectDiretion = -Vector2.UnitY;
+                        currentInput = CurrentInput.Down;
+                    }
                     deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
             }
@@ -92,25 +108,40 @@ namespace Projecto
                 //Movement Controls.
                 if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
                 {
-                    /*if (currentInput != CurrentInput.Right)
+                    if (currentInput != CurrentInput.Right)
                     {
-                        this.currentAnimation.Stop();
-                        this.currentAnimation = animations[3];
+                        this.objectDiretion = Vector2.UnitX;
+                        //this.currentAnimation.Stop();
+                        //this.currentAnimation = animations[3];
                         currentInput = CurrentInput.Right;
-
-                    }*/
+                    }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Left)
+                    {
+                        this.objectDiretion = -Vector2.UnitX;
+                        currentInput = CurrentInput.Left;
+                    }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Up)
+                    {
+                        this.objectDiretion = Vector2.UnitY;
+                        currentInput = CurrentInput.Up;
+                    }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
                 if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
                 {
+                    if (currentInput != CurrentInput.Down)
+                    {
+                        this.objectDiretion = -Vector2.UnitY;
+                        currentInput = CurrentInput.Down;
+                    }
                     deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
             }
