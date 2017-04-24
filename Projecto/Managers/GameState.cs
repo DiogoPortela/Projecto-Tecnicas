@@ -21,7 +21,9 @@ namespace Projecto
         GameObject teste1;
         MapGenerator map = new MapGenerator();
         KeyboardState oldState;
+        public static List<Enemy> enemies;
         #endregion
+
 
 
         //------------->CONSTRUCTORS<-------------//
@@ -58,6 +60,8 @@ namespace Projecto
             PlayerOne = new PlayerManager(new Vector2(0, 0), Vector2.One * 5, PlayerNumber.playerOne);
             teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
             PlayerTwo = new PlayerManager(new Vector2(50, 0), Vector2.One * 5, PlayerNumber.playerTwo);
+            enemies = new List<Enemy>();
+            
             #endregion
 
         }

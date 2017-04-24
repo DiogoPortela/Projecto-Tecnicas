@@ -16,10 +16,32 @@ namespace Projecto
         private CurrentInput currentInput;
         protected Animation[] animations;
         public Animation currentAnimation;
-
         private const float movingSpeed = 0.4f;
+        private PlayerNumber playerNumber;
+        private readonly PlayerManager player;
+
+
+        #region Atribute Stats
+        public int HP { get; set; }
+        public double PhysDmg { get; set; }
+        public double MagicDmg { get; set; }
+        public double PhysDmgRes { get; set; }
+        public double MagicDmgRes { get; set; }
+        #endregion
         //------------->CONSTRUCTORS<-------------//
 
+        public PlayerManager(string texture, Vector2 position, float size, PlayerNumber playerNumber) : base(texture, position, new Vector2(size, size), 0f)
+        {
+            this.playerNumber = playerNumber;
+
+            #region Stats initializer
+            this.HP = 100;
+            this.PhysDmg = 18.0;
+            this.MagicDmg = 8.0;
+            this.PhysDmgRes = 5.0;
+            this.MagicDmgRes = 5.0;
+            #endregion
+        }
         public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number) : base("Drude", position, size, 0f)
         {
             this.animations = new Animation[18];
@@ -50,7 +72,7 @@ namespace Projecto
         {
             #region PlayerOne
             if (pNumber == PlayerNumber.playerOne)
-            {                
+            {
                 //Movement Controls.
                 if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
                 {
@@ -106,10 +128,59 @@ namespace Projecto
                 }
             }
             #endregion
-
-
             //this.currentAnimation.Play(gameTime);
         }
+        public void DamageManager()
+        {
+            #region playerone
+
+            if (pNumber == PlayerNumber.playerOne)
+            {
+                //attack button
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                {
+                    //animação de attack
+                    foreach (Enemy enemy in GameState.enemies)
+                    {
+                        if (this.IsInRange(enemy) == true)
+                        {
+                            Attack(enemy);
+                        }
+                    }
+
+                }
+                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                {
+                    //animação de defense   
+                    //Defense(player);
+                }
+            }
+            #endregion
+
+            #region playertwo
+            if (pNumber == PlayerNumber.playerTwo)
+            {
+                if (InputManager.attckdefOne.L == ButtonState.Pressed && InputManager.attckdefOne.L != ButtonState.Pressed)
+                {
+                    //o que fazer no attack
+                    foreach (Enemy enemy in GameState.enemies)
+                    {
+                        if (this.IsInRange(enemy) == true)
+                        {
+                            Attack(enemy);
+                        }
+                    }
+
+                }
+                if (InputManager.attckdefOne.K == ButtonState.Pressed && InputManager.attckdefOne.K != ButtonState.Pressed)
+                {
+                    //o que fazer no DEFESA
+                   // Defense(player);
+                }
+            }
+            #endregion
+        }
+
         #region
         //para detetar collisão de attack
         public Rectangle playercollison()
@@ -117,77 +188,16 @@ namespace Projecto
             return new Rectangle((int)Position.X, (int)Position.Y, Texture.Width, Texture.Height);
         }
 
-        
-      
+
+
         public bool intersect(Rectangle rectangle)
         {
             return Rectangle.Intersects(rectangle);
         }
 
         #endregion
-
-
-        /*
-        public void Collision(Rectangle newRectangle, int xOffset, int yOffset)
-        {
-            if (Rectangle.TouchingTopOf(newRectangle))
-            {
-                Rectangle.Y = newRectangle.Y - Rectangle.Height;
-                speedDirection.Y = 0f;
-                hasJumped = false;
-            }
-
-            if (Rectangle.TouchingLeftOf(newRectangle))
-            {
-                position.X = newRectangle.X - Rectangle.Width - 2;
-            }
-
-            if (Rectangle.TouchingRightOf(newRectangle))
-            {
-                position.X = newRectangle.X + newRectangle.Width + 2;
-            }
-
-            if (Rectangle.TouchingBottomOf(newRectangle))
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.X < 0)
-            {
-                position.X = 0;
-            }
-
-            if (position.X > xOffset - Rectangle.Width)
-            {
-                position.X = xOffset - Rectangle.Width;
-            }
-
-            if (position.Y < 0)
-            {
-                speedDirection.Y = 1f;
-            }
-
-            if (position.Y > yOffset - Rectangle.Height)
-            {
-                position.Y = yOffset - Rectangle.Height;
-            }
-
-        }*/
-        /// <summary>
-        /// Draws on screen an object, using a camera.
-        /// </summary>
-        /// <param name="camera">Camera to draw the image at.</param>
-        public override void DrawObject(Camera camera)
-=======
-
-        public void CombatMod(PlayerNumber player, List<Enemy> enemies)
-        {
-            player = player;
-            enemies = new List<Enemy>();
-        }
-
         // Use this method to resolve attacks between Figures
-        public void Attack(PlayerNumber player, Enemy defender)
+        public void Attack(Enemy defender)
         {
             if (PhysDmg >= defender.PhysDmgRes)
             {
@@ -203,7 +213,7 @@ namespace Projecto
                         var enemy = defender as Enemy;
                         // When an enemies health dropped below 0 they died
                         // Remove that enemy from the game
-                        enemies.Remove(enemy);
+                        GameState.enemies.Remove(enemy);
                     }
                 }
             }
@@ -217,32 +227,34 @@ namespace Projecto
                         var enemy = defender as Enemy;
                         // When an enemies health dropped below 0 they died
                         // Remove that enemy from the game
-                        enemies.Remove(enemy);
+                        GameState.enemies.Remove(enemy);
                     }
                 }
             }
             else
             {
                 // Show the miss message in the Debug log for now
-               // Debug.WriteLine("{0} missed {1}", attacker.Name, defender.HP);
+                // Debug.WriteLine("{0} missed {1}", attacker.Name, defender.HP);
             }
         }
 
-        public void Defense(PlayerNumber defensive)
+        public void Defense()
         {
-            defensive.HP = defensive.HP;
+           // this.HP = this.HP;
         }
 
-
-    }
-
-
-    /// <summary>
-    /// Draws on screen an object, using a camera.
-    /// </summary>
-    /// <param name="camera">Camera to draw the image at.</param>
-    public override void DrawObject(Camera camera)
->>>>>>> Stashed changes
+        public bool IsInRange(Enemy enemy)
+        {
+            Vector2 v = (this.Position) - (enemy.Position);
+            float distance = Math.Abs(v.Length());
+            if ((this.Size.X + 2) + enemy.Size.X < distance) return true;
+            return false;
+        }
+        /// <summary>
+        /// Draws on screen an object, using a camera.
+        /// </summary>
+        /// <param name="camera">Camera to draw the image at.</param>
+        public override void DrawObject(Camera camera)
         {
             if (isActive)
             {
@@ -252,30 +264,12 @@ namespace Projecto
             }
         }
     }
-
-                //attack def button
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                {
-                    //animação de attack
-                    this.Atackrange(-Vector2.UnitY,2f);
-                    Attack();
-                }
-                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
-                {
-                    //animação de defense
-                    
-                    
-                }
+}
 
 
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                {
-                    //o que fazer no attack
-                }
-                if (InputManager.attckdefOne.K == ButtonState.Pressed && InputManager.attckdefOne.K != ButtonState.Pressed)
-                {
-                    //o que fazer no DEFESA
-                }
 
 
-
+
+
+
+

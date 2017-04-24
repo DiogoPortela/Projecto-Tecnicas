@@ -22,10 +22,10 @@ namespace Projecto
         protected float speed;
         protected Vector2 speedDirection;
         protected Vector2 objectDiretion;
-        public static CombatMod combatmod;
-
-
        
+
+
+
 
         private bool isactive;
         public bool isActive
@@ -97,8 +97,7 @@ namespace Projecto
 
         public void Atackrange(Vector2 direction, float Range)
         {
-            this.Position += direction * Range;
-           
+            this.Position += direction * Range;    
         }
 
         /// <summary>

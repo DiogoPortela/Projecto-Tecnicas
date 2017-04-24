@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Projecto
 {
-    public class CombatMod 
+    public class CombatMod
     {
 
         public bool IncHP { get; set; }
@@ -24,7 +24,7 @@ namespace Projecto
         public bool MagicDmgRes { get; set; }
 
         public bool PhysDmgRes { get; set; }
-        
+
         public CombatMod()
         {
             Random rand = new Random();
@@ -40,6 +40,5 @@ namespace Projecto
 
 
         }
-
-       
+    }
 }
