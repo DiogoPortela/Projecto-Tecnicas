@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace Projecto
 {
-   /* public class Boss : Enemy
-    {
-        public CombatMod mod { get; set; }
+    //public class Boss : Enemy
+    //{
+    //    public CombatMod mod { get; set; }
 
-        public Boss(CombatMod mod) : base()
-        {
+    //    public Boss(CombatMod mod) : base()
+    //    {
             
-        }
+    //    }
 
 
-    }*/
+    //}
 }
