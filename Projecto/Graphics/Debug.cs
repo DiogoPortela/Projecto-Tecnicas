@@ -91,6 +91,8 @@ namespace Projecto
                 Game1.spriteBatch.DrawString(font, "Coor X:" + player.Coordinates.X + " Coor Y:" + player.Coordinates.Y,drawPosition + new Vector2(0 , 15), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
                 Game1.spriteBatch.DrawString(font, "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y,drawPosition + new Vector2(0, 30), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
                 Game1.spriteBatch.DrawString(font, "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y,drawPosition + new Vector2(0, 45), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, "HP:" + player.HP, drawPosition + new Vector2(0, 60), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+
             }
         }
         /// <summary>
