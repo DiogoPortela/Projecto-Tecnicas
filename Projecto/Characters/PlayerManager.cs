@@ -17,7 +17,7 @@ namespace Projecto
         protected Animation[] animations;
         public Animation currentAnimation;
         private const float movingSpeed = 0.4f;
-        private int range = 2;
+        private int range = 10;
         public Collider playerCollider;
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
@@ -185,15 +185,20 @@ namespace Projecto
             if (pNumber == PlayerNumber.playerOne)
             {
                 //attack button
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
+                if (InputManager.attckdefOne.Space == ButtonState.Pressed)
                 {
+                    List<Enemy> mortos = new List<Enemy>();
                     //animação de attack
                     foreach (Enemy enemy in GameState.enemies)
                     {
                         if (this.IsInRange(enemy) == true)
                         {
-                            Attack(enemy);
+                            mortos.Add(Attack(enemy));
                         }
+                    }
+                    foreach(Enemy enemy in mortos)
+                    {
+                        GameState.enemies.Remove(enemy);
                     }
 
                 }
@@ -227,24 +232,28 @@ namespace Projecto
             }
             #endregion
         }
-        // Use this method to resolve attacks between Figures
-        public void Attack(Enemy defender)
+        /// <summary>
+        /// Use this method to resolve attacks between Figures vs enemy
+        /// </summary>
+        /// <param name="attack"></param>
+        public Enemy Attack(Enemy defender)
         {
+            Debug.NewLine(defender.HP.ToString());
             if (PhysDmg >= defender.PhysDmgRes)
             {
                 // Lower the defender's health by the amount of damage
                 defender.HP -= (int)(PhysDmg - PhysDmgRes);
                 // Write a combat message to the debug log.ideia
                 /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
-                   attacker.Name, defender.Name, damage, defender.Health);*/
+                   attacker.Name, damage, defender.Health);*/
                 if (defender.HP <= 0)
                 {
                     if (defender is Enemy)
                     {
-                        var enemy = defender as Enemy;
                         // When an enemies health dropped below 0 they died
                         // Remove that enemy from the game
-                        GameState.enemies.Remove(enemy);
+                        return defender;
+                       
                     }
                 }
             }
@@ -258,7 +267,7 @@ namespace Projecto
                         var enemy = defender as Enemy;
                         // When an enemies health dropped below 0 they died
                         // Remove that enemy from the game
-                        GameState.enemies.Remove(enemy);
+                        return defender;
                     }
                 }
             }
@@ -267,16 +276,27 @@ namespace Projecto
                 // Show the miss message in the Debug log for now
                 // Debug.WriteLine("{0} missed {1}", attacker.Name, defender.HP);
             }
+            Debug.NewLine(defender.HP.ToString());
+            return null;
+
         }
+        /// <summary>
+        /// Use this method to defense
+        /// </summary>
         public void Defense()
         {
            // this.HP = this.HP;
         }
+        /// <summary>
+        /// this method is to verific, if player is on range 
+        /// </summary>
+        /// <param name="enemy"></param>
+        /// <returns></returns>
         public bool IsInRange(Enemy enemy)
         {
             Vector2 v = (this.Position) - (enemy.Position);
             float distance = Math.Abs(v.Length());
-            if ((this.Size.X + range) + enemy.Size.X < distance) return true;
+            if ((this.Size.X + range) + enemy.Size.X > distance) return true;
             return false;
         }
         /// <summary>

@@ -15,6 +15,7 @@ namespace Projecto
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
         static public Random random;
+        static public Texture2D enemytexture;
 
         static GameState gameState;
 
