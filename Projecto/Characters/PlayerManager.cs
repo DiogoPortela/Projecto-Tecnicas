@@ -1,29 +1,16 @@
 ﻿using System;
-
 using System.Collections.Generic;
-
 using System.Linq;
-
 using System.Text;
-
 using System.Threading.Tasks;
-
 using Microsoft.Xna.Framework;
-
 using Microsoft.Xna.Framework.Input;
-
 using Microsoft.Xna.Framework.Graphics;
-
 using System.Collections;
 
-
-
 namespace Projecto
-
 {
-
     internal class PlayerManager : GameObject
-
     {
         public PlayerNumber pNumber;
         private CurrentInput currentInput;
@@ -195,19 +182,19 @@ namespace Projecto
             //this.currentAnimation.Play(gameTime);
         }
 
-        /// <summary>
-        /// Draws on screen an object, using a camera.
-        /// </summary>
-        /// <param name="camera">Camera to draw the image at.</param>
-        public override void DrawObject(Camera camera)
-        {
-            if (isActive)
-            {
-                this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size);
-                Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
-                //Game1.spriteBatch.Draw(currentAnimation.spriteTexture, this.Rectangle, currentAnimation.currentFrameRec, Color.White);
-            }
-        }
+        ///// <summary>
+        ///// Draws on screen an object, using a camera.
+        ///// </summary>
+        ///// <param name="camera">Camera to draw the image at.</param>
+        //public override void DrawObject(Camera camera)
+        //{
+        //    if (isActive)
+        //    {
+        //        this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size);
+        //        Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+        //        //Game1.spriteBatch.Draw(currentAnimation.spriteTexture, this.Rectangle, currentAnimation.currentFrameRec, Color.White);
+        //    }
+        //}
     }
 }
 
