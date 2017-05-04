@@ -15,6 +15,7 @@ namespace Projecto
         protected Rectangle Rectangle;          //Rectangle to draw to.
 
         public Vector2 Position { get; set; }
+        public Vector2 Center;
         public Vector2 Size { get; set; }
         public Vector2 SizeCenter;
         public float RotationAngle { get; set; }
@@ -65,6 +66,7 @@ namespace Projecto
             this.RotationAngle = rotation;
 
             this.SizeCenter = new Vector2(size.X, -size.Y)/2;
+            this.Center = position + SizeCenter;
             //this.speed = 0f;
             //this.speedDirection = Vector2.Zero;
             this.objectDiretion = -Vector2.UnitY;
@@ -83,6 +85,7 @@ namespace Projecto
         public void Move(Vector2 direction, float speed)
         {
             this.Position += direction * speed;
+            this.Center = Position + SizeCenter;
             this.objectDiretion = direction;
         }
         /// <summary>
@@ -92,6 +95,7 @@ namespace Projecto
         public void Move(Vector2 direction)
         {
             this.Position += direction;
+            this.Center = Position + SizeCenter;
             this.objectDiretion = direction;
         }
 

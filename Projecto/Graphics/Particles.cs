@@ -12,7 +12,7 @@ namespace Projecto
     {
         public Vector2 Position;
         public Vector2 Direction;
-        public float Alpha;
+        public byte Alpha;
         public TimeSpan TimeLeft;
         public bool isDone;
 
@@ -20,14 +20,14 @@ namespace Projecto
         {
             Position = position;
             Direction = direction;
-            Alpha = 100;
+            Alpha = byte.MaxValue;
             TimeLeft = TimeSpan.FromMilliseconds(timeLeft);
             isDone = false;
         }
 
-        public void Update()
+        public void Update(GameTime time)
         {
-            Position += Direction;
+            Position += Direction / time.ElapsedGameTime.Milliseconds;
         }
     }
     class ParticleSystem
@@ -36,26 +36,29 @@ namespace Projecto
         public Vector2 TextureSize;
         public Texture2D Texture;
         public Particle[] Particles;
+        public int NumberOfParticles;
         public int MaxParticles;
         public int SpawnRate;
         public float SpawnRadius;
         public float ParticleLifeSpan;
-        public float ParticleAlphaDecreaseRate;
+        public byte ParticleAlphaDecreaseRate;
         public float TimeLeft;
         public bool isStopped;
         public bool isActive;
 
         private TimeSpan SpawnTimer;
 
-        public ParticleSystem(string texture, Vector2 position, Vector2 textureSize, int maxParticles, int spawnRate, float spawnRadius, float timeLeft, float particleLifeSpan, float particleAlphaDecreaseRate )
+        public ParticleSystem(string texture, Vector2 position, Vector2 textureSize, int maxParticles, int spawnRate, float spawnRadius, float timeLeft, float particleLifeSpan, byte particleAlphaDecreaseRate)
         {
             Position = position;
             TextureSize = textureSize;
             Texture = Game1.content.Load<Texture2D>(texture);
             MaxParticles = maxParticles;
             Particles = new Particle[maxParticles];
+            NumberOfParticles = 0;
             TimeLeft = timeLeft;
             SpawnRate = spawnRate;
+            SpawnTimer = TimeSpan.FromMilliseconds(SpawnRate);
             SpawnRadius = spawnRadius;
             ParticleLifeSpan = particleLifeSpan;
             ParticleAlphaDecreaseRate = particleAlphaDecreaseRate;
@@ -70,58 +73,86 @@ namespace Projecto
         public void Stop()
         {
             isStopped = true;
+            Particles = new Particle[MaxParticles];
+            NumberOfParticles = 0;
         }
-        public void Update(GameTime time, Vector2 deltaMovement)
+        public void Update(GameTime time, Vector2 position)
         {
-            if(!isStopped)
+            if (!isStopped)
             {
                 SpawnTimer -= time.ElapsedGameTime;
-                Position = Position + deltaMovement;
+                Position = position;
 
-                foreach(Particle p in Particles)
+                for (int i = 0; i < MaxParticles; i++)
                 {
-                    p.TimeLeft -= time.ElapsedGameTime;
-                    if (p.TimeLeft.Milliseconds <= 0)
-                        p.isDone = true;
+                    if (Particles[i] == null)
+                        break;
+                    Particles[i].TimeLeft -= time.ElapsedGameTime;
+                    Particles[i].Alpha -= ParticleAlphaDecreaseRate;
+                    Particles[i].Update(time);
+                    if (Particles[i].TimeLeft.Milliseconds <= 0)
+                        Particles[i].isDone = true;
                     //POR O ALPHA AQUI
                 }
 
-                if(SpawnTimer <= TimeSpan.FromMilliseconds(0))
+                if (SpawnTimer <= TimeSpan.FromMilliseconds(0))
                 {
                     SpawnTimer = TimeSpan.FromMilliseconds(SpawnRate);
 
-                    if (Particles.Length < MaxParticles)
+                    int? freePostion = null;
+
+                    for (int i = 0; i < MaxParticles; i++)
                     {
-                        int? freePostion = null;
-
-                        for (int i = 0; i > MaxParticles; i++)
+                        if (Particles[i] == null || Particles[i].isDone)
                         {
-                            if (Particles[i].isDone)
-                            {
-                                freePostion = i;
-                                break;
-                            }
+                            freePostion = i;
+                            break;
                         }
+                    }
 
-                        if(freePostion != null)
-                        {
+                    if (freePostion != null)
+                    {
+                        Vector2 Pos = new Vector2(Game1.random.Next((int)SpawnRadius * 100) / 100, 0);
+                        int rotation = Game1.random.Next(360);
+                        Vector2 PosFinal;
+                        PosFinal.X = Pos.X * (float)Math.Cos(rotation) - Pos.Y * (float)Math.Sin(rotation);
+                        PosFinal.Y = Pos.X * (float)Math.Sin(rotation) + Pos.Y * (float)Math.Cos(rotation);
+                        Vector2 Norm = PosFinal;
+                        Norm.Normalize();
+                        PosFinal += this.Position;
 
-                            Particle aux = new Particle(,, ParticleLifeSpan);
-                        }
+                        Particle aux = new Particle(PosFinal, Norm, ParticleLifeSpan);
+                        Particles[(int)freePostion] = aux;
+                        if (NumberOfParticles < MaxParticles)
+                            NumberOfParticles++;
+
                     }
                 }
             }
         }
         public void Draw(Camera camera)
         {
-            if(isActive)
+            if (isActive)
             {
-                foreach (Particle p in Particles)
+                for (int i = 0; i < MaxParticles; i++)
                 {
-                    Rectangle rectAux = camera.CalculatePixelRectangle(p.Position, this.TextureSize);
-                    Game1.spriteBatch.Draw(Texture, rectAux, Color.White);
+                    if (Particles[i] == null)
+                        break;
+                    Particle p = Particles[i];
+                    try
+                    {
+                        Rectangle rectAux = camera.CalculatePixelRectangle(p.Position, this.TextureSize);
+                        Color aux = Color.Green;
+                        aux.A = p.Alpha;
+                        Game1.spriteBatch.Draw(Texture, rectAux, aux);
+                    }
+                    catch
+                    {
+                        Debug.NewLine("Error.");
+                    }
                 }
-            }            
+            }
         }
     }
 }
+
