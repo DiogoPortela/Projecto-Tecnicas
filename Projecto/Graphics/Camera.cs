@@ -94,7 +94,7 @@ namespace Projecto
         /// <param name="obj">Object to be looked at.</param>
         public void LookAt(GameObject obj)
         {
-            this.position = obj.Position + obj.SizeCenter - centerCamera;
+            this.position = obj.Center - centerCamera;
         }
         /// <summary>
         /// Makes the camera look at a given position.

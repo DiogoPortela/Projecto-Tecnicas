@@ -63,6 +63,7 @@
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Debug.cs" />
     <Compile Include="Graphics\MapGenerator.cs" />
+    <Compile Include="Graphics\Particles.cs" />
     <Compile Include="Graphics\Room.cs" />
     <Compile Include="Managers\CollisionManager.cs" />
     <Compile Include="Managers\External Structures.cs" />

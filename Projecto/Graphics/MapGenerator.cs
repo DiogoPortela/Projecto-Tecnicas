@@ -125,6 +125,7 @@ namespace Projecto
             ConnectClosestRooms(MapRooms);
         }
 
+        //----------------------------Map Generation-----------------------------//
         /// <summary>
         /// Transforms a number (0,1) into a Tile.
         /// </summary>
@@ -448,6 +449,19 @@ namespace Projecto
             return x >= 0 && x < Width && y >= 0 && y < Height;
         }
         /// <summary>
+        /// Finds the rooms in which monsters can spawn.
+        /// </summary>
+        static private void FindMapWalkableTiles()
+        {
+            foreach (Room r in MapRooms)
+            {
+                if (!r.isSpawn)
+                {
+                    WalkableTiles += r.roomSize;
+                }
+            }
+        }
+        /// <summary>
         /// Finds the room in which the Player(s) can spawn.
         /// </summary>
         static private void FindPlayerSpawn()
@@ -467,19 +481,8 @@ namespace Projecto
             }
             Spawn.isSpawn = true;
         }
-        /// <summary>
-        /// Finds the rooms in which monsters can spawn.
-        /// </summary>
-        static private void FindMapWalkableTiles()
-        {
-            foreach (Room r in MapRooms)
-            {
-                if (!r.isSpawn)
-                {
-                    WalkableTiles += r.roomSize;
-                }
-            }
-        }
+
+        //---------------------------Player & Enemy Position--------------------------------//
         /// <summary>
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
@@ -512,6 +515,7 @@ namespace Projecto
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
             return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
         }
+
         /// <summary>
         /// Draws the finished map on the given camera.
         /// </summary>
