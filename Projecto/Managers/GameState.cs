@@ -58,7 +58,7 @@ namespace Projecto
 
             debugPlayerOnePosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 0));
             debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
-            Debug.LoadFont();   //Starting Debug.
+            Debug.Init(null, 30);   //Starting Debug.
 
             #region TestZone
             EnemyList = new List<Enemy>();
@@ -121,7 +121,6 @@ namespace Projecto
         /// <param name="camera">Target camera to draw.</param>
         void DrawCameraView(Camera camera)
         {
-            //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);
             PlayerOne.DrawObject(camera);

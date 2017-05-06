@@ -19,11 +19,7 @@ namespace Projecto
         public Vector2 Size { get; set; }
         public Vector2 SizeCenter;
         public float RotationAngle { get; set; }
-
-        //protected float speed;
-        //protected Vector2 speedDirection;
-        protected Vector2 objectDiretion;
-        //public static CombatMod combatmod;
+        public Vector2 objectDiretion;
 
         private bool isactive;
         public bool isActive
@@ -42,17 +38,23 @@ namespace Projecto
                 }
         } //If it's necessary to turn an object on/off.
 
-
         //------------->CONSTRUCTORS<-------------//
-
-
-        //Empty constructor, therefore is not active.
+        
+        /// <summary>
+        /// Empty.
+        /// </summary>
         public GameObject()
         {             
             isActive = false;
         }
-
-        //Constructor with all the atributtes that can be set.
+        
+        /// <summary>
+        /// Creates a GameObject
+        /// </summary>
+        /// <param name="texture">Texture of the object.</param>
+        /// <param name="position">Position of the object.</param>
+        /// <param name="size">Size of the object.</param>
+        /// <param name="rotation">Rotation of the object.</param>
         public GameObject(string texture, Vector2 position, Vector2 size, float rotation)
         {
             if(texture != null)
@@ -67,15 +69,13 @@ namespace Projecto
 
             this.SizeCenter = new Vector2(size.X, -size.Y)/2;
             this.Center = position + SizeCenter;
-            //this.speed = 0f;
-            //this.speedDirection = Vector2.Zero;
             this.objectDiretion = -Vector2.UnitY;
             this.isActive = true;
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
 
-            public virtual void Update(GameTime gametime, List<GameObject> enemies)
+        public virtual void Update(GameTime gametime, List<GameObject> enemies)
         { }
         /// <summary>
         /// Moves the object in a given direction, with a given speed.
@@ -99,10 +99,10 @@ namespace Projecto
             this.objectDiretion = direction;
         }
 
-        public void Atackrange(Vector2 direction, float Range)
-        {
-            this.Position += direction * Range;
-        }
+        //public void Atackrange(Vector2 direction, float Range)
+        //{
+        //    this.Position += direction * Range;
+        //}
 
         /// <summary>
         /// Draws an object on screen using a camera.
