@@ -10,27 +10,58 @@ namespace Projecto
 {
     class Debug
     {
-        static private List<string> text = new List<string>();  //List with all the debug logs.
+        static private List<string> text;                       //List with all the debug logs.
         static private SpriteFont font;                         //Font to use.
-        static private int MAXLINES = 30;                        //Maximum Lines to draw on screen at once.
+        static private int MAXLINES;                       //Maximum Lines to draw on screen at once.
         static public bool isActive = true;                     //Should it draw o on screen?
 
         //AUXILIARY
-        static private string textStr = "";                                                     
+        static private string textStr;
+        static private string textPlayer;
+        static private Texture2D debugTexture;
         static private int counter;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
         /// <summary>
+        /// Initialize Debugging.
+        /// </summary>
+        /// <param name="font">Font for the text.</param>
+        /// <param name="maxLines">Number Max of lines.</param>
+        public static void Init(SpriteFont font, int maxLines)
+        {
+            debugTexture = Game1.content.Load<Texture2D>("DebugPixel");
+            MAXLINES = maxLines;
+            textStr = "";
+            text = new List<string>();
+            LoadFont(font);
+        }
+        /// <summary>
+        /// Enable rendering.
+        /// </summary>
+        public static void Enable()
+        {
+            isActive = true;
+        }
+        /// <summary>
+        /// Disable rendering.
+        /// </summary>
+        public static void Disable()
+        {
+            isActive = false;
+        }
+
+        /// <summary>
         /// Loads the Arial font if none is existant.
         /// </summary>
-        public static void LoadFont( )
+        private static void LoadFont(SpriteFont font1)
         {
-            if(font == null)
+            if(font1 == null)
             {
                 font = Game1.content.Load<SpriteFont>("Arial");
             }
         }
+
         /// <summary>
         /// Adds a line to be drawn in the screen.
         /// </summary>
@@ -87,10 +118,11 @@ namespace Projecto
         {
             if(isActive)
             {
-                Game1.spriteBatch.DrawString(font, "X:" + player.Position.X + " Y:" + player.Position.Y, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "Coor X:" + player.Coordinates.X + " Coor Y:" + player.Coordinates.Y,drawPosition + new Vector2(0 , 15), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y,drawPosition + new Vector2(0, 30), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
-                Game1.spriteBatch.DrawString(font, "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y,drawPosition + new Vector2(0, 45), Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                textPlayer =   "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
+                                "Coordinate X:" + player.Coordinates.X + " Coordinate Y:" + player.Coordinates.Y + "\n" +
+                                "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
+                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y;
+                Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>
@@ -102,7 +134,6 @@ namespace Projecto
         {
             if(isActive)
             {
-                Texture2D debugTexture = Game1.content.Load<Texture2D>("DebugPixel");
                 Game1.spriteBatch.Draw(debugTexture, rect, Color.LightGreen);
             }
         }

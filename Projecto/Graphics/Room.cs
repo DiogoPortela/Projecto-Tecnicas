@@ -17,8 +17,9 @@ namespace Projecto
         public bool isMainRoom;
         public bool isSpawn;
 
-        public Room() { }
+        //------------->CONSTRUCTORS<-------------//
 
+        public Room() { }
         public Room(List<Coordinate> roomTiles, int[,] map)
         {
             int[,] mapFlag = new int[MapGenerator.Width, MapGenerator.Height];
@@ -48,6 +49,8 @@ namespace Projecto
                 }
             }
         }
+
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void SetAccessibleFromMainRoom()
         {

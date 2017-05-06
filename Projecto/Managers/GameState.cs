@@ -19,12 +19,12 @@ namespace Projecto
         static public Camera cameraRight, cameraLeft, cameraScreen;
 
         private Vector2 debugPlayerOnePosition;
-        private Vector2 debugPlayerTwoPosition;
+        private Vector2 debugPlayerTwoPosition;   
 
         #region ZONA DE TESTE
-        GameObject teste1;
         MapGenerator map = new MapGenerator();
         KeyboardState oldState;
+        ParticleSystem teste2;
         #endregion
 
 
@@ -58,13 +58,14 @@ namespace Projecto
 
             debugPlayerOnePosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 0));
             debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
-            Debug.LoadFont();   //Starting Debug.
+            Debug.Init(null, 30);   //Starting Debug.
 
             #region TestZone
             EnemyList = new List<Enemy>();
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne);
-            teste1 = new GameObject("Tile1", new Vector2(25, 0), Vector2.One * 5, 0f);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo);
+            teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
+            teste2.Start();
             #endregion
         }
 
@@ -79,6 +80,7 @@ namespace Projecto
             cameraLeft.LookAt(PlayerOne);
             PlayerTwo.PlayerMovement(gameTime);
             cameraRight.LookAt(PlayerTwo);
+            teste2.Update(gameTime, PlayerOne.Center);
 
             KeyboardState teste = Keyboard.GetState();
             if(teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
@@ -119,12 +121,11 @@ namespace Projecto
         /// <param name="camera">Target camera to draw.</param>
         void DrawCameraView(Camera camera)
         {
-            //Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, camera.transform);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);
-            teste1.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
+            teste2.Draw(camera);
             Debug.DrawColliders(camera, PlayerOne, PlayerOne.playerCollider);
             Game1.spriteBatch.End();
         }
