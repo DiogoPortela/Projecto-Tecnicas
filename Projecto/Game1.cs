@@ -15,7 +15,9 @@ namespace Projecto
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
         static public Random random;
-        static public Texture2D enemytexture;
+
+        static public KeyboardState lastFrameState;
+        static public KeyboardState currentFrameState;
 
         static GameState gameState;
 
@@ -71,9 +73,11 @@ namespace Projecto
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             gameState.StateUpdate(gameTime);
-            
 
+            currentFrameState = Keyboard.GetState();
             base.Update(gameTime);
+            lastFrameState = currentFrameState;
+
         }
 
         /// <summary>

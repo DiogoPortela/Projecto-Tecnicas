@@ -93,12 +93,11 @@ namespace Projecto
 
         //Buttons1..2..3
     }
-
-    internal struct AttackDefenseinput1
+    internal struct AttackDefenseInput1
     {
         private ButtonState GetState(Keys key)
         {
-            if (Keyboard.GetState().IsKeyDown(key))
+            if (Keyboard.GetState().IsKeyDown(key) && Game1.lastFrameState.IsKeyUp(key))
                 return ButtonState.Pressed;
             return ButtonState.Released;
         }

@@ -17,28 +17,22 @@ namespace Projecto
         protected Animation[] animations;
         public Animation currentAnimation;
         private const float movingSpeed = 0.4f;
-        private int range = 10;
+        private int range;
         public Collider playerCollider;
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
 
         #region Atribute Stats
-
         public int HP { get; set; }
-
         public double PhysDmg { get; set; }
-
         public double MagicDmg { get; set; }
-
         public double PhysDmgRes { get; set; }
-
         public double MagicDmgRes { get; set; }
-
         #endregion
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number) : base("Drude", position, size, 0f)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, 0f)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -48,18 +42,14 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
+            this.range = range;
+
             #region Stats initializer
-
             this.HP = 100;
-
             this.PhysDmg = 18.0;
-
             this.MagicDmg = 8.0;
-
             this.PhysDmgRes = 5.0;
-
             this.MagicDmgRes = 5.0;
-
             #endregion
 
             if (number == PlayerNumber.playerOne)
@@ -87,178 +77,92 @@ namespace Projecto
             deltaPosition = Vector2.Zero;
 
             #region PlayerOne
-
             if (pNumber == PlayerNumber.playerOne)
-
             {
-
                 //Movement Controls.
-
                 if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Right)
-
                     {
-
                         //this.currentAnimation.Stop();
-
                         //this.currentAnimation = animations[3];
-
                         this.objectDiretion = Vector2.UnitX;
-
                         currentInput = CurrentInput.Right;
-
                     }
-
                     deltaPosition += Vector2.UnitX * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Left)
-
                     {
-
                         this.objectDiretion = -Vector2.UnitX;
-
                         currentInput = CurrentInput.Left;
-
                     }
-
                     deltaPosition += -Vector2.UnitX * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Up)
-
                     {
-
                         this.objectDiretion = Vector2.UnitY;
-
                         currentInput = CurrentInput.Up;
-
                     }
-
                     deltaPosition += Vector2.UnitY * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Down)
-
                     {
-
                         this.objectDiretion = -Vector2.UnitY;
-
                         currentInput = CurrentInput.Down;
-
                     }
-
                     deltaPosition += -Vector2.UnitY * movingSpeed;
-
                 }
-
             }
-
             #endregion
             #region PlayerTwo
-
             if (pNumber == PlayerNumber.playerTwo)
-
             {
-
                 //Movement Controls.
-
                 if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Right)
-
                     {
-
                         this.objectDiretion = Vector2.UnitX;
-
                         //this.currentAnimation.Stop();
-
                         //this.currentAnimation = animations[3];
-
                         currentInput = CurrentInput.Right;
-
                     }
-
                     deltaPosition += Vector2.UnitX * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Left)
-
                     {
-
                         this.objectDiretion = -Vector2.UnitX;
-
                         currentInput = CurrentInput.Left;
-
                     }
-
                     deltaPosition += -Vector2.UnitX * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Up)
-
                     {
-
                         this.objectDiretion = Vector2.UnitY;
-
                         currentInput = CurrentInput.Up;
-
                     }
-
                     deltaPosition += Vector2.UnitY * movingSpeed;
-
                 }
-
                 if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
-
                 {
-
                     if (currentInput != CurrentInput.Down)
-
                     {
-
                         this.objectDiretion = -Vector2.UnitY;
-
                         currentInput = CurrentInput.Down;
-
                     }
-
                     deltaPosition += -Vector2.UnitY * movingSpeed;
-
                 }
-
             }
-
             #endregion
 
             if (deltaPosition != Vector2.Zero)
@@ -280,6 +184,8 @@ namespace Projecto
         public void DamageManager()
         {
             #region playerone
+
+            //if (teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
 
             if (pNumber == PlayerNumber.playerOne)
             {

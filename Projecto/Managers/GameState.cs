@@ -15,8 +15,9 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
-        public Enemy e;
-                
+
+
+
         private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft, cameraScreen;
 
@@ -25,7 +26,7 @@ namespace Projecto
 
         #region ZONA DE TESTE
         MapGenerator map = new MapGenerator();
-        KeyboardState oldState;
+        Enemy e;
         ParticleSystem teste2;
         #endregion
 
@@ -65,8 +66,8 @@ namespace Projecto
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
 
-            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne);
-            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo);
+            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne, 10);
+            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
 
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
             teste2.Start();
@@ -84,6 +85,7 @@ namespace Projecto
         /// </summary>
         public void StateUpdate(GameTime gameTime)
         {
+
             PlayerOne.PlayerMovement(gameTime);
             PlayerOne.DamageManager();
             cameraLeft.LookAt(PlayerOne);
@@ -91,16 +93,10 @@ namespace Projecto
             PlayerTwo.PlayerMovement(gameTime);
             cameraRight.LookAt(PlayerTwo);
 
+
             //Particle Update.
             teste2.Update(gameTime, PlayerOne.Center);
 
-            KeyboardState teste = Keyboard.GetState();
-            if(teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
-            {
-                map.GenerateMap(5);
-                Debug.NewLine("New Map");
-            }
-            oldState = teste;
         }
         /// <summary>
         /// Draws the whole gamestate.
@@ -129,7 +125,7 @@ namespace Projecto
         /// Draws the whole world for one camera.
         /// </summary>
         /// <param name="camera">Target camera to draw.</param>
-        void DrawCameraView(Camera camera)
+        private void DrawCameraView(Camera camera)
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);
