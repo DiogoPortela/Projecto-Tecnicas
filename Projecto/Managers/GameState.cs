@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Projecto
@@ -73,7 +68,7 @@ namespace Projecto
             teste2.Start();
             ParticlesList.Add(teste2);
 
-            e = new Enemy("New Piskel", PlayerOne.Position, 5);
+            e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
             EnemyList.Add(e);
             #endregion
         }
@@ -91,6 +86,7 @@ namespace Projecto
             cameraLeft.LookAt(PlayerOne);
 
             PlayerTwo.PlayerMovement(gameTime);
+            PlayerTwo.DamageManager();
             cameraRight.LookAt(PlayerTwo);
 
 

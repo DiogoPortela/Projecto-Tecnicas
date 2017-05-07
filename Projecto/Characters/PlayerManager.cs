@@ -1,38 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections;
 
 namespace Projecto
 {
-    internal class PlayerManager : GameObject
+    internal class PlayerManager : DamageManager
     {
         public PlayerNumber pNumber;
         private CurrentInput currentInput;
         protected Animation[] animations;
         public Animation currentAnimation;
         private const float movingSpeed = 0.4f;
-        private int range;
         public Collider playerCollider;
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
 
-        #region Atribute Stats
-        public int HP { get; set; }
-        public double PhysDmg { get; set; }
-        public double MagicDmg { get; set; }
-        public double PhysDmgRes { get; set; }
-        public double MagicDmgRes { get; set; }
-        #endregion
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, 0f)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, range)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -42,14 +29,13 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
-            this.range = range;
 
             #region Stats initializer
             this.HP = 100;
-            this.PhysDmg = 18.0;
-            this.MagicDmg = 8.0;
-            this.PhysDmgRes = 5.0;
-            this.MagicDmgRes = 5.0;
+            this.PhysDmg = 18.0f;
+            this.MagicDmg = 8.0f;
+            this.PhysDmgRes = 5.0f;
+            this.MagicDmgRes = 5.0f;
             #endregion
 
             if (number == PlayerNumber.playerOne)
@@ -185,28 +171,25 @@ namespace Projecto
         {
             #region playerone
 
-            //if (teste.IsKeyDown(Keys.H) && oldState.IsKeyUp(Keys.H))
-
             if (pNumber == PlayerNumber.playerOne)
             {
-                //attack button
-                if (InputManager.attckdefOne.Space == ButtonState.Pressed)
+                if (InputManager.CombatInput.Space == ButtonState.Pressed)
                 {
-                    List<Enemy> mortos = new List<Enemy>();
+                    List<Enemy> auxEnemy = new List<Enemy>();
                     //animação de attack
                     foreach (Enemy enemy in GameState.EnemyList)
                     {
                         if (this.IsInRange(enemy) == true)
                         {
-                            mortos.Add(Attack(enemy));
+                            auxEnemy.Add(EnemyTakeDamage(enemy));
                         }
                     }
-                    foreach (Enemy enemy in mortos)
+                    foreach (Enemy enemy in auxEnemy)
                     {
                         GameState.EnemyList.Remove(enemy);
                     }
                 }
-                if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
+                if (InputManager.CombatInput.Q == ButtonState.Pressed)
                 {
                     //animação de defense   
                     //Defense(player);
@@ -216,18 +199,23 @@ namespace Projecto
             #region playertwo
             if (pNumber == PlayerNumber.playerTwo)
             {
-                if (InputManager.attckdefOne.L == ButtonState.Pressed && InputManager.attckdefOne.L != ButtonState.Pressed)
+                if (InputManager.CombatInput.L == ButtonState.Pressed)
                 {
-                    //o que fazer no attack
+                    List<Enemy> auxEnemy = new List<Enemy>();
+                    //animação de attack
                     foreach (Enemy enemy in GameState.EnemyList)
                     {
                         if (this.IsInRange(enemy) == true)
                         {
-                            Attack(enemy);
+                            auxEnemy.Add(EnemyTakeDamage(enemy));
                         }
                     }
+                    foreach (Enemy enemy in auxEnemy)
+                    {
+                        GameState.EnemyList.Remove(enemy);
+                    }
                 }
-                if (InputManager.attckdefOne.K == ButtonState.Pressed && InputManager.attckdefOne.K != ButtonState.Pressed)
+                if (InputManager.CombatInput.K == ButtonState.Pressed)
                 {
                     //o que fazer no DEFESA
                     // Defense(player);
@@ -235,73 +223,7 @@ namespace Projecto
             }
             #endregion
         }
-        /// <summary>
-        /// Use this method to resolve attacks between Figures vs enemy
-        /// </summary>
-        /// <param name="attack"></param>
-        public Enemy Attack(Enemy defender)
-        {
-            Debug.NewLine(defender.HP.ToString());
-            if (PhysDmg >= defender.PhysDmgRes)
-            {
-                // Lower the defender's health by the amount of damage
-                defender.HP -= (int)(PhysDmg - PhysDmgRes);
-                // Write a combat message to the debug log.ideia
-                /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
-                   attacker.Name, damage, defender.Health);*/
-                if (defender.HP <= 0)
-                {
-                    if (defender is Enemy)
-                    {
-                        // When an enemies health dropped below 0 they died
-                        // Remove that enemy from the game
-                        return defender;
-                    }
-                }
-            }
-            else if (MagicDmg >= defender.MagicDmgRes)
-            {
-                defender.HP -= (int)(MagicDmg - defender.MagicDmgRes);
-                if (defender.HP <= 0)
-                {
-                    if (defender is Enemy)
-                    {
-                        var enemy = defender as Enemy;
-                        // When an enemies health dropped below 0 they died
-                        // Remove that enemy from the game
-                        return defender;
-                    }
-                }
-            }
-            else
-            {
-                // Show the miss message in the Debug log for now
-                // Debug.WriteLine("{0} missed {1}", attacker.Name, defender.HP);
-            }
-            Debug.NewLine(defender.HP.ToString());
-            return null;
-
-        }
-        /// <summary>
-        /// Use this method to defense
-        /// </summary>
-        public void Defense()
-        {
-            // this.HP = this.HP;
-        }
-        /// <summary>
-        /// this method is to verific, if player is on range 
-        /// </summary>
-        /// <param name="enemy"></param>
-        /// <returns></returns>
-        public bool IsInRange(Enemy enemy)
-        {
-            Vector2 v = (this.Position) - (enemy.Position);
-            float distance = Math.Abs(v.Length());
-            if ((this.Size.X + range) + enemy.Size.X > distance) return true;
-            return false;
-        }
-
+        
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>
