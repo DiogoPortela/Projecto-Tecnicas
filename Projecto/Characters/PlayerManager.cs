@@ -52,8 +52,6 @@ namespace Projecto
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
-
-
         /// <summary>
         /// Deals with all the movement and animations.
         /// </summary>

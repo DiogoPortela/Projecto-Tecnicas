@@ -17,12 +17,15 @@ namespace Projecto
         private int range;
         private bool isDefending;
 
+        //------------->CONSTRUCTORS<-------------//
+
         public DamageManager(string texture, Vector2 position, Vector2 size, int range) : base(texture, position, size, 0f)
         {
             isDefending = false;
             this.range = range;
         }
 
+        //------------->FUNCTIONS && METHODS<-------------//
         /// <summary>
         /// Use this method to resolve attacks between Figures vs enemy
         /// </summary>
