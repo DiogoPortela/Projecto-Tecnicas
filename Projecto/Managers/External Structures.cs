@@ -18,7 +18,7 @@ namespace Projecto
             tileY = y;
         }
     }
-    internal enum ScreenSelect
+    public enum ScreenSelect
     {
         MainMenu, Playing, ScoreScreen
     }

@@ -19,6 +19,7 @@ namespace Projecto
 
         static public KeyboardState lastFrameState;
         static public KeyboardState currentFrameState;
+        static public ScreenSelect selectedScreen;
 
         static GameState gameState;
 
@@ -33,6 +34,8 @@ namespace Projecto
             Content.RootDirectory = "Content";
             content = Content;
             random = new Random();
+
+            selectedScreen = ScreenSelect.MainMenu;
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -73,7 +76,8 @@ namespace Projecto
         protected override void Update(GameTime gameTime)
         {
             currentFrameState = Keyboard.GetState();
-            gameState.StateUpdate(gameTime);
+            if (selectedScreen == ScreenSelect.Playing)
+                gameState.StateUpdate(gameTime);
             base.Update(gameTime);
             lastFrameState = currentFrameState;
         }
@@ -85,7 +89,8 @@ namespace Projecto
         {
             GraphicsDevice.Clear(Color.HotPink);
 
-            gameState.Draw();
+            if (selectedScreen == ScreenSelect.Playing)
+                gameState.Draw();
 
             base.Draw(gameTime);
         }
