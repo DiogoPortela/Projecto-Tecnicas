@@ -1,33 +1,55 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Xna.Framework;
 
 namespace Projecto
 {
-    public class Enemy
+    internal class Enemy : DamageManager
     {
-        public List<Enemy> enemies = new List<Enemy>();
-
-        public int HP { get; set; }
-
-        public int MP { get; set; }
-
-        public float MS { get; set; }
-
-        public double PhysDmg { get; set; }
-
-        public double MagicDmg { get; set; }
-
-        public Enemy()
+        //------------->CONSTRUCTORS<-------------//
+        public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size), range)
         {
-            this.HP = 30;
-            this.MP = 30;
-            this.MS = 0.8f;
-            this.PhysDmg = 10;
+            #region Stats initializer
+            this.HP = 50;
+            this.PhysDmg = 5;
             this.MagicDmg = 5;
+            this.PhysDmgRes = 1;
+            this.MagicDmgRes = 1;
+            #endregion
         }
 
+        //public void AttackEnemy(Enemy enemy)
+        //{
+        //    if (PhysDmg >= enemy.PhysDmgRes)
+        //    {
+        //        // Lower the defender's health by the amount of damage
+        //        enemy.HP -= (int)(PhysDmg - PhysDmgRes);
+        //        // Write a combat message to the debug log.ideia
+        //        /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
+        //           damage, player.Health);*/
+        //        /*     if (player.HP <= 0)
+        //             {
+        //                 if (player is PlayerManager)
+        //                 {
+        //                     var enemy = player as PlayerManager;
+        //                     // When an enemies health dropped below 0 they died
+        //                     // Remove that enemy from the game
+        //                     GameState.p
+        //                 }
+        //             }*/
+        //    }
+        //    else if (MagicDmg >= MagicDmgRes)
+        //    {
+        //        enemy.HP -= (int)(MagicDmg - enemy.MagicDmgRes);
+        //        /*if (player.HP <= 0)
+        //        {
+        //            if (player is PlayerManager)
+        //            {
+        //                var enemy = player as PlayerManager;
+        //                // When an enemies health dropped below 0 they died
+        //                // Remove that enemy from the game
+        //                GameState.PlayerOne.Remove(enemy);
+        //            }
+        //        }*/
+        //    }
+        //}
     }
 }

@@ -16,6 +16,8 @@ namespace Projecto
         public TimeSpan TimeLeft;
         public bool isDone;
 
+        //------------->CONSTRUCTORS<-------------//
+
         public Particle(Vector2 position, Vector2 direction, float timeLeft)
         {
             Position = position;
@@ -24,6 +26,8 @@ namespace Projecto
             TimeLeft = TimeSpan.FromMilliseconds(timeLeft);
             isDone = false;
         }
+        
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void Update(GameTime time)
         {
@@ -48,6 +52,8 @@ namespace Projecto
 
         private TimeSpan SpawnTimer;
 
+        //------------->CONSTRUCTORS<-------------//
+
         public ParticleSystem(string texture, Vector2 position, Vector2 textureSize, int maxParticles, int spawnRate, float spawnRadius, float timeLeft, float particleLifeSpan, byte particleAlphaDecreaseRate)
         {
             Position = position;
@@ -65,6 +71,8 @@ namespace Projecto
             isActive = true;
             isStopped = true;
         }
+
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void Start()
         {

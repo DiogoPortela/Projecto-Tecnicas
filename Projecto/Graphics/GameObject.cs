@@ -75,8 +75,6 @@ namespace Projecto
 
         //------------->FUNCTIONS && METHODS<-------------//
 
-        public virtual void Update(GameTime gametime, List<GameObject> enemies)
-        { }
         /// <summary>
         /// Moves the object in a given direction, with a given speed.
         /// </summary>

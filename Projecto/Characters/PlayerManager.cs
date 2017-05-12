@@ -1,29 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
-using Microsoft.Xna.Framework.Graphics;
-using System.Collections;
 
 namespace Projecto
 {
-    internal class PlayerManager : GameObject
+    internal class PlayerManager : DamageManager
     {
         public PlayerNumber pNumber;
         private CurrentInput currentInput;
         protected Animation[] animations;
         public Animation currentAnimation;
+        private const float movingSpeed = 0.4f;
         public Collider playerCollider;
         public Vector2 Coordinates;
-        private const float movingSpeed = 0.4f;
         private Vector2 deltaPosition;
+
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number) : base("Drude", position, size, 0f)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, range)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -33,6 +29,14 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
+
+            #region Stats initializer
+            this.HP = 100;
+            this.PhysDmg = 18.0f;
+            this.MagicDmg = 8.0f;
+            this.PhysDmgRes = 5.0f;
+            this.MagicDmgRes = 5.0f;
+            #endregion
 
             if (number == PlayerNumber.playerOne)
             {
@@ -48,7 +52,6 @@ namespace Projecto
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
-
         /// <summary>
         /// Deals with all the movement and animations.
         /// </summary>
@@ -61,7 +64,7 @@ namespace Projecto
             if (pNumber == PlayerNumber.playerOne)
             {
                 //Movement Controls.
-                if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Right == ButtonState.Pressed && InputManager.PlayerOne.Left != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Right)
                     {
@@ -72,7 +75,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Left == ButtonState.Pressed && InputManager.PlayerOne.Right != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Left)
                     {
@@ -81,7 +84,7 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Up == ButtonState.Pressed && InputManager.PlayerOne.Down != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Up)
                     {
@@ -90,7 +93,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Down == ButtonState.Pressed && InputManager.PlayerOne.Up != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Down)
                     {
@@ -99,25 +102,13 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
-                ////attack def button
-                //if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                //{
-                //    //animação de attack
-                //    this.Atackrange(-Vector2.UnitY, 2f);
-                //    //Attack();
-                //}
-                //if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
-                //{
-                //    //animação de defense
-                //    //Defense();
-                //}
             }
             #endregion
             #region PlayerTwo
             if (pNumber == PlayerNumber.playerTwo)
             {
                 //Movement Controls.
-                if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Right == ButtonState.Pressed && InputManager.PlayerTwo.Left != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Right)
                     {
@@ -128,7 +119,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Left == ButtonState.Pressed && InputManager.PlayerTwo.Right != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Left)
                     {
@@ -137,7 +128,7 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Up == ButtonState.Pressed && InputManager.PlayerTwo.Down != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Up)
                     {
@@ -146,7 +137,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Down == ButtonState.Pressed && InputManager.PlayerTwo.Up != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Down)
                     {
@@ -155,14 +146,6 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitY * movingSpeed;
                 }
-                //if (InputManager.attckdefOne.Space == ButtonState.Pressed && InputManager.attckdefOne.Space != ButtonState.Pressed)
-                //{
-                //    //o que fazer no attack
-                //}
-                //if (InputManager.attckdefOne.Q == ButtonState.Pressed && InputManager.attckdefOne.Q != ButtonState.Pressed)
-                //{
-                //    //o que fazer no DEFESA
-                //}
             }
             #endregion
 
@@ -181,6 +164,91 @@ namespace Projecto
             }
             //this.currentAnimation.Play(gameTime);
         }
+
+        public void DamageManager()
+        {
+            #region playerone
+
+            if (pNumber == PlayerNumber.playerOne)
+            {
+                if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
+                {
+                    List<Enemy> auxEnemy = new List<Enemy>();
+                    //animação de attack
+                    foreach (Enemy enemy in GameState.EnemyList)
+                    {
+                        if (this.IsInRange(enemy) == true)
+                        {
+                            auxEnemy.Add(EnemyTakeDamage(enemy));
+                        }
+                    }
+                    foreach (Enemy enemy in auxEnemy)
+                    {
+                        GameState.EnemyList.Remove(enemy);
+                    }
+                }
+                if (InputManager.PressedLastFrame.Q == ButtonState.Pressed)
+                {
+                    //animação de defense   
+                    //Defense(player);
+                }
+            }
+            #endregion
+            #region playertwo
+            if (pNumber == PlayerNumber.playerTwo)
+            {
+                if (InputManager.PressedLastFrame.L == ButtonState.Pressed)
+                {
+                    List<Enemy> auxEnemy = new List<Enemy>();
+                    //animação de attack
+                    foreach (Enemy enemy in GameState.EnemyList)
+                    {
+                        if (this.IsInRange(enemy) == true)
+                        {
+                            auxEnemy.Add(EnemyTakeDamage(enemy));
+                        }
+                    }
+                    foreach (Enemy enemy in auxEnemy)
+                    {
+                        GameState.EnemyList.Remove(enemy);
+                    }
+                }
+                if (InputManager.PressedLastFrame.K == ButtonState.Pressed)
+                {
+                    //o que fazer no DEFESA
+                    // Defense(player);
+                }
+            }
+            #endregion
+        }
+        
+        /// <summary>
+        /// Draws on screen an object, using a camera.
+        /// </summary>
+        /// <param name="camera">Camera to draw the image at.</param>
+        public override void DrawObject(Camera camera)
+        {
+            if (isActive)
+            {
+                this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size);
+                Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+                //Game1.spriteBatch.Draw(currentAnimation.spriteTexture, this.Rectangle, currentAnimation.currentFrameRec, Color.White);
+            }
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

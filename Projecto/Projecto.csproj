@@ -65,7 +65,9 @@
     <Compile Include="Graphics\MapGenerator.cs" />
     <Compile Include="Graphics\Particles.cs" />
     <Compile Include="Graphics\Room.cs" />
+    <Compile Include="Graphics\UI Manager.cs" />
     <Compile Include="Managers\CollisionManager.cs" />
+    <Compile Include="Managers\DamageManager.cs" />
     <Compile Include="Managers\External Structures.cs" />
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Managers\CombatMod.cs" />
@@ -97,6 +99,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\DebugPixel.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\New Piskel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\Tile0.png">
