@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
@@ -10,14 +11,14 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
-
-
+        static public bool isPaused;
 
         private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft, cameraScreen;
 
         private Vector2 debugPlayerOnePosition;
-        private Vector2 debugPlayerTwoPosition;   
+        private Vector2 debugPlayerTwoPosition;
+        private Color pauseColor;
 
         #region ZONA DE TESTE
         MapGenerator map = new MapGenerator();
@@ -57,6 +58,8 @@ namespace Projecto
             debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
             Debug.Init(null, 30);   //Starting Debug.
 
+            isPaused = false;
+            pauseColor = new Color(Color.Black, 0.5f);
             #region TestZone
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
@@ -80,19 +83,28 @@ namespace Projecto
         /// </summary>
         public void StateUpdate(GameTime gameTime)
         {
+            if(InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
+            {
+                isPaused = !isPaused;
+            }
+            if(!isPaused)
+            {
+                PlayerOne.PlayerMovement(gameTime);
+                PlayerOne.DamageManager();
+                cameraLeft.LookAt(PlayerOne);
 
-            PlayerOne.PlayerMovement(gameTime);
-            PlayerOne.DamageManager();
-            cameraLeft.LookAt(PlayerOne);
-
-            PlayerTwo.PlayerMovement(gameTime);
-            PlayerTwo.DamageManager();
-            cameraRight.LookAt(PlayerTwo);
+                PlayerTwo.PlayerMovement(gameTime);
+                PlayerTwo.DamageManager();
+                cameraRight.LookAt(PlayerTwo);
 
 
-            //Particle Update.
-            teste2.Update(gameTime, PlayerOne.Center);
+                //Particle Update.
+                teste2.Update(gameTime, PlayerOne.Center);
+            }
+            else
+            {
 
+            }
         }
         /// <summary>
         /// Draws the whole gamestate.
@@ -110,9 +122,13 @@ namespace Projecto
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
+
             Debug.DrawText();
             Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne);
             Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo);
+
+            if (isPaused)
+                Game1.spriteBatch.Draw(Debug.debugTexture, Game1.cameraArea, pauseColor);
             Game1.spriteBatch.End();
             #endregion
 

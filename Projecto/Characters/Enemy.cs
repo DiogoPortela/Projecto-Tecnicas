@@ -4,6 +4,7 @@ namespace Projecto
 {
     internal class Enemy : DamageManager
     {
+        //------------->CONSTRUCTORS<-------------//
         public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size), range)
         {
             #region Stats initializer

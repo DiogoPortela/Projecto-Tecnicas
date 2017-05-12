@@ -18,7 +18,7 @@ namespace Projecto
         //AUXILIARY
         static private string textStr;
         static private string textPlayer;
-        static private Texture2D debugTexture;
+        static public Texture2D debugTexture;
         static private int counter;
 
         //------------->FUNCTIONS && METHODS<-------------//

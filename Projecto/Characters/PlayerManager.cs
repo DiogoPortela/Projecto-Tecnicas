@@ -64,7 +64,7 @@ namespace Projecto
             if (pNumber == PlayerNumber.playerOne)
             {
                 //Movement Controls.
-                if (InputManager.MovementPlayerOne.Right == ButtonState.Pressed && InputManager.MovementPlayerOne.Left != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Right == ButtonState.Pressed && InputManager.PlayerOne.Left != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Right)
                     {
@@ -75,7 +75,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Left == ButtonState.Pressed && InputManager.MovementPlayerOne.Right != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Left == ButtonState.Pressed && InputManager.PlayerOne.Right != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Left)
                     {
@@ -84,7 +84,7 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Up == ButtonState.Pressed && InputManager.MovementPlayerOne.Down != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Up == ButtonState.Pressed && InputManager.PlayerOne.Down != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Up)
                     {
@@ -93,7 +93,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
-                if (InputManager.MovementPlayerOne.Down == ButtonState.Pressed && InputManager.MovementPlayerOne.Up != ButtonState.Pressed)
+                if (InputManager.PlayerOne.Down == ButtonState.Pressed && InputManager.PlayerOne.Up != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Down)
                     {
@@ -108,7 +108,7 @@ namespace Projecto
             if (pNumber == PlayerNumber.playerTwo)
             {
                 //Movement Controls.
-                if (InputManager.MovementPlayerTwo.Right == ButtonState.Pressed && InputManager.MovementPlayerTwo.Left != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Right == ButtonState.Pressed && InputManager.PlayerTwo.Left != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Right)
                     {
@@ -119,7 +119,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Left == ButtonState.Pressed && InputManager.MovementPlayerTwo.Right != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Left == ButtonState.Pressed && InputManager.PlayerTwo.Right != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Left)
                     {
@@ -128,7 +128,7 @@ namespace Projecto
                     }
                     deltaPosition += -Vector2.UnitX * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Up == ButtonState.Pressed && InputManager.MovementPlayerTwo.Down != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Up == ButtonState.Pressed && InputManager.PlayerTwo.Down != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Up)
                     {
@@ -137,7 +137,7 @@ namespace Projecto
                     }
                     deltaPosition += Vector2.UnitY * movingSpeed;
                 }
-                if (InputManager.MovementPlayerTwo.Down == ButtonState.Pressed && InputManager.MovementPlayerTwo.Up != ButtonState.Pressed)
+                if (InputManager.PlayerTwo.Down == ButtonState.Pressed && InputManager.PlayerTwo.Up != ButtonState.Pressed)
                 {
                     if (currentInput != CurrentInput.Down)
                     {
@@ -171,7 +171,7 @@ namespace Projecto
 
             if (pNumber == PlayerNumber.playerOne)
             {
-                if (InputManager.CombatInput.Space == ButtonState.Pressed)
+                if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
                 {
                     List<Enemy> auxEnemy = new List<Enemy>();
                     //animação de attack
@@ -187,7 +187,7 @@ namespace Projecto
                         GameState.EnemyList.Remove(enemy);
                     }
                 }
-                if (InputManager.CombatInput.Q == ButtonState.Pressed)
+                if (InputManager.PressedLastFrame.Q == ButtonState.Pressed)
                 {
                     //animação de defense   
                     //Defense(player);
@@ -197,7 +197,7 @@ namespace Projecto
             #region playertwo
             if (pNumber == PlayerNumber.playerTwo)
             {
-                if (InputManager.CombatInput.L == ButtonState.Pressed)
+                if (InputManager.PressedLastFrame.L == ButtonState.Pressed)
                 {
                     List<Enemy> auxEnemy = new List<Enemy>();
                     //animação de attack
@@ -213,7 +213,7 @@ namespace Projecto
                         GameState.EnemyList.Remove(enemy);
                     }
                 }
-                if (InputManager.CombatInput.K == ButtonState.Pressed)
+                if (InputManager.PressedLastFrame.K == ButtonState.Pressed)
                 {
                     //o que fazer no DEFESA
                     // Defense(player);
