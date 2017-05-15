@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Projecto.AI
+namespace Projecto
 {
     /// <summary>
     /// This class is responsible for running the A* algorithm in a new thread.

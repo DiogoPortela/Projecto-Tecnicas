@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Projecto.AI
+namespace Projecto
 {
     /// <summary>
     /// This class is responsible for creating a thread from a ThreadPool 

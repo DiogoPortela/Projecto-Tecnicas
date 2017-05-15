@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using static Projecto.MapGenerator;
 
-namespace Projecto.AI
+namespace Projecto
 {
     class Astar
     {
