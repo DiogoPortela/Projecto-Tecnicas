@@ -14,6 +14,11 @@ namespace Projecto
         public Vector2 Coordinates;
         public bool isSomethingOnTop;
         public bool isWalkable;
+        public int H_Value;
+        public int G_Value;
+        public int F_Value;
+        public bool Diagonal;
+        public Tile Parent;
 
 
         //------------->CONSTRUCTORS<-------------//

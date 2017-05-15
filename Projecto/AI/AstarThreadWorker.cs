@@ -22,21 +22,21 @@ namespace Projecto.AI
         /// <summary>
         /// This function will run the astar algorithem and tries to find the shortest path.
         /// </summary>
-        /// <param name="StartingNode">The starting position in (Array coordinates) of the search path.</param>
-        /// <param name="TargetNode">The target or destination position in (Array coordinates) where the search for the path will end at.</param>
+        /// <param name="StartingTile">The starting position in (Array coordinates) of the search path.</param>
+        /// <param name="TargetTile">The target or destination position in (Array coordinates) where the search for the path will end at.</param>
         /// <param name="map">Map class.</param>
         /// <param name="DisableDiagonalPathfinding">If true, the A* algorithm will not search the path in diagonal direction.</param>
         /// <param name="WorkerIDNumber">ID number for this worker thread so you can get the results back.</param>
-        public AstarThreadWorker(Node StartingNode, Node TargetNode, MapGenerator map, bool DisableDiagonalPathfinding, int WorkerIDNumber)
+        public AstarThreadWorker(Tile StartingTile, Tile TargetTile, MapGenerator map, bool DisableDiagonalPathfinding, int WorkerIDNumber)
         {
-            if (StartingNode.Position.X > map.ArraySize.X || StartingNode.Position.Y > map.ArraySize.Y)
-                throw new Exception("StartingNode size cannot be bigger than map array size. Please make sure the StartingNode position is in array coordinates not pixel coordinates.");
+            if (StartingTile.Position.X > map.ArraySize.X || StartingTile.Position.Y > map.ArraySize.Y)
+                throw new Exception("StartingTile size cannot be bigger than map array size. Please make sure the StartingTile position is in array coordinates not pixel coordinates.");
 
-            if (TargetNode.Position.X > map.ArraySize.X || TargetNode.Position.Y > map.ArraySize.Y)
-                throw new Exception("TargetNode size cannot be bigger than map array size. Please make sure the TargetNode position is in array coordinates not pixel coordinates.");
+            if (TargetTile.Position.X > map.ArraySize.X || TargetTile.Position.Y > map.ArraySize.Y)
+                throw new Exception("TargetTile size cannot be bigger than map array size. Please make sure the TargetTile position is in array coordinates not pixel coordinates.");
 
             this.WorkerIDNumber = WorkerIDNumber;
-            astar = new Astar(StartingNode, TargetNode, map, DisableDiagonalPathfinding);
+            astar = new Astar(StartingTile, TargetTile, map, DisableDiagonalPathfinding);
             astar.FindPath();
         }
     }

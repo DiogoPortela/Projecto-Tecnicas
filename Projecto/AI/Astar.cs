@@ -5,20 +5,20 @@ using System.Text;
 using System.Threading.Tasks;
 
 using Microsoft.Xna.Framework;
+using static Projecto.MapGenerator;
 
 namespace Projecto.AI
 {
     class Astar
     {
         MapGenerator Map;
+        Tile[,] TileMap; // array para os tiles
+        Tile CurrentTile; // Tile currently selected
+        List<Tile> OpenList; // List for open Tiles
+        List<Tile> ClosedList; // List for closed Tiles
+        List<Tile> FinalPath; // The path to take
 
-        Node[,] Nodes; // array para os tiles
-        Node CurrentNode; // Node currently selected
-        List<Node> OpenList; // List for open nodes
-        List<Node> ClosedList; // List for closed nodes
-        List<Node> FinalPath; // The path to take
-
-        Node StartingNode, TargetNode;
+        Tile StartingTile, TargetTile;
 
         public bool ReachedTarget;
         //horizontal and vertical G cost
@@ -28,53 +28,53 @@ namespace Projecto.AI
         public bool DisableDiagonalPathfinding; // Para movimentos diagonais ou não
 
         // recebe uma posicao inicial e final, o mapa e um boleano para as activar movimento diagonais
-        public Astar(Node startingNode, Node targetNode, MapGenerator map, bool disableDiagonalPathfinding)
+        public Astar(Tile startingTile, Tile targetTile, MapGenerator map, bool disableDiagonalPathfinding)
         {
-            this.StartingNode = startingNode;
-            this.TargetNode = targetNode;
+            this.StartingTile = startingTile;
+            this.TargetTile = targetTile;
             this.Map = map;
             this.DisableDiagonalPathfinding = disableDiagonalPathfinding;
         }
-        void CreateNodeList()
+        void CreateTileList()
         {
-            Nodes = new Node[(int)Map.ArraySize.X, (int)Map.ArraySize.Y];
+            TileMap = new Tile[(int)Map.ArraySize.X, (int)Map.ArraySize.Y];
 
             for (int y = 0; y < Map.ArraySize.Y; y++)
                 for (int x = 0; x < Map.ArraySize.X; x++)
-                    Nodes[x, y] = new Node(new Vector2(x, y));
+                    TileMap[x, y] = new Tile(0, new Vector2(x, y), 5);
         }
         /// <summary>
-        /// Create an array of nodes for the collision detection in pathfinding.
+        /// Create an array of Tiles for the collision detection in pathfinding.
         /// </summary>
-        void GenerateCollisionNodes()
+        void GenerateCollisionTiles()
         {
             for (int i = 0; i < Map.AStarCollisionObjects.Count; i++)
-                Nodes[(int)Map.AStarCollisionObjects[i].X, (int)Map.AStarCollisionObjects[i].Y].Passable = false;
+                TileMap[(int)Map.AStarCollisionObjects[i].X, (int)Map.AStarCollisionObjects[i].Y].isWalkable = false;
         }
         /// <summary>
-        /// Add Neighbors Nodes to the OpenList and the Current node to the Closed list
+        /// Add Neighbors Tiles to the OpenList and the Current Tile to the Closed list
         /// </summary>
-        void FindNeighbourNodes()
+        void FindNeighbourTiles()
         {
-            Node NeighborNode;
+            Tile NeighborTile;
             bool Add = false;
 
-            OpenList.Remove(CurrentNode); // Remove da openlist o current node
-            if (!ClosedList.Contains(CurrentNode)) // Adiciona o current node à closed list se não estiver já la
-                ClosedList.Add(CurrentNode);
+            OpenList.Remove(CurrentTile); // Remove da openlist o current Tile
+            if (!ClosedList.Contains(CurrentTile)) // Adiciona o current Tile à closed list se não estiver já la
+                ClosedList.Add(CurrentTile);
 
             // Check if we are in the bounds
-            #region Top Node
-            if (CurrentNode.Position.Y - 1 >= 0)
+            #region Top Tile
+            if (CurrentTile.Position.Y - 1 >= 0)
             {
-                NeighborNode = Nodes[(int)CurrentNode.Position.X, (int)CurrentNode.Position.Y - 1];
-                if (!OpenList.Contains(NeighborNode))
+                NeighborTile = TileMap[(int)CurrentTile.Position.X, (int)CurrentTile.Position.Y - 1];
+                if (!OpenList.Contains(NeighborTile))
                 {
-                    if (NeighborNode.Passable)
+                    if (NeighborTile.isWalkable)
                     {
                         for (int i = 0; i < ClosedList.Count; i++)
                         {
-                            if (NeighborNode.Position == ClosedList[i].Position)
+                            if (NeighborTile.Position == ClosedList[i].Position)
                             {
                                 Add = false;
                                 break;
@@ -85,26 +85,26 @@ namespace Projecto.AI
                     }
                     if (Add)
                     {
-                        NeighborNode.Parent = CurrentNode;
-                        NeighborNode.Diagonal = false;
-                        OpenList.Add(NeighborNode);
+                        NeighborTile.Parent = CurrentTile;
+                        NeighborTile.Diagonal = false;
+                        OpenList.Add(NeighborTile);
                         Add = false;
                     }
                 }
             }
             #endregion
-            #region Bottom Node
-            if (CurrentNode.Position.Y + 1 < Nodes.GetLength(1))
+            #region Bottom Tile
+            if (CurrentTile.Position.Y + 1 < TileMap.GetLength(1))
             {
-                NeighborNode = Nodes[(int)CurrentNode.Position.X, (int)CurrentNode.Position.Y + 1];
+                NeighborTile = TileMap[(int)CurrentTile.Position.X, (int)CurrentTile.Position.Y + 1];
 
-                if (!OpenList.Contains(NeighborNode))
+                if (!OpenList.Contains(NeighborTile))
                 {
-                    if (NeighborNode.Passable)
+                    if (NeighborTile.isWalkable)
                     {
                         for (int i = 0; i < ClosedList.Count; i++)
                         {
-                            if (NeighborNode.Position == ClosedList[i].Position)
+                            if (NeighborTile.Position == ClosedList[i].Position)
                             {
                                 Add = false;
                                 break;
@@ -117,26 +117,26 @@ namespace Projecto.AI
                     }
                     if (Add)
                     {
-                        NeighborNode.Parent = CurrentNode;
-                        NeighborNode.Diagonal = false;
-                        OpenList.Add(NeighborNode);
+                        NeighborTile.Parent = CurrentTile;
+                        NeighborTile.Diagonal = false;
+                        OpenList.Add(NeighborTile);
                         Add = false;
                     }
                 }
             }
             #endregion
-            #region RightNode
-            if (CurrentNode.Position.X + 1 < Nodes.GetLength(0))
+            #region RightTile
+            if (CurrentTile.Position.X + 1 < TileMap.GetLength(0))
             {
-                NeighborNode = Nodes[(int)CurrentNode.Position.X + 1, (int)CurrentNode.Position.Y];
+                NeighborTile = TileMap[(int)CurrentTile.Position.X + 1, (int)CurrentTile.Position.Y];
 
-                if (!OpenList.Contains(NeighborNode))
+                if (!OpenList.Contains(NeighborTile))
                 {
-                    if (NeighborNode.Passable)
+                    if (NeighborTile.isWalkable)
                     {
                         for (int i = 0; i < ClosedList.Count; i++)
                         {
-                            if (NeighborNode.Position == ClosedList[i].Position)
+                            if (NeighborTile.Position == ClosedList[i].Position)
                             {
                                 Add = false;
                                 break;
@@ -147,26 +147,26 @@ namespace Projecto.AI
                     }
                     if (Add)
                     {
-                        NeighborNode.Parent = CurrentNode;
-                        NeighborNode.Diagonal = false;
-                        OpenList.Add(NeighborNode);
+                        NeighborTile.Parent = CurrentTile;
+                        NeighborTile.Diagonal = false;
+                        OpenList.Add(NeighborTile);
                         Add = false;
                     }
                 }
             }
             #endregion
-            #region Left Node
-            if (CurrentNode.Position.X - 1 >= 0)
+            #region Left Tile
+            if (CurrentTile.Position.X - 1 >= 0)
             {
-                NeighborNode = Nodes[(int)CurrentNode.Position.X - 1, (int)CurrentNode.Position.Y];
+                NeighborTile = TileMap[(int)CurrentTile.Position.X - 1, (int)CurrentTile.Position.Y];
 
-                if (!OpenList.Contains(NeighborNode))
+                if (!OpenList.Contains(NeighborTile))
                 {
-                    if (NeighborNode.Passable)
+                    if (NeighborTile.isWalkable)
                     {
-                        foreach (Node closedNode in ClosedList)  // Melhor?
+                        foreach (Tile closedTile in ClosedList)  // Melhor?
                         {
-                            if (NeighborNode.Position == closedNode.Position)
+                            if (NeighborTile.Position == closedTile.Position)
                             {
                                 Add = false;
                                 break;
@@ -177,9 +177,9 @@ namespace Projecto.AI
                     }
                     if (Add)
                     {
-                        NeighborNode.Parent = CurrentNode;
-                        NeighborNode.Diagonal = false;
-                        OpenList.Add(NeighborNode);
+                        NeighborTile.Parent = CurrentTile;
+                        NeighborTile.Diagonal = false;
+                        OpenList.Add(NeighborTile);
                     }
                 }
             }
@@ -187,18 +187,18 @@ namespace Projecto.AI
             // Pathfinding Diagonal
             if (!DisableDiagonalPathfinding)
             {
-                #region Top-Right Node
-                if (CurrentNode.Position.X + 1 < Nodes.GetLength(0) && CurrentNode.Position.Y - 1 >= 0)
+                #region Top-Right Tile
+                if (CurrentTile.Position.X + 1 < TileMap.GetLength(0) && CurrentTile.Position.Y - 1 >= 0)
                 {
-                    NeighborNode = Nodes[(int)CurrentNode.Position.X + 1, (int)CurrentNode.Position.Y - 1];
+                    NeighborTile = TileMap[(int)CurrentTile.Position.X + 1, (int)CurrentTile.Position.Y - 1];
 
-                    if (!OpenList.Contains(NeighborNode))
+                    if (!OpenList.Contains(NeighborTile))
                     {
-                        if (NeighborNode.Passable)
+                        if (NeighborTile.isWalkable)
                         {
                             for (int i = 0; i < ClosedList.Count; i++)
                             {
-                                if (NeighborNode.Position == ClosedList[i].Position)
+                                if (NeighborTile.Position == ClosedList[i].Position)
                                 {
                                     Add = false;
                                     break;
@@ -210,26 +210,26 @@ namespace Projecto.AI
 
                         if (Add)
                         {
-                            NeighborNode.Parent = CurrentNode;
-                            NeighborNode.Diagonal = true;
-                            OpenList.Add(NeighborNode);
+                            NeighborTile.Parent = CurrentTile;
+                            NeighborTile.Diagonal = true;
+                            OpenList.Add(NeighborTile);
                             Add = false;
                         }
                     }
                 }
                 #endregion
-                #region Top-Left Node
-                if (CurrentNode.Position.X - 1 >= 0 && CurrentNode.Position.Y - 1 >= 0)
+                #region Top-Left Tile
+                if (CurrentTile.Position.X - 1 >= 0 && CurrentTile.Position.Y - 1 >= 0)
                 {
-                    NeighborNode = Nodes[(int)CurrentNode.Position.X - 1, (int)CurrentNode.Position.Y - 1];
+                    NeighborTile = TileMap[(int)CurrentTile.Position.X - 1, (int)CurrentTile.Position.Y - 1];
 
-                    if (!OpenList.Contains(NeighborNode))
+                    if (!OpenList.Contains(NeighborTile))
                     {
-                        if (NeighborNode.Passable)
+                        if (NeighborTile.isWalkable)
                         {
                             for (int i = 0; i < ClosedList.Count; i++)
                             {
-                                if (NeighborNode.Position == ClosedList[i].Position)
+                                if (NeighborTile.Position == ClosedList[i].Position)
                                 {
                                     Add = false;
                                     break;
@@ -241,26 +241,26 @@ namespace Projecto.AI
 
                         if (Add)
                         {
-                            NeighborNode.Parent = CurrentNode;
-                            NeighborNode.Diagonal = true;
-                            OpenList.Add(NeighborNode);
+                            NeighborTile.Parent = CurrentTile;
+                            NeighborTile.Diagonal = true;
+                            OpenList.Add(NeighborTile);
                             Add = false;
                         }
                     }
                 }
                 #endregion
-                #region Bottom-Right Node
-                if (CurrentNode.Position.X + 1 < Nodes.GetLength(0) && CurrentNode.Position.Y + 1 < Nodes.GetLength(1))
+                #region Bottom-Right Tile
+                if (CurrentTile.Position.X + 1 < TileMap.GetLength(0) && CurrentTile.Position.Y + 1 < TileMap.GetLength(1))
                 {
-                    NeighborNode = Nodes[(int)CurrentNode.Position.X + 1, (int)CurrentNode.Position.Y + 1];
+                    NeighborTile = TileMap[(int)CurrentTile.Position.X + 1, (int)CurrentTile.Position.Y + 1];
 
-                    if (!OpenList.Contains(NeighborNode))
+                    if (!OpenList.Contains(NeighborTile))
                     {
-                        if (NeighborNode.Passable)
+                        if (NeighborTile.isWalkable)
                         {
                             for (int i = 0; i < ClosedList.Count; i++)
                             {
-                                if (NeighborNode.Position == ClosedList[i].Position)
+                                if (NeighborTile.Position == ClosedList[i].Position)
                                 {
                                     Add = false;
                                     break;
@@ -272,26 +272,26 @@ namespace Projecto.AI
 
                         if (Add)
                         {
-                            NeighborNode.Parent = CurrentNode;
-                            NeighborNode.Diagonal = true;
-                            OpenList.Add(NeighborNode);
+                            NeighborTile.Parent = CurrentTile;
+                            NeighborTile.Diagonal = true;
+                            OpenList.Add(NeighborTile);
                             Add = false;
                         }
                     }
                 }
                 #endregion
-                #region Bottom-Left Node
-                if (CurrentNode.Position.X - 1 >= 0 && CurrentNode.Position.Y + 1 < Nodes.GetLength(1))
+                #region Bottom-Left Tile
+                if (CurrentTile.Position.X - 1 >= 0 && CurrentTile.Position.Y + 1 < TileMap.GetLength(1))
                 {
-                    NeighborNode = Nodes[(int)CurrentNode.Position.X - 1, (int)CurrentNode.Position.Y + 1];
+                    NeighborTile = TileMap[(int)CurrentTile.Position.X - 1, (int)CurrentTile.Position.Y + 1];
 
-                    if (!OpenList.Contains(NeighborNode))
+                    if (!OpenList.Contains(NeighborTile))
                     {
-                        if (NeighborNode.Passable)
+                        if (NeighborTile.isWalkable)
                         {
                             for (int i = 0; i < ClosedList.Count; i++)
                             {
-                                if (NeighborNode.Position == ClosedList[i].Position)
+                                if (NeighborTile.Position == ClosedList[i].Position)
                                 {
                                     Add = false;
                                     break;
@@ -303,9 +303,9 @@ namespace Projecto.AI
 
                         if (Add)
                         {
-                            NeighborNode.Parent = CurrentNode;
-                            NeighborNode.Diagonal = true;
-                            OpenList.Add(NeighborNode);
+                            NeighborTile.Parent = CurrentTile;
+                            NeighborTile.Diagonal = true;
+                            OpenList.Add(NeighborTile);
                             Add = false;
                         }
                     }
@@ -314,33 +314,33 @@ namespace Projecto.AI
             }
         }
         /// <summary>
-        /// Distancia do CurrentNode até ao TargetNode
+        /// Distancia do CurrentTile até ao TargetTile
         /// </summary>
         void Calculate_Heuristic_Value()
         {
-            // distância do startingNode ao targetNode
+            // distância do startingTile ao targetTile
             Vector2 Distance = Vector2.Zero;
 
-            for (int x = 0; x < Nodes.GetLength(0); x++)
+            for (int x = 0; x < TileMap.GetLength(0); x++)
             {
-                for (int y = 0; y < Nodes.GetLength(1); y++)
+                for (int y = 0; y < TileMap.GetLength(1); y++)
                 {
-                    Vector2 CurrentNodePosition = new Vector2(x, y);
+                    Vector2 CurrentTilePosition = new Vector2(x, y);
 
-                    // Node at right
-                    if (CurrentNodePosition.X <= TargetNode.Position.X)
-                        Distance.X = TargetNode.Position.X - CurrentNodePosition.X;
-                    // Node at left
-                    if (CurrentNodePosition.X >= TargetNode.Position.X)
-                        Distance.X = CurrentNodePosition.X - TargetNode.Position.X;
-                    // Node at Up
-                    if (CurrentNodePosition.Y <= TargetNode.Position.Y)
-                        Distance.Y = TargetNode.Position.Y - CurrentNodePosition.Y;
-                    // Node at Down
-                    if (CurrentNodePosition.Y >= TargetNode.Position.Y - TargetNode.Position.Y)
-                        Distance.Y = CurrentNodePosition.Y - TargetNode.Position.Y;
+                    // Tile at right
+                    if (CurrentTilePosition.X <= TargetTile.Position.X)
+                        Distance.X = TargetTile.Position.X - CurrentTilePosition.X;
+                    // Tile at left
+                    if (CurrentTilePosition.X >= TargetTile.Position.X)
+                        Distance.X = CurrentTilePosition.X - TargetTile.Position.X;
+                    // Tile at Up
+                    if (CurrentTilePosition.Y <= TargetTile.Position.Y)
+                        Distance.Y = TargetTile.Position.Y - CurrentTilePosition.Y;
+                    // Tile at Down
+                    if (CurrentTilePosition.Y >= TargetTile.Position.Y - TargetTile.Position.Y)
+                        Distance.Y = CurrentTilePosition.Y - TargetTile.Position.Y;
 
-                    Nodes[x, y].H_Value = (int)(Distance.X + Distance.Y);
+                    TileMap[x, y].H_Value = (int)(Distance.X + Distance.Y);
                 }
             }
         }
@@ -367,8 +367,8 @@ namespace Projecto.AI
                 OpenList[i].F_Value = OpenList[i].G_Value + OpenList[i].H_Value;
             }
         }
-        // Devolve o Node com o F value mais baixo
-        Node GetMin_F_Value()
+        // Devolve o Tile com o F value mais baixo
+        Tile GetMin_F_Value()
         {
             List<int> F_ValuesList = new List<int>();
             int Lowest_F_Value = 0;
@@ -378,22 +378,22 @@ namespace Projecto.AI
             if(F_ValuesList.Count > 0)
             {
                 Lowest_F_Value = F_ValuesList.Min();
-                foreach(Node openNode in OpenList)
+                foreach(Tile openTile in OpenList)
                 {
-                    if (openNode.F_Value == Lowest_F_Value)
-                        return openNode;
+                    if (openTile.F_Value == Lowest_F_Value)
+                        return openTile;
                 }
             }
 
-            return CurrentNode;
+            return CurrentTile;
         }
-        // Organiza a lista de nodes com o caminho final (FinalPath)
+        // Organiza a lista de Tiles com o caminho final (FinalPath)
         void CalculateFinalPath()
         {
-            List<Node> FinalPathTemp = new List<Node>();
+            List<Tile> FinalPathTemp = new List<Tile>();
 
-            FinalPathTemp.Add(CurrentNode);
-            FinalPathTemp.Add(CurrentNode.Parent);
+            FinalPathTemp.Add(CurrentTile);
+            FinalPathTemp.Add(CurrentTile.Parent);
 
             for(int i=1; ; i++)
             {
@@ -414,7 +414,7 @@ namespace Projecto.AI
         public List<Vector2> GetFinalPath()
         {
             List<Vector2> FinalPatchVector2 = new List<Vector2>();
-            // Com a lista de nodes(FinalPath) cria-se uma lista de vetores
+            // Com a lista de Tiles(FinalPath) cria-se uma lista de vetores
             for (int i = 1; i < FinalPath.Count; i++)
                 FinalPatchVector2.Add(FinalPath[i].Position);
 
@@ -423,34 +423,34 @@ namespace Projecto.AI
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="StartingNode">The starting position of the search path in map coordinate</param>
-        /// <param name="EndingNode">The Goal or the ending position of the search path in map coordinate</param>
+        /// <param name="StartingTile">The starting position of the search path in map coordinate</param>
+        /// <param name="EndingTile">The Goal or the ending position of the search path in map coordinate</param>
         public void FindPath()
         {
-            CreateNodeList();
-            GenerateCollisionNodes();
+            CreateTileList();
+            GenerateCollisionTiles();
 
-            CurrentNode = this.StartingNode; // 
+            CurrentTile = this.StartingTile; // 
 
-            OpenList = new List<Node>();
-            ClosedList = new List<Node>();
-            FinalPath = new List<Node>();
+            OpenList = new List<Tile>();
+            ClosedList = new List<Tile>();
+            FinalPath = new List<Tile>();
 
             Calculate_Heuristic_Value();
 
             while (true)
             {
-                CurrentNode = GetMin_F_Value(); // 
+                CurrentTile = GetMin_F_Value(); // 
 
-                FindNeighbourNodes();
+                FindNeighbourTiles();
                 Calculate_G_Value();
                 Calculate_F_Value();
 
-                foreach(Node openNode in OpenList)
+                foreach(Tile openTile in OpenList)
                 {
-                    if(openNode.Position == TargetNode.Position)
+                    if(openTile.Position == TargetTile.Position)
                     {
-                        CurrentNode = openNode;
+                        CurrentTile = openTile;
                         CalculateFinalPath();
                         ReachedTarget = true;
                         break;
