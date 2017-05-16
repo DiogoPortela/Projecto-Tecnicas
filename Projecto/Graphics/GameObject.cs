@@ -10,7 +10,7 @@ namespace Projecto
 {
     public class GameObject
     {
-        protected Texture2D Texture;            //Texture image.
+        public Texture2D Texture;            //Texture image.
         public Vector2 TextureCenter;           //For rotations.
         protected Rectangle Rectangle;          //Rectangle to draw to.
 
@@ -57,12 +57,14 @@ namespace Projecto
         /// <param name="rotation">Rotation of the object.</param>
         public GameObject(string texture, Vector2 position, Vector2 size, float rotation)
         {
-            if(texture != null)
+            if(texture != null && Game1.textureList.ContainsKey(texture))
             {
-                this.Texture = Game1.content.Load<Texture2D>(texture);
+                this.Texture = Game1.textureList[texture];
                 this.TextureCenter.X = Texture.Width / 2;
                 this.TextureCenter.Y = Texture.Height / 2;
-            }            
+            }
+            else
+                Debug.NewLine("FILE MISSING: " + texture);
             this.Position = position;
             this.Size = size;
             this.RotationAngle = rotation;
