@@ -114,14 +114,15 @@ namespace Projecto
         /// <param name="camera">Camera to draw to.</param>
         /// <param name="drawPosition">Position to draw to.</param>
         /// <param name="player">Player information.</param>
-        public static void DrawPlayerInfo(Camera camera,Vector2 drawPosition, PlayerManager player)
+        public static void DrawPlayerInfo(Camera camera,Vector2 drawPosition, PlayerManager player, Enemy enemy)
         {
             if(isActive)
             {
                 textPlayer =   "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
                                 "Coordinate X:" + player.Coordinates.X + " Coordinate Y:" + player.Coordinates.Y + "\n" +
                                 "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
-                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y;
+                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" +
+                                "Eenemy HP:" + enemy.HP;
                 Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }

@@ -38,7 +38,7 @@ namespace Projecto
         /// </summary>
         public void GetDamageValues()
         {
-            if (this.MHweapon == GameState.AllWeapons[0] && this.OHweapon == GameState.AllWeapons[1]) // Staff + Sword
+            if (this.MHweapon == GameState.AllWeapons[1] && this.OHweapon == GameState.AllWeapons[0]) // Staff + Sword
             {
                 //this.PhysDmg = PhysDmg + MHweapon.WeaponPhysicalDamage+(OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
                 this.PhysDmg = 0f;
@@ -50,7 +50,7 @@ namespace Projecto
                 Debug.NewLine(this.MagicDmg.ToString());
                 Debug.NewLine(this.PhysDmg.ToString());
             }
-            else if (this.MHweapon == GameState.AllWeapons[1] && this.OHweapon == GameState.AllWeapons[0]) // sword+ staff
+            else if (this.MHweapon == GameState.AllWeapons[0] && this.OHweapon == GameState.AllWeapons[1]) // sword+ staff
             {
                 this.PhysDmg = (float)Cons.PhysicalDamage + MHweapon.WeaponPhysicalDamage + (OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
                 //this.MagicDmg = MagicDmg + MHweapon.WeaponMagicalDamage + (OHweapon.WeaponMagicalDamage * 0.5f); // dano magico
@@ -63,7 +63,9 @@ namespace Projecto
                 Debug.NewLine(this.PhysDmg.ToString());
             }
         }
-
+        /// <summary>
+        /// Muda as armas do player
+        /// </summary>
         public void ChangeWeapons()
         {
             if (InputManager.PressedLastFrame.K == ButtonState.Pressed && this.MHweapon == GameState.AllWeapons[0]

@@ -16,8 +16,6 @@ namespace Projecto
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
 
-
-
         //------------->CONSTRUCTORS<-------------//
 
         public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size)

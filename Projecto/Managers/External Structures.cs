@@ -29,7 +29,7 @@ namespace Projecto
         PhysicalDamage = 20,
         MagicalDamage = 15,
         AtackSpeed = 1,
-        AtackRange = 2,
+        AtackRange = 1,
         MagicalResistance = 15,
         PhysicalResistance = 15
     }

@@ -72,7 +72,7 @@ namespace Projecto
             teste2.Start();
             ParticlesList.Add(teste2);
 
-            e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
+            e = new Enemy("New Piskel", PlayerOne.Position, 5);
             EnemyList.Add(e);
 
             //weapon mchanics
@@ -137,8 +137,8 @@ namespace Projecto
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
 
             Debug.DrawText();
-            Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne);
-            Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo);
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne,e);
+            Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo,e);
 
             if (isPaused)
                 Game1.spriteBatch.Draw(Debug.debugTexture, Game1.cameraArea, pauseColor);
