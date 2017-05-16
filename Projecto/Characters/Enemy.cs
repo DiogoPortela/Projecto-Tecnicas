@@ -1,81 +1,87 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Input;
-
-using Projecto.AI;
+﻿using Microsoft.Xna.Framework;
 
 namespace Projecto
 {
-    public class Enemy: GameObject
+    internal class Enemy : DamageManager
     {
-        AstarThreadWorker astarThreadWorkerTemp, astarThreadWorker;
-        List<Vector2> WayPointList;
-        Waypoint waypoint;
-        public float Speed { get; set; }
+        public Vector2 Coordinates;
+
+        //------------->CONSTRUCTORS<-------------//
+        public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size), range)
+        {
+            Coordinates = (position / size);
+            Coordinates.X = (int)Coordinates.X;
+            Coordinates.Y = (int)Coordinates.Y;
+
+            #region Stats initializer
+            this.HP = 50;
+            this.PhysDmg = 5;
+            this.MagicDmg = 5;
+            this.PhysDmgRes = 1;
+            this.MagicDmgRes = 1;
+            #endregion
+        }
+
+        //public void AttackEnemy(Enemy enemy)
+        //{
+        //    if (PhysDmg >= enemy.PhysDmgRes)
+        //    {
+        //        // Lower the defender's health by the amount of damage
+        //        enemy.HP -= (int)(PhysDmg - PhysDmgRes);
+        //        // Write a combat message to the debug log.ideia
+        //        /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
+        //           damage, player.Health);*/
+        //        /*     if (player.HP <= 0)
+        //             {
+        //                 if (player is PlayerManager)
+        //                 {
+        //                     var enemy = player as PlayerManager;
+        //                     // When an enemies health dropped below 0 they died
+        //                     // Remove that enemy from the game
+        //                     GameState.p
+        //                 }
+        //             }*/
+        //    }
+        //    else if (MagicDmg >= MagicDmgRes)
+        //    {
+        //        enemy.HP -= (int)(MagicDmg - enemy.MagicDmgRes);
+        //        /*if (player.HP <= 0)
+        //        {
+        //            if (player is PlayerManager)
+        //            {
+        //                var enemy = player as PlayerManager;
+        //                // When an enemies health dropped below 0 they died
+        //                // Remove that enemy from the game
+        //                GameState.PlayerOne.Remove(enemy);
+        //            }
+        //        }*/
+        //    }
+        //}
+    }
+}
+
+namespace Projecto
+{
+    public class Enemy
+    {
         public int HP { get; set; }
+
         public int MP { get; set; }
+
         public float MS { get; set; }
+
         public double PhysDmg { get; set; }
+
         public double MagicDmg { get; set; }
 
-        public Enemy(Vector2 position,Vector2 size, int numID):base("chickenprofilewalkx2",position,size,0f)
+        public Enemy()
         {
-            #region Stats Initializer
             this.HP = 30;
             this.MP = 30;
             this.MS = 0.8f;
             this.PhysDmg = 10;
             this.MagicDmg = 5;
-            #endregion
-            Size = new Vector2(10, 10);
-            Speed = 0.1f;
-            WayPointList = new List<Vector2>();
-            waypoint = new Waypoint();
         }
-        public void Initialize(GraphicsDeviceManager graphics)
-        {
-            this.graphics = graphics;
-        }
-        public void LoadContent()
-        {
 
-        }
-        void Astar(GameTime gameTime, int numID, List<Enemy> units, MapGenerator map)
-        {
-            if ()
-            { // Inicializa a Astar numa thread
-                AstarManager.AddNewThreadWorker();
-            }
-            // Guarda os resultados
-            AstarManager.AstarThreadWorkerResults.TryPeek(out astarThreadWorkerTemp);
-
-            if (astarThreadWorkerTemp != null)
-            {
-                if (astarThreadWorkerTemp.WorkerIDNumber == numID)
-                {
-                    AstarManager.AstarThreadWorkerResults.TryDequeue(out astarThreadWorker);
-                }
-                if (astarThreadWorker != null)
-                {
-                    waypoint = new Waypoint();
-
-                    WayPointList = astarThreadWorker.astar.GetFinalPath();
-
-                    for (int i = 0; i < WayPointList.Count; i++)
-                    {
-                        WayPointList[i] = new Vector2(WayPointList[i].X * 10, WayPointList[i].Y * 10);
-                    }
-                }
-
-            }
-
-
-        }
     }
 }

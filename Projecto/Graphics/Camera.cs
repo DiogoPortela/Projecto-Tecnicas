@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Projecto
 {
@@ -18,19 +13,34 @@ namespace Projecto
         public Vector2 Position { get { return position; } }
         public float Widht { get { return width; } }
         public float Height { get { return height; } }
-    
+
         //------------->CONSTRUCTORS<-------------//
 
+        /// <summary>
+        /// Set the camera window size;
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="width"></param>
+        public Camera(Vector2 position, float width)
+        {
+            this.position = position;
+            this.width = width;
+            height = width * Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth;
+            ratio = -1;
+            centerCamera = new Vector2(width / 2, height / 2);
+            cameraWindowToPixelRatio();
+        }
         /// <summary>
         /// Set the camera window size.
         /// </summary>
         /// <param name="position"> Camera position. </param>
         /// <param name="width"> Width of the camera. </param>
-        public Camera(Vector2 position, float width, float heighRatio)
+        /// <param name="heigthRatio"> Ratio of the height. </param>
+        public Camera(Vector2 position, float width, float heightRatio)
         {
             this.position = position;
             this.width = width;
-            height = width * heighRatio;
+            height = width * heightRatio;
             ratio = -1;
             centerCamera = new Vector2(width / 2, height / 2);
             cameraWindowToPixelRatio();
@@ -60,6 +70,19 @@ namespace Projecto
             y = Game1.graphics.PreferredBackBufferHeight - y;
         }
         /// <summary>
+        /// Transforms a point to pixel-position. (doesn't invert Y)
+        /// </summary>
+        /// <param name="position">Position on screen to draw to.</param>
+        /// <returns></returns>
+        public Vector2 CalculatePixelPoint(Vector2 position)
+        {
+            position.X = (int)((position.X * ratio) + 0.5f);
+            position.Y = (int)((position.Y * ratio) + 0.5f);
+
+            //position.Y = Game1.graphics.PreferredBackBufferHeight - position.Y;
+            return position;
+        }
+        /// <summary>
         /// Convertes the position and size of a rectangle from User-space to Pixel-space.
         /// </summary>
         /// <param name="position"> Position of the rectangle in User-space. </param>
@@ -81,7 +104,7 @@ namespace Projecto
         /// <param name="obj">Object to be looked at.</param>
         public void LookAt(GameObject obj)
         {
-            this.position = obj.Position + obj.SizeCenter - centerCamera;
+            this.position = obj.Center - centerCamera;
         }
         /// <summary>
         /// Makes the camera look at a given position.
