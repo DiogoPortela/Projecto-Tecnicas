@@ -5,36 +5,39 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
-    class GameState : Game
+    static class GameState
     {
         static public PlayerManager PlayerOne;
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
         static public bool isPaused;
+        static public MapGenerator map;
 
-        private Viewport defaultView, leftView, rightView;
-        static public Camera cameraRight, cameraLeft, cameraScreen;
+        static private Viewport defaultView, leftView, rightView;
+        static public Camera cameraRight, cameraLeft;
 
-        private Vector2 debugPlayerOnePosition;
-        private Vector2 debugPlayerTwoPosition;
-        private Color pauseColor;
+        static private Vector2 debugPlayerOnePosition;
+        static private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
-        MapGenerator map = new MapGenerator();
-        Enemy e;
-        ParticleSystem teste2;
+        static Enemy e;
+        static ParticleSystem teste2;
         #endregion
 
-        //------------->CONSTRUCTORS<-------------//
-
-        public GameState()
+        //------------->FUNCTIONS && METHODS<-------------//
+        
+        /// <summary>
+        /// Starts the class values.
+        /// </summary>
+        static public void Start()
         {
             #region Map Generation
+            map = new MapGenerator();
             map.UseRandomSeed = true;
             map.RandomFillPercent = 50;
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
-            MapGenerator.Height = 75;
+            MapGenerator.Height =(int)Cons.MAXHEIGHT;
             map.GenerateMap(5);
             #endregion
 
@@ -51,22 +54,20 @@ namespace Projecto
             //Initializing cameras.
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
-            cameraScreen = new Camera(Vector2.Zero, 100,(float)(Game1.graphics.PreferredBackBufferHeight / (float)Game1.graphics.PreferredBackBufferWidth));
             #endregion
 
-            debugPlayerOnePosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 0));
-            debugPlayerTwoPosition = cameraScreen.CalculatePixelPoint(new Vector2(60, 10));
-            Debug.Init(null, 30);   //Starting Debug.
+            #region Debugger
+            debugPlayerOnePosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 0));
+            debugPlayerTwoPosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 10));
+            #endregion
 
-            isPaused = false;
-            pauseColor = new Color(Color.Black, 0.5f);
-            #region TestZone
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
-
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne, 10);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
+            isPaused = false;
 
+            #region TestZone            
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
             teste2.Start();
             ParticlesList.Add(teste2);
@@ -75,13 +76,10 @@ namespace Projecto
             EnemyList.Add(e);
             #endregion
         }
-
-        //------------->FUNCTIONS && METHODS<-------------//
-
         /// <summary>
         /// Updates the whole gamestate.
         /// </summary>
-        public void StateUpdate(GameTime gameTime)
+        static public void StateUpdate(GameTime gameTime)
         {
             if(InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
             {
@@ -103,13 +101,13 @@ namespace Projecto
             }
             else
             {
-
+                UI.PauseUpdate();
             }
         }
         /// <summary>
         /// Draws the whole gamestate.
         /// </summary>
-        public void Draw()
+        static public void Draw()
         {
             //Draws the left side
             Game1.graphics.GraphicsDevice.Viewport = leftView;
@@ -124,20 +122,22 @@ namespace Projecto
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
 
             Debug.DrawText();
-            Debug.DrawPlayerInfo(cameraScreen, debugPlayerOnePosition, PlayerOne);
-            Debug.DrawPlayerInfo(cameraScreen, debugPlayerTwoPosition, PlayerTwo);
+            Debug.DrawPlayerInfo(debugPlayerOnePosition, PlayerOne);
+            Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
 
-            if (isPaused)
-                Game1.spriteBatch.Draw(Debug.debugTexture, Game1.cameraArea, pauseColor);
+            if(isPaused)
+            {
+                UI.DrawPauseMenu();
+            }
+
             Game1.spriteBatch.End();
             #endregion
-
         }
         /// <summary>
         /// Draws the whole world for one camera.
         /// </summary>
         /// <param name="camera">Target camera to draw.</param>
-        private void DrawCameraView(Camera camera)
+        static private void DrawCameraView(Camera camera)
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);

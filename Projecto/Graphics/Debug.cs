@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
 
@@ -28,7 +25,7 @@ namespace Projecto
         /// </summary>
         /// <param name="font">Font for the text.</param>
         /// <param name="maxLines">Number Max of lines.</param>
-        public static void Init(SpriteFont font, int maxLines)
+        public static void Start(SpriteFont font, int maxLines)
         {
             debugTexture = Game1.content.Load<Texture2D>("DebugPixel");
             MAXLINES = maxLines;
@@ -100,7 +97,6 @@ namespace Projecto
         /// <summary>
         /// Draws the MAXLINES amount of lines on the camera.
         /// </summary>
-        /// <param name="camera">Camera to draw to.</param>
         public static void DrawText()
         {
             if(isActive)
@@ -111,10 +107,9 @@ namespace Projecto
         /// <summary>
         /// Draws some important info on screen.
         /// </summary>
-        /// <param name="camera">Camera to draw to.</param>
         /// <param name="drawPosition">Position to draw to.</param>
         /// <param name="player">Player information.</param>
-        public static void DrawPlayerInfo(Camera camera,Vector2 drawPosition, PlayerManager player)
+        public static void DrawPlayerInfo(Vector2 drawPosition, PlayerManager player)
         {
             if(isActive)
             {
