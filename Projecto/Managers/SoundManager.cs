@@ -13,42 +13,31 @@ namespace Projecto.Managers
         Song mainMenuTheme;
         Song mainGameTheme;
         // LoadContent method:
-        void LoadContent()
+       /* void LoadContent()
         {
             mainMenuTheme = content.load<Song>("mainMenuTheme");
             mainGameTheme = content.load<Song>("mainGameTheme");
             MediaPlayer.IsRepeating = true;
-        }
+        }*/
 
         // Update method:
         void UpdateSong()
         {
-            switch (Game1.ScreenSelect)
+            switch (Game1.selectedScreen)
             {
                 case ScreenSelect.MainMenu:
-                    if (ScreenSelect == ScreenSelect.MainMenu && !songStart)
+                    if ( !songStart)
                     {
                         MediaPlayer.Stop();
                         MediaPlayer.Play(mainMenuTheme);
                         songStart = true;
                     }
-                    else if (ScreenSelect != ScreenSelect.MainMenu && songStart == true)
-                    {
-                        MediaPlayer.Stop();
-                        songStart = false;
-                    }
                     break;
                 case ScreenSelect.Playing:
-                    if (ScreenSelect == ScreenSelect.Playing && !songStart)
                     {
                         MediaPlayer.Stop();
                         MediaPlayer.Play(mainGameTheme);
                         songStart = true;
-                    }
-                    else if (ScreenSelect != ScreenSelect.Playing && songStart == true)
-                    {
-                        MediaPlayer.Stop();
-                        songStart = false;
                     }
                     break;
             }
