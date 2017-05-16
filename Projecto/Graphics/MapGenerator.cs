@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SettlersEngine;
 
 namespace Projecto
 {
@@ -23,7 +24,7 @@ namespace Projecto
         static public Tile[,] TilesMap;
         static public List<Room> MapRooms;
         static public Room Spawn;
-        static int[,] infoMap;
+        static public int[,] infoMap;
         static private int WalkableTiles;
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -43,6 +44,7 @@ namespace Projecto
             FillTileMap();
             FindPlayerSpawn();
             FindMapWalkableTiles();
+
         }
 
         private void RandomFillMap()

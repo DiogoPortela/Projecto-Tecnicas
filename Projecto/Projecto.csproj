@@ -58,6 +58,8 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AI\PriorityQueue.cs" />
+    <Compile Include="AI\SpatialAStar.cs" />
     <Compile Include="Characters\Boss.cs" />
     <Compile Include="Characters\PlayerManager.cs" />
     <Compile Include="Graphics\Animation.cs" />
@@ -130,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Content\Arial.xnb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using SettlersEngine;
+using System;
 
 namespace Projecto
 {
@@ -11,6 +13,7 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
+        static public SpatialAStar<Tile, Object> aStar;
         static public bool isPaused;
         static public MapGenerator map;
 
@@ -21,44 +24,70 @@ namespace Projecto
         static private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
+
         static Enemy e;
+
         static ParticleSystem teste2;
+
         #endregion
 
         //------------->FUNCTIONS && METHODS<-------------//
-        
+
         /// <summary>
         /// Starts the class values.
         /// </summary>
         static public void Start()
         {
             #region Map Generation
+
             map = new MapGenerator();
+
             map.UseRandomSeed = true;
+
             map.RandomFillPercent = 50;
+
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
-            MapGenerator.Height =(int)Cons.MAXHEIGHT;
+
+            MapGenerator.Height = (int)Cons.MAXHEIGHT;
+
             map.GenerateMap(5);
+
             #endregion
 
             #region Camera. Split screen
+
             //Viewports           
+
             defaultView = Game1.graphics.GraphicsDevice.Viewport;
+
             leftView = rightView = defaultView;
 
+
+
             //Dividing it in half, and adjusting the positioning.
+
             rightView.Width /= 2;
+
             leftView.Width /= 2;
+
             rightView.X = leftView.Width;
 
+
+
             //Initializing cameras.
+
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
+
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
+
             #endregion
 
             #region Debugger
+
             debugPlayerOnePosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 0));
+
             debugPlayerTwoPosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 10));
+
             #endregion
 
             EnemyList = new List<Enemy>();
@@ -68,12 +97,17 @@ namespace Projecto
             isPaused = false;
 
             #region TestZone            
+
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
+
             teste2.Start();
+
             ParticlesList.Add(teste2);
 
+            aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
+
             e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
-            EnemyList.Add(e);
+
             #endregion
         }
         /// <summary>
@@ -81,11 +115,11 @@ namespace Projecto
         /// </summary>
         static public void StateUpdate(GameTime gameTime)
         {
-            if(InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
+            if (InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
             {
                 isPaused = !isPaused;
             }
-            if(!isPaused)
+            if (!isPaused)
             {
                 PlayerOne.PlayerMovement(gameTime);
                 PlayerOne.DamageManager();
@@ -95,6 +129,13 @@ namespace Projecto
                 PlayerTwo.DamageManager();
                 cameraRight.LookAt(PlayerTwo);
 
+                LinkedList<Tile> path = aStar.Search(new Tile(0, new Vector2(e.Coordinates.X, e.Coordinates.Y), 5),
+                                new Tile(0, new Vector2(PlayerOne.Coordinates.X, PlayerOne.Coordinates.Y), 5), null);
+
+                foreach (Tile t in path)
+                {
+                    e.Move(new Vector2(t.Coordinates.X, t.Coordinates.Y));
+                }
 
                 //Particle Update.
                 teste2.Update(gameTime, PlayerOne.Center);
@@ -118,19 +159,33 @@ namespace Projecto
             DrawCameraView(cameraRight);
 
             #region Draws the whole picture.
+
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
+
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
 
+
+
             Debug.DrawText();
+
             Debug.DrawPlayerInfo(debugPlayerOnePosition, PlayerOne);
+
             Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
 
-            if(isPaused)
+
+
+            if (isPaused)
+
             {
+
                 UI.DrawPauseMenu();
+
             }
 
+
+
             Game1.spriteBatch.End();
+
             #endregion
         }
         /// <summary>
@@ -144,11 +199,11 @@ namespace Projecto
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
 
-            foreach(Enemy e in EnemyList)
+            foreach (Enemy e in EnemyList)
             {
                 e.DrawObject(camera);
             }
-            foreach(ParticleSystem p in ParticlesList)
+            foreach (ParticleSystem p in ParticlesList)
             {
                 p.Draw(camera);
             }
