@@ -13,9 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Teste tdj.wav
-/importer:WavImporter
-/processor:SoundEffectProcessor
+#begin Teste tdj.mp3
+/importer:Mp3Importer
+/processor:SongProcessor
 /processorParam:Quality=Best
-/build:Teste tdj.wav
+/build:Teste tdj.mp3
 

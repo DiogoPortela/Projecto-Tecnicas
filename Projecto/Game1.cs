@@ -13,7 +13,7 @@ namespace Projecto
     /// </summary>
     public class Game1 : Game
     {
-        public SoundEffect tuamae;
+        public Song BackgroundMusic;
 
         static public GraphicsDeviceManager graphics;
         static public SpriteBatch spriteBatch;
@@ -60,8 +60,8 @@ namespace Projecto
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            tuamae = content.Load<SoundEffect>("Teste tdj");
-            tuamae.Play();
+            BackgroundMusic = content.Load<Song>("Teste tdj");
+            MediaPlayer.Play(BackgroundMusic);
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
