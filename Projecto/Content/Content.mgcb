@@ -13,9 +13,9 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Teste tdj.mp3
+#begin mainGameTheme.mp3
 /importer:Mp3Importer
 /processor:SongProcessor
 /processorParam:Quality=Best
-/build:Teste tdj.mp3
+/build:mainGameTheme.mp3
 
