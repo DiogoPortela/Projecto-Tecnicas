@@ -24,11 +24,8 @@ namespace Projecto
         static private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
-
         static Enemy e;
-
         static ParticleSystem teste2;
-
         #endregion
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -39,55 +36,32 @@ namespace Projecto
         static public void Start()
         {
             #region Map Generation
-
             map = new MapGenerator();
-
             map.UseRandomSeed = true;
-
             map.RandomFillPercent = 50;
-
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
-
             MapGenerator.Height = (int)Cons.MAXHEIGHT;
-
             map.GenerateMap(5);
-
             #endregion
 
             #region Camera. Split screen
-
             //Viewports           
-
             defaultView = Game1.graphics.GraphicsDevice.Viewport;
-
             leftView = rightView = defaultView;
 
-
-
             //Dividing it in half, and adjusting the positioning.
-
             rightView.Width /= 2;
-
             leftView.Width /= 2;
-
             rightView.X = leftView.Width;
 
-
-
             //Initializing cameras.
-
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
-
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
-
             #endregion
 
             #region Debugger
-
             debugPlayerOnePosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 0));
-
             debugPlayerTwoPosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 10));
-
             #endregion
 
             EnemyList = new List<Enemy>();
@@ -95,19 +69,14 @@ namespace Projecto
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne, 10);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
             isPaused = false;
-
+        
             #region TestZone            
-
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
-
             teste2.Start();
-
             ParticlesList.Add(teste2);
-
             aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
-
             e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
-
+            EnemyList.Add(e);
             #endregion
         }
         /// <summary>
@@ -129,12 +98,12 @@ namespace Projecto
                 PlayerTwo.DamageManager();
                 cameraRight.LookAt(PlayerTwo);
 
-                LinkedList<Tile> path = aStar.Search(new Tile(0, new Vector2(e.Coordinates.X, e.Coordinates.Y), 5),
-                                new Tile(0, new Vector2(PlayerOne.Coordinates.X, PlayerOne.Coordinates.Y), 5), null);
+                LinkedList<Tile> path = aStar.Search(new Tile(0, new Vector2(EnemyList[0].Position.X, EnemyList[0].Position.Y), 5),
+                                new Tile(0, new Vector2(PlayerOne.Position.X, PlayerOne.Position.Y), 5), null);
 
                 foreach (Tile t in path)
                 {
-                    e.Move(new Vector2(t.Coordinates.X, t.Coordinates.Y));
+                    e.Move(new Vector2(t.Position.X, t.Position.Y));
                 }
 
                 //Particle Update.
@@ -159,33 +128,19 @@ namespace Projecto
             DrawCameraView(cameraRight);
 
             #region Draws the whole picture.
-
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
-
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
 
-
-
             Debug.DrawText();
-
             Debug.DrawPlayerInfo(debugPlayerOnePosition, PlayerOne);
-
             Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
 
-
-
             if (isPaused)
-
             {
-
                 UI.DrawPauseMenu();
-
             }
 
-
-
             Game1.spriteBatch.End();
-
             #endregion
         }
         /// <summary>
