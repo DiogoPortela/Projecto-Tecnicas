@@ -5,15 +5,20 @@ namespace Projecto
     internal class Enemy : DamageManager
     {
         //------------->CONSTRUCTORS<-------------//
-        public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size), range)
+        public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size))
         {
             #region Stats initializer
-            this.HP = 50;
+            this.HP = 100;
             this.PhysDmg = 5;
             this.MagicDmg = 5;
             this.PhysDmgRes = 1;
             this.MagicDmgRes = 1;
             #endregion
+            this.MHweapon = GameState.AllWeapons[1]; // sword
+        }
+        public void enemyAtack()
+        {
+
         }
 
         //public void AttackEnemy(Enemy enemy)

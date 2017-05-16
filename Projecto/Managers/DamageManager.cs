@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
@@ -14,18 +15,69 @@ namespace Projecto
         public float MagicDmg { get; set; }
         public float PhysDmgRes { get; set; }
         public float MagicDmgRes { get; set; }
-        private int range;
+        public float AtackSpeed { get; set; }
+        public int Range { get; set; }
         private bool isDefending;
+
+        public Weapon MHweapon { get; set; }
+        public Weapon OHweapon { get; set; }
+
+
 
         //------------->CONSTRUCTORS<-------------//
 
-        public DamageManager(string texture, Vector2 position, Vector2 size, int range) : base(texture, position, size, 0f)
+        public DamageManager(string texture, Vector2 position, Vector2 size) : base(texture, position, size, 0f)
         {
             isDefending = false;
-            this.range = range;
+            this.Range = (int)Cons.AtackRange;
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
+        /// <summary>
+        /// Devolve o tipo de dano baseado nas armas que o player usa
+        /// </summary>
+        public void GetDamageValues()
+        {
+            if (this.MHweapon == GameState.AllWeapons[0] && this.OHweapon == GameState.AllWeapons[1]) // Staff + Sword
+            {
+                //this.PhysDmg = PhysDmg + MHweapon.WeaponPhysicalDamage+(OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
+                this.PhysDmg = 0f;
+                this.MagicDmg = (float)Cons.MagicalDamage + MHweapon.WeaponMagicalDamage + (OHweapon.WeaponMagicalDamage * 0.5f); // dano magico
+                this.MagicDmgRes = (float)Cons.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
+                this.PhysDmgRes = (float)Cons.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
+                this.Range = MHweapon.WeaponAtackRange + (int)Cons.AtackRange; // Range
+                this.AtackSpeed = MHweapon.WeaponAtackSpeed * (float)Cons.AtackSpeed; // AtackSpeed
+                Debug.NewLine(this.MagicDmg.ToString());
+                Debug.NewLine(this.PhysDmg.ToString());
+            }
+            else if (this.MHweapon == GameState.AllWeapons[1] && this.OHweapon == GameState.AllWeapons[0]) // sword+ staff
+            {
+                this.PhysDmg = (float)Cons.PhysicalDamage + MHweapon.WeaponPhysicalDamage + (OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
+                //this.MagicDmg = MagicDmg + MHweapon.WeaponMagicalDamage + (OHweapon.WeaponMagicalDamage * 0.5f); // dano magico
+                this.MagicDmg = 0f;
+                this.MagicDmgRes = (float)Cons.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
+                this.PhysDmgRes = (float)Cons.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
+                this.Range = MHweapon.WeaponAtackRange + (int)Cons.AtackRange; // Range
+                this.AtackSpeed = MHweapon.WeaponAtackSpeed * (float)Cons.AtackSpeed; // Atack Speed
+                Debug.NewLine(this.MagicDmg.ToString());
+                Debug.NewLine(this.PhysDmg.ToString());
+            }
+        }
+
+        public void ChangeWeapons()
+        {
+            if (InputManager.PressedLastFrame.K == ButtonState.Pressed && this.MHweapon == GameState.AllWeapons[0]
+                && this.OHweapon == GameState.AllWeapons[1])
+            {
+                this.MHweapon = GameState.AllWeapons[1];
+                this.OHweapon = GameState.AllWeapons[0];
+            }else if(InputManager.PressedLastFrame.K == ButtonState.Pressed && this.MHweapon == GameState.AllWeapons[1]
+                && this.OHweapon == GameState.AllWeapons[0])
+            {
+                this.MHweapon = GameState.AllWeapons[0];
+                this.OHweapon = GameState.AllWeapons[1];
+            }
+        }
         /// <summary>
         /// Use this method to resolve attacks between Figures vs enemy
         /// </summary>
@@ -93,7 +145,7 @@ namespace Projecto
         {
             Vector2 v = (this.Position) - (enemy.Position);
             float distance = Math.Abs(v.Length());
-            if ((this.Size.X + range) + enemy.Size.X > distance) return true;
+            if ((this.Size.X + Range) + enemy.Size.X > distance) return true;
             return false;
         }
         /// <summary>
@@ -105,8 +157,13 @@ namespace Projecto
         {
             Vector2 v = (this.Position) - (player.Position);
             float distance = Math.Abs(v.Length());
-            if ((this.Size.X + range) + player.Size.X > distance) return true;
+            if ((this.Size.X + Range) + player.Size.X > distance) return true;
             return false;
         }
+        /// <summary>
+        ///  Returns the atack animation to perform.
+        /// </summary>
+        /// <param name="player">Player to test distance with.</param>
+        /// <returns></returns>
     }
 }

@@ -17,9 +17,10 @@ namespace Projecto
         private Vector2 deltaPosition;
 
 
+
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, range)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -29,6 +30,8 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
+            this.MHweapon = GameState.AllWeapons[0]; // Staff
+            this.OHweapon = GameState.AllWeapons[1]; // Sword
 
             #region Stats initializer
             this.HP = 100;
@@ -165,7 +168,7 @@ namespace Projecto
             //this.currentAnimation.Play(gameTime);
         }
 
-        public void DamageManager()
+        public void DamageManage()
         {
             #region playerone
 
@@ -175,6 +178,7 @@ namespace Projecto
                 {
                     List<Enemy> auxEnemy = new List<Enemy>();
                     //animação de attack
+
                     foreach (Enemy enemy in GameState.EnemyList)
                     {
                         if (this.IsInRange(enemy) == true)
@@ -221,7 +225,8 @@ namespace Projecto
             }
             #endregion
         }
-        
+
+ 
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>

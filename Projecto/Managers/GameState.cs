@@ -10,6 +10,7 @@ namespace Projecto
         static public PlayerManager PlayerOne;
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
+        static public Weapon[] AllWeapons = new Weapon[2];
         static public List<ParticleSystem> ParticlesList;
         static public bool isPaused;
 
@@ -73,6 +74,12 @@ namespace Projecto
 
             e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
             EnemyList.Add(e);
+
+            //weapon mchanics
+            AllWeapons[0] = new Weapon("Staff", 10f, 5f, 1, 1.5f);
+            AllWeapons[1] = new Weapon("Sword", 5f, 10f, 1, 1f);
+            PlayerOne.MHweapon = AllWeapons[0];
+            PlayerOne.OHweapon = AllWeapons[1];
             #endregion
         }
 
@@ -90,11 +97,17 @@ namespace Projecto
             if(!isPaused)
             {
                 PlayerOne.PlayerMovement(gameTime);
-                PlayerOne.DamageManager();
+                PlayerOne.ChangeWeapons(); // Altera as armas pressionando no K
+                PlayerOne.GetDamageValues(); // Update damage values based on what weapons are being used
+                PlayerOne.DamageManage();
+
+                
                 cameraLeft.LookAt(PlayerOne);
 
                 PlayerTwo.PlayerMovement(gameTime);
-                PlayerTwo.DamageManager();
+                PlayerTwo.GetDamageValues(); // Update damage values based on what weapons are being used
+                PlayerTwo.DamageManage();
+
                 cameraRight.LookAt(PlayerTwo);
 
 
