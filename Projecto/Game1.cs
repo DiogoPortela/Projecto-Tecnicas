@@ -21,6 +21,7 @@ namespace Projecto
         static public KeyboardState currentFrameState;
         static public ScreenSelect selectedScreen;
 
+        static MainMenu menu;
         static GameState gameState;
 
         //------------->CONSTRUCTORS<-------------//
@@ -47,6 +48,8 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
+            UI.Start(null);
+            menu = new MainMenu();
             gameState = new GameState();
 
             base.Initialize();
@@ -76,7 +79,12 @@ namespace Projecto
         protected override void Update(GameTime gameTime)
         {
             currentFrameState = Keyboard.GetState();
-            if (selectedScreen == ScreenSelect.Playing)
+            UI.Update();
+            if (selectedScreen == ScreenSelect.Quit)
+                Exit();
+            else if (selectedScreen == ScreenSelect.MainMenu)
+                menu.Update();
+            else if (selectedScreen == ScreenSelect.Playing)
                 gameState.StateUpdate(gameTime);
             base.Update(gameTime);
             lastFrameState = currentFrameState;
@@ -89,6 +97,8 @@ namespace Projecto
         {
             GraphicsDevice.Clear(Color.HotPink);
 
+            if (selectedScreen == ScreenSelect.MainMenu)
+                menu.Draw();
             if (selectedScreen == ScreenSelect.Playing)
                 gameState.Draw();
 

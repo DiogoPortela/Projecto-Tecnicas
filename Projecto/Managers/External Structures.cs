@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework.Input;
-
-namespace Projecto
+﻿namespace Projecto
 {
     internal struct Coordinate
     {
@@ -20,7 +13,7 @@ namespace Projecto
     }
     public enum ScreenSelect
     {
-        MainMenu, Playing, ScoreScreen
+        MainMenu, Playing, ScoreScreen, Quit
     }
     enum Cons
     {

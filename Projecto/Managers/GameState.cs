@@ -12,6 +12,7 @@ namespace Projecto
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
         static public bool isPaused;
+        static public MapGenerator map;
 
         private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft, cameraScreen;
@@ -21,7 +22,6 @@ namespace Projecto
         private Color pauseColor;
 
         #region ZONA DE TESTE
-        MapGenerator map = new MapGenerator();
         Enemy e;
         ParticleSystem teste2;
         #endregion
@@ -31,10 +31,11 @@ namespace Projecto
         public GameState()
         {
             #region Map Generation
+            map = new MapGenerator();
             map.UseRandomSeed = true;
             map.RandomFillPercent = 50;
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
-            MapGenerator.Height = 75;
+            MapGenerator.Height =(int)Cons.MAXHEIGHT;
             map.GenerateMap(5);
             #endregion
 
