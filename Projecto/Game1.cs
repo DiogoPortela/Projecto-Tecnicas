@@ -2,6 +2,8 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System;
 
 namespace Projecto
@@ -11,6 +13,8 @@ namespace Projecto
     /// </summary>
     public class Game1 : Game
     {
+        public SoundEffect tuamae;
+
         static public GraphicsDeviceManager graphics;
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
@@ -56,6 +60,8 @@ namespace Projecto
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            tuamae = content.Load<SoundEffect>("Teste tdj");
+            tuamae.Play();
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
