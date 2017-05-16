@@ -1,93 +1,90 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
+
 namespace Projecto
 {
-    class MainMenu
+    static class MainMenu
     {
-        Camera camera;
-        Rectangle StartBox;
-        Vector2 StartBoxPos;
-        Vector2 StartBoxScale;
+        static private Vector2 startBoxPos;
+        static private Vector2 startBoxCenter;
+        static private int startBoxScale;
 
-        Rectangle QuitBox;
-        Vector2 QuitBoxPos;
-        Vector2 QuitBoxScale;
+        static private Vector2 quitBoxPos;
+        static private Vector2 quitBoxCenter;
+        static private int quitBoxScale;
 
-        string Start;
-        string Quit;
+        static private string start;
+        static private string quit;
 
-        int selected;
+        static private int selected;
+        static private Color[] colors;
 
-        public MainMenu()
+        //------------->FUNCTIONS && METHODS<-------------//
+
+        static public void Start()
         {
-            camera = new Camera(Vector2.Zero, 100);
-            StartBoxScale = QuitBoxScale = camera.CalculatePixelPoint(new Vector2(1, 1));
-            StartBoxPos = camera.CalculatePixelPoint(new Vector2(50, 10));
-            QuitBoxPos = camera.CalculatePixelPoint(new Vector2(50, 20));
+            colors = new Color[2];
+            startBoxScale = quitBoxScale = 2;
+            startBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 10));
+            quitBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 20));
 
-            StartBox = camera.CalculatePixelRectangle(StartBoxPos, StartBoxScale);
-            QuitBox = camera.CalculatePixelRectangle(QuitBoxPos, QuitBoxScale);
+            colors[0] = Color.Yellow;
+            for(int i = 1; i < colors.Length; i++)
+            {
+                colors[i] = Color.White;
+            }
 
-            Start = "Start";
-            Quit = "Quit";
-            selected = 1;
+            start = "Start";
+            quit = "Quit";
+            selected = 0;
+
+            startBoxCenter = UI.GameFont.MeasureString(start) / 2;
+            quitBoxCenter = UI.GameFont.MeasureString(quit) / 2;
         }
 
-        public void Update()
+        static public void Update()
         {
-            //if (StartBox.Contains(UI.mousePostion) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-            //{
-            //    Game1.selectedScreen = ScreenSelect.Playing;
-            //}
-            //if (QuitBox.Contains(UI.mousePostion) && Mouse.GetState().LeftButton == ButtonState.Pressed)
-            //{
-            //    Game1.selectedScreen = ScreenSelect.Quit;
-            //}
-
-            if ((InputManager.PlayerOne.Up == ButtonState.Pressed || InputManager.PlayerTwo.Up == ButtonState.Pressed) && selected > 1)
+            if ((InputManager.PlayerOne.Up == ButtonState.Pressed || InputManager.PlayerTwo.Up == ButtonState.Pressed) && selected > 0)
             {
+                colors[selected] = Color.White;
                 selected--;
                 Debug.NewLine(selected.ToString());
+                colors[selected] = Color.Yellow;
 
             }
-            else if ((InputManager.PlayerOne.Down == ButtonState.Pressed || InputManager.PlayerTwo.Down == ButtonState.Pressed) && selected < 2)
+            else if ((InputManager.PlayerOne.Down == ButtonState.Pressed || InputManager.PlayerTwo.Down == ButtonState.Pressed) && selected < 1)
             {
+                colors[selected] = Color.White;
                 selected++;
                 Debug.NewLine(selected.ToString());
+                colors[selected] = Color.Yellow;
             }
 
-            if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
+            if (InputManager.PressedLastFrame.Enter == ButtonState.Pressed)
             {
                 switch (selected)
                 {
-                    case 1:
+                    case 0:
                         {
                             Game1.selectedScreen = ScreenSelect.Playing;
                             break;
                         }
-                    case 2:
+                    case 1:
                         {
                             Game1.selectedScreen = ScreenSelect.Quit;
                             break;
                         }
                 }
             }
-
         }
 
-        public void Draw()
+        static public void Draw()
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
 
-            Game1.spriteBatch.DrawString(UI.GameFont, Start, StartBoxPos, Color.White, 0f, Vector2.Zero, StartBoxScale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, Quit, QuitBoxPos, Color.White, 0f, Vector2.Zero, QuitBoxScale, SpriteEffects.None, 0f);
-
+            Game1.spriteBatch.DrawString(UI.GameFont, start, startBoxPos, colors[0], 0f, startBoxCenter, startBoxScale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, quit, quitBoxPos, colors[1], 0f, quitBoxCenter, quitBoxScale, SpriteEffects.None, 0f);
             Debug.DrawText();
 
             Game1.spriteBatch.End();

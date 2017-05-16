@@ -26,7 +26,7 @@ namespace Projecto
             TimeLeft = TimeSpan.FromMilliseconds(timeLeft);
             isDone = false;
         }
-        
+
         //------------->FUNCTIONS && METHODS<-------------//
 
         public void Update(GameTime time)
@@ -58,7 +58,8 @@ namespace Projecto
         {
             Position = position;
             TextureSize = textureSize;
-            Texture = Game1.content.Load<Texture2D>(texture);
+            if (Game1.textureList.ContainsKey(texture))
+                Texture = Game1.textureList[texture];
             MaxParticles = maxParticles;
             Particles = new Particle[maxParticles];
             NumberOfParticles = 0;

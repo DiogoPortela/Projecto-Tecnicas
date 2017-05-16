@@ -3,6 +3,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
 using System;
+using System.Collections.Generic;
 
 namespace Projecto
 {
@@ -15,14 +16,12 @@ namespace Projecto
         static public SpriteBatch spriteBatch;
         static public ContentManager content;
         static public Random random;
-        static public Rectangle cameraArea;
+        static public Camera mainCamera;
+        static public Dictionary<string, Texture2D> textureList;
 
         static public KeyboardState lastFrameState;
         static public KeyboardState currentFrameState;
         static public ScreenSelect selectedScreen;
-
-        static MainMenu menu;
-        static GameState gameState;
 
         //------------->CONSTRUCTORS<-------------//
 
@@ -31,10 +30,10 @@ namespace Projecto
             graphics = new GraphicsDeviceManager(this);
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
-            cameraArea = new Rectangle(0, 0, graphics.PreferredBackBufferWidth, graphics.PreferredBackBufferHeight);
             Content.RootDirectory = "Content";
             content = Content;
             random = new Random();
+            mainCamera = new Camera(Vector2.Zero, 100);
 
             selectedScreen = ScreenSelect.MainMenu;
         }
@@ -48,9 +47,31 @@ namespace Projecto
         /// </summary>
         protected override void Initialize()
         {
+            #region LoadTextures
+
+            textureList = new Dictionary<string, Texture2D>();
+            List<string> auxString = new List<string>();
+
+            auxString.Add("Drude");
+            auxString.Add("Tile0");
+            auxString.Add("Tile1");
+            auxString.Add("Tile2");
+            auxString.Add("Tile4");
+            auxString.Add("New Piskel");
+            auxString.Add("DebugPixel");
+
+            foreach (string s in auxString)
+            {
+                Texture2D aux = content.Load<Texture2D>(s);
+                textureList.Add(s, aux);
+            }
+            #endregion
+
             UI.Start(null);
-            menu = new MainMenu();
-            gameState = new GameState();
+            Debug.Start(null, 30);
+            MainMenu.Start();
+            GameState.Start();
+
 
             base.Initialize();
         }
@@ -79,13 +100,12 @@ namespace Projecto
         protected override void Update(GameTime gameTime)
         {
             currentFrameState = Keyboard.GetState();
-            UI.Update();
             if (selectedScreen == ScreenSelect.Quit)
                 Exit();
             else if (selectedScreen == ScreenSelect.MainMenu)
-                menu.Update();
+                MainMenu.Update();
             else if (selectedScreen == ScreenSelect.Playing)
-                gameState.StateUpdate(gameTime);
+                GameState.StateUpdate(gameTime);
             base.Update(gameTime);
             lastFrameState = currentFrameState;
         }
@@ -98,9 +118,9 @@ namespace Projecto
             GraphicsDevice.Clear(Color.HotPink);
 
             if (selectedScreen == ScreenSelect.MainMenu)
-                menu.Draw();
+                MainMenu.Draw();
             if (selectedScreen == ScreenSelect.Playing)
-                gameState.Draw();
+                GameState.Draw();
 
             base.Draw(gameTime);
         }
