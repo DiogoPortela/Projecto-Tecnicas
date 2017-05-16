@@ -13,9 +13,9 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
-        static public SpatialAStar<Tile, Object> aStar;
         static public bool isPaused;
         static public MapGenerator map;
+        static public SpatialAStar<Tile, Object> aStar;
 
         static private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft;
@@ -42,6 +42,7 @@ namespace Projecto
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
             MapGenerator.Height = (int)Cons.MAXHEIGHT;
             map.GenerateMap(5);
+            aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
             #endregion
 
             #region Camera. Split screen
@@ -74,8 +75,7 @@ namespace Projecto
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
             teste2.Start();
             ParticlesList.Add(teste2);
-            aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
-            e = new Enemy("New Piskel", PlayerOne.Position, 5, 10);
+            e = new Enemy("New Piskel", PlayerOne.Position, Vector2.One * 5, 10, ref aStar);
             EnemyList.Add(e);
             #endregion
         }
@@ -97,14 +97,8 @@ namespace Projecto
                 PlayerTwo.PlayerMovement(gameTime);
                 PlayerTwo.DamageManager();
                 cameraRight.LookAt(PlayerTwo);
-
-                LinkedList<Tile> path = aStar.Search(new Tile(0, new Vector2(EnemyList[0].Position.X, EnemyList[0].Position.Y), 5),
-                                new Tile(0, new Vector2(PlayerOne.Position.X, PlayerOne.Position.Y), 5), null);
-
-                foreach (Tile t in path)
-                {
-                    e.Move(new Vector2(t.Position.X, t.Position.Y));
-                }
+                if(e.Coordinates != PlayerOne.Coordinates)
+                    e.EnemyMovement(gameTime,PlayerOne);
 
                 //Particle Update.
                 teste2.Update(gameTime, PlayerOne.Center);
