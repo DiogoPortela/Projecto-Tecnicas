@@ -45,7 +45,7 @@ namespace Projecto
             else
                 return;
 
-            Debug.NewLine(aux.Coordinates.X.ToString() + ", " + aux.Coordinates.Y.ToString());
+            //Debug.NewLine(aux.Coordinates.X.ToString() + ", " + aux.Coordinates.Y.ToString());
 
             Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
             deltaPosition += auxVector * movingSpeed;

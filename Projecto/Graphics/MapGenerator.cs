@@ -278,7 +278,7 @@ namespace Projecto
             List<Coordinate> line = GetLine(tileA, tileB);
             foreach (Coordinate c in line)
             {
-                DrawCircle(c, 2);
+                DrawCircle(c, 4);
             }
         }
         /// <summary>
