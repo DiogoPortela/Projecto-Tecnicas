@@ -24,7 +24,7 @@ namespace Projecto
         static private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
-        static Enemy e;
+        static Enemy e, e2, e3;
         static ParticleSystem teste2;
         #endregion
 
@@ -76,7 +76,11 @@ namespace Projecto
             teste2.Start();
             ParticlesList.Add(teste2);
             e = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[0], Vector2.One * 5, 10, ref aStar);
+            e2 = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[1], Vector2.One * 5, 10, ref aStar);
+            e3 = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[2], Vector2.One * 5, 10, ref aStar);
             EnemyList.Add(e);
+            EnemyList.Add(e2);
+            EnemyList.Add(e3);
             #endregion
         }
         /// <summary>
@@ -98,7 +102,10 @@ namespace Projecto
                 PlayerTwo.DamageManager();
                 cameraRight.LookAt(PlayerTwo);
                 
-                e.EnemyMovement(gameTime,PlayerOne);
+                foreach(Enemy e in EnemyList)
+                {
+                    e.EnemyMovement(gameTime, PlayerOne);
+                }
 
                 //Particle Update.
                 teste2.Update(gameTime, PlayerOne.Center);

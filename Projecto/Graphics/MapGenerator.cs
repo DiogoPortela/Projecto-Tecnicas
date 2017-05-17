@@ -369,7 +369,7 @@ namespace Projecto
         /// <returns>A Vector2 with the given Coordinates</returns>
         static private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
-            return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
+            return new Vector2(tile.tileX * TileSize, tile.tileY * TileSize);
         }
         /// <summary>
         /// Given the tileType, this function gets all the regions in the map. 
@@ -499,17 +499,17 @@ namespace Projecto
             Coordinate c;
             foreach (Room r in MapRooms)
             {
-                if(!r.isSpawn)
+                if (!r.isSpawn)
                 {
                     aux = (float)r.roomSize / (float)WalkableTiles;
 
                     if (r.isMainRoom)
                     {
-                        for(int i = 0; i < maxMobs;)
+                        for (int i = 0; i < maxMobs;)
                         {
-                             c = RandomCoord(r);
+                            c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && IsInMapRange(c.tileX, c.tileY))
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 i++;
@@ -522,7 +522,7 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && IsInMapRange(c.tileX, c.tileY))
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 i++;
