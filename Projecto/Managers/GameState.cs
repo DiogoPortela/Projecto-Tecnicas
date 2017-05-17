@@ -75,7 +75,7 @@ namespace Projecto
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
             teste2.Start();
             ParticlesList.Add(teste2);
-            e = new Enemy("New Piskel", PlayerOne.Position, Vector2.One * 5, 10, ref aStar);
+            e = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[0], Vector2.One * 5, 10, ref aStar);
             EnemyList.Add(e);
             #endregion
         }
@@ -97,8 +97,8 @@ namespace Projecto
                 PlayerTwo.PlayerMovement(gameTime);
                 PlayerTwo.DamageManager();
                 cameraRight.LookAt(PlayerTwo);
-                if(e.Coordinates != PlayerOne.Coordinates)
-                    e.EnemyMovement(gameTime,PlayerOne);
+                
+                e.EnemyMovement(gameTime,PlayerOne);
 
                 //Particle Update.
                 teste2.Update(gameTime, PlayerOne.Center);

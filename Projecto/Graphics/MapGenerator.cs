@@ -483,31 +483,57 @@ namespace Projecto
             }
             Spawn.isSpawn = true;
         }
-
+        static private Coordinate RandomCoord(Room r)
+        {
+            return r.tiles[Game1.random.Next(r.tiles.Count())];
+        }
         //---------------------------Player & Enemy Position--------------------------------//
         /// <summary>
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
-        static public Vector2 FindEnemyPosition()
+        static public List<Vector2> FindEnemySpawns()
         {
-            Vector2 positionToSpawnTo = Vector2.Zero;
-            Room RoomToSpawnTo = new Room();
-            int rand = Game1.random.Next(WalkableTiles);
-            foreach(Room r in MapRooms)
+            List<Vector2> enemySpawns = new List<Vector2>();
+            float aux, maxMobs = 10f;
+            Coordinate c;
+            foreach (Room r in MapRooms)
             {
-                if(rand <= r.roomSize)
+                if(!r.isSpawn)
                 {
-                    RoomToSpawnTo = r;
-                }
-                else
-                {
-                    break;
+                    aux = (float)r.roomSize / (float)WalkableTiles;
+
+                    if (r.isMainRoom)
+                    {
+                        for(int i = 0; i < maxMobs;)
+                        {
+                             c = RandomCoord(r);
+
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && IsInMapRange(c.tileX, c.tileY))
+                            {
+                                enemySpawns.Add(CoordinateToWorldPoint(c));
+                                i++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < aux * maxMobs;)
+                        {
+                            c = RandomCoord(r);
+
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && IsInMapRange(c.tileX, c.tileY))
+                            {
+                                enemySpawns.Add(CoordinateToWorldPoint(c));
+                                i++;
+                            }
+                        }
+                    }
                 }
             }
-            rand = Game1.random.Next(RoomToSpawnTo.roomSize);
-            return positionToSpawnTo = CoordinateToWorldPoint(RoomToSpawnTo.tiles[rand]);
+            return enemySpawns;
         }
+
         /// <summary>
         /// This function calculates a position in the spawn for the player.
         /// </summary>
