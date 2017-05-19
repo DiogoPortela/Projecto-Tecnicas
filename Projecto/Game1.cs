@@ -70,11 +70,11 @@ namespace Projecto
             }
             #endregion
 
+            SoundManager.Start();
             UI.Start(null);
             Debug.Start(null, 30);
             MainMenu.Start();
             GameState.Start();
-
 
             base.Initialize();
         }

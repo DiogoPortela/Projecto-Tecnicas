@@ -4,43 +4,64 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 
-namespace Projecto.Managers
+namespace Projecto
 {
-    class SoundManager
+    static class SoundManager
     {
-        bool songStart = false;
-        Song mainMenuTheme;
-        Song mainGameTheme;
-        // LoadContent method:
-       /* void LoadContent()
-        {
-            mainMenuTheme = content.load<Song>("mainMenuTheme");
-            mainGameTheme = content.load<Song>("mainGameTheme");
-            MediaPlayer.IsRepeating = true;
-        }*/
+        static Dictionary<string, SoundEffect> listSounds;
+        static Dictionary<string, SoundEffectInstance> listPlayingSounds;
 
-        // Update method:
-        void UpdateSong()
+        static public void Start()
         {
-            switch (Game1.selectedScreen)
+            listSounds = new Dictionary<string, SoundEffect>();
+            listPlayingSounds = new Dictionary<string, SoundEffectInstance>();
+
+            List<string> stringAux = new List<string>();
+
+            //stringAux.Add("mainMenuTheme");
+            stringAux.Add("mainGameTheme");
+
+            foreach(string s in stringAux)
             {
-                case ScreenSelect.MainMenu:
-                    if ( !songStart)
-                    {
-                        MediaPlayer.Stop();
-                        MediaPlayer.Play(mainMenuTheme);
-                        songStart = true;
-                    }
-                    break;
-                case ScreenSelect.Playing:
-                    {
-                        MediaPlayer.Stop();
-                        MediaPlayer.Play(mainGameTheme);
-                        songStart = true;
-                    }
-                    break;
+                SoundEffect SoundFX = Game1.content.Load<SoundEffect>(s);
+                listSounds.Add(s, SoundFX);
             }
+        }
+        static public void StartSound(string name, bool isLoop)
+        { 
+            if (listSounds.ContainsKey(name))
+            {
+                SoundEffectInstance aux = listSounds[name].CreateInstance();
+                aux.Play();
+                aux.IsLooped = isLoop;
+                listPlayingSounds.Add(name, aux);
+            }
+            else
+            {
+                Debug.NewLine("Sound:\"" + name + "\" doesn't exist.");
+            }
+        }
+        static public void StopSound(string name)
+        {
+            if(listPlayingSounds.ContainsKey(name))
+            {
+                listPlayingSounds[name].Stop();
+                listPlayingSounds.Remove(name);
+            }
+            else
+            {
+                Debug.NewLine("Sound:\"" + name + "\" doesn't exist.");
+            }
+        }
+        static public void StopAllSounds()
+        {
+            foreach(KeyValuePair<string, SoundEffectInstance> soundFX in listPlayingSounds)
+            {
+                soundFX.Value.Stop();
+            }
+            listPlayingSounds.Clear();
         }
     }
 }

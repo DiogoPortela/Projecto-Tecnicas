@@ -41,6 +41,8 @@ namespace Projecto
 
             startBoxCenter = UI.GameFont.MeasureString(start) / 2;
             quitBoxCenter = UI.GameFont.MeasureString(quit) / 2;
+
+            SoundManager.StartSong("mainGameTheme", true);
         }
 
         static public void Update()
