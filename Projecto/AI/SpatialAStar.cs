@@ -155,7 +155,7 @@ namespace SettlersEngine
             if (startNode == endNode)
                 return new LinkedList<TPathNode>(new TPathNode[] { startNode.UserContext });
 
-            PathNode[] neighborNodes = new PathNode[8];
+            PathNode[] neighborNodes = new PathNode[8]; //4 for non diagonal, 8 for diagonal
 
             m_ClosedSet.Clear();
             m_OpenSet.Clear();
@@ -188,7 +188,7 @@ namespace SettlersEngine
 
                 if (x == endNode)
                 {
-                   // watch.Stop();
+                    // watch.Stop();
 
                     //elapsed.Add(watch.ElapsedMilliseconds);
 
@@ -277,7 +277,7 @@ namespace SettlersEngine
             {
                 ReconstructPathRecursive(came_from, item, result);
 
-                 result.AddLast(current_node.UserContext);
+                result.AddLast(current_node.UserContext);
             }
             else
                 result.AddLast(current_node.UserContext);
@@ -294,7 +294,7 @@ namespace SettlersEngine
                 inNeighbors[0] = null;
 
             if (y > 0)
-                inNeighbors[1] = m_SearchSpace[x, y - 1];
+                inNeighbors[1] = m_SearchSpace[x, y - 1]; //index 1 for diagonal
             else
                 inNeighbors[1] = null;
 
@@ -304,12 +304,12 @@ namespace SettlersEngine
                 inNeighbors[2] = null;
 
             if (x > 0)
-                inNeighbors[3] = m_SearchSpace[x - 1, y];
+                inNeighbors[3] = m_SearchSpace[x - 1, y]; //index 3 for diagonal
             else
                 inNeighbors[3] = null;
 
             if (x < Width - 1)
-                inNeighbors[4] = m_SearchSpace[x + 1, y];
+                inNeighbors[4] = m_SearchSpace[x + 1, y]; //index 4 for diagonal
             else
                 inNeighbors[4] = null;
 
@@ -319,7 +319,7 @@ namespace SettlersEngine
                 inNeighbors[5] = null;
 
             if (y < Height - 1)
-                inNeighbors[6] = m_SearchSpace[x, y + 1];
+                inNeighbors[6] = m_SearchSpace[x, y + 1]; //index 6 for diagonal
             else
                 inNeighbors[6] = null;
 
