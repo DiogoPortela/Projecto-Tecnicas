@@ -42,7 +42,7 @@ namespace Projecto
             startBoxCenter = UI.GameFont.MeasureString(start) / 2;
             quitBoxCenter = UI.GameFont.MeasureString(quit) / 2;
 
-            SoundManager.StartSong("mainGameTheme", true);
+            SoundManager.StartSound("mainGameTheme", true);
         }
 
         static public void Update()
@@ -69,6 +69,7 @@ namespace Projecto
                 {
                     case 0:
                         {
+                            GameState.Start();
                             Game1.selectedScreen = ScreenSelect.Playing;
                             break;
                         }

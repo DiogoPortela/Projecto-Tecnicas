@@ -13,6 +13,9 @@ namespace Projecto
         static Dictionary<string, SoundEffect> listSounds;
         static Dictionary<string, SoundEffectInstance> listPlayingSounds;
 
+        /// <summary>
+        /// Starts the class, and loads all sounds.
+        /// </summary>
         static public void Start()
         {
             listSounds = new Dictionary<string, SoundEffect>();
@@ -29,6 +32,11 @@ namespace Projecto
                 listSounds.Add(s, SoundFX);
             }
         }
+        /// <summary>
+        /// Starts a sound.
+        /// </summary>
+        /// <param name="name"> Sound name. </param>
+        /// <param name="isLoop"> True if the sound should be on loop. </param>
         static public void StartSound(string name, bool isLoop)
         { 
             if (listSounds.ContainsKey(name))
@@ -43,6 +51,10 @@ namespace Projecto
                 Debug.NewLine("Sound:\"" + name + "\" doesn't exist.");
             }
         }
+        /// <summary>
+        /// Stops a sound.
+        /// </summary>
+        /// <param name="name">Sound name.</param>
         static public void StopSound(string name)
         {
             if(listPlayingSounds.ContainsKey(name))
@@ -55,6 +67,9 @@ namespace Projecto
                 Debug.NewLine("Sound:\"" + name + "\" doesn't exist.");
             }
         }
+        /// <summary>
+        /// Stops all sounds.
+        /// </summary>
         static public void StopAllSounds()
         {
             foreach(KeyValuePair<string, SoundEffectInstance> soundFX in listPlayingSounds)
