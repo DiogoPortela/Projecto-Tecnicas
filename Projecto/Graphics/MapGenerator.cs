@@ -421,7 +421,7 @@ namespace Projecto
                 Coordinate tile = queue.Dequeue();
                 tiles.Add(tile);
 
-                //identiifca tile relacionado com startx e starty
+                //identifica tile relacionado com startx e starty
                 for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++)
                 {
                     for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
@@ -533,7 +533,6 @@ namespace Projecto
             }
             return enemySpawns;
         }
-
         /// <summary>
         /// This function calculates a position in the spawn for the player.
         /// </summary>

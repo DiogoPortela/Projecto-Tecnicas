@@ -33,7 +33,6 @@ namespace Projecto
         /// <returns>An Enemy if it dies.</returns>
         public Enemy EnemyTakeDamage(Enemy defender)
         {
-            Debug.NewLine(defender.HP.ToString());
             if (PhysDmg >= defender.PhysDmgRes)
             {
                 defender.HP -= (int)(PhysDmg - PhysDmgRes);
@@ -41,6 +40,7 @@ namespace Projecto
                 {
                     // When an enemies health dropped below 0 they died
                     // Remove that enemy from the game
+                    Debug.NewLine("Enemy died.");
                     return defender;
                 }
             }
@@ -51,6 +51,7 @@ namespace Projecto
                 {
                     // When an enemies health dropped below 0 they died
                     // Remove that enemy from the game
+                    Debug.NewLine("Enemy died.");
                     return defender;
                 }
             }
@@ -59,7 +60,7 @@ namespace Projecto
                 // Show the miss message in the Debug log for now
                 // Debug.NewLine("{0} missed {1}", defender.Name, defender.HP);
             }
-            Debug.NewLine(defender.HP.ToString());
+            Debug.NewLine("Enemy's HP is " + defender.HP.ToString());
             return null;
 
         }
