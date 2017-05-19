@@ -2,8 +2,10 @@
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Content;
-using System;
+using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Audio;
 using System.Collections.Generic;
+using System;
 
 namespace Projecto
 {
@@ -68,11 +70,10 @@ namespace Projecto
             }
             #endregion
 
+            SoundManager.Start();
             UI.Start(null);
             Debug.Start(null, 30);
             MainMenu.Start();
-            GameState.Start();
-
 
             base.Initialize();
         }

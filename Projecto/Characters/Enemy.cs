@@ -4,9 +4,15 @@ namespace Projecto
 {
     internal class Enemy : DamageManager
     {
+        public Vector2 Coordinates;
+
         //------------->CONSTRUCTORS<-------------//
         public Enemy(string texture, Vector2 position, float size, int range) : base("New Piskel", position, new Vector2(size, size), range)
         {
+            Coordinates = (position / size);
+            Coordinates.X = (int)Coordinates.X;
+            Coordinates.Y = (int)Coordinates.Y;
+
             #region Stats initializer
             this.HP = 50;
             this.PhysDmg = 5;
