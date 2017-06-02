@@ -14,11 +14,16 @@ namespace Projecto
         static private Vector2 continueBoxCenter;
         static private int continueBoxScale;
 
+        static private Vector2 mainMenuBoxPos;
+        static private Vector2 mainMenuBoxCenter;
+        static private int mainMenuBoxScale;
+
         static private Vector2 quitBoxPos;
         static private Vector2 quitBoxCenter;
         static private int quitBoxScale;
 
         static private string cont;
+        static private string mainMenu;
         static private string quit;
 
         static private int selected;
@@ -42,10 +47,11 @@ namespace Projecto
             pauseColor = new Color(Color.Black, 0.5f);
             ScreenArea = new Rectangle(0, 0, Game1.graphics.PreferredBackBufferWidth, Game1.graphics.PreferredBackBufferHeight);
 
-            colors = new Color[2];
-            continueBoxScale = quitBoxScale = 2;
+            colors = new Color[3];
+            continueBoxScale = mainMenuBoxScale = quitBoxScale = 2;
             continueBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 10));
-            quitBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 20));
+            mainMenuBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 20));
+            quitBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 30));
 
             colors[0] = Color.Yellow;
             for (int i = 1; i < colors.Length; i++)
@@ -54,10 +60,12 @@ namespace Projecto
             }
 
             cont = "Continue";
+            mainMenu = "Main Menu";
             quit = "Quit";
             selected = 0;
 
             continueBoxCenter = GameFont.MeasureString(cont) / 2;
+            mainMenuBoxCenter = GameFont.MeasureString(mainMenu) / 2;
             quitBoxCenter = GameFont.MeasureString(quit) / 2;
             
         }
@@ -66,7 +74,7 @@ namespace Projecto
         /// </summary>
         static public void PauseUpdate()
         {
-            if ((InputManager.PlayerOne.Up == ButtonState.Pressed || InputManager.PlayerTwo.Up == ButtonState.Pressed) && selected > 0)
+            if ((InputManager.PressedLastFrame.UpTwo == ButtonState.Pressed || InputManager.PressedLastFrame.UpOne == ButtonState.Pressed) && selected > 0)
             {
                 colors[selected] = Color.White;
                 selected--;
@@ -74,7 +82,7 @@ namespace Projecto
                 colors[selected] = Color.Yellow;
 
             }
-            else if ((InputManager.PlayerOne.Down == ButtonState.Pressed || InputManager.PlayerTwo.Down == ButtonState.Pressed) && selected < 1)
+            else if ((InputManager.PressedLastFrame.DownOne == ButtonState.Pressed || InputManager.PressedLastFrame.DownTwo == ButtonState.Pressed) && selected < 2)
             {
                 colors[selected] = Color.White;
                 selected++;
@@ -93,6 +101,11 @@ namespace Projecto
                         }
                     case 1:
                         {
+                            Game1.selectedScreen = ScreenSelect.MainMenu;
+                            break;
+                        }
+                    case 2:
+                        {
                             Game1.selectedScreen = ScreenSelect.Quit;
                             break;
                         }
@@ -106,7 +119,8 @@ namespace Projecto
         {
             Game1.spriteBatch.Draw(Debug.debugTexture, ScreenArea, pauseColor);
             Game1.spriteBatch.DrawString(UI.GameFont, cont, continueBoxPos, colors[0], 0f, continueBoxCenter, continueBoxScale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, quit, quitBoxPos, colors[1], 0f, quitBoxCenter, quitBoxScale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, mainMenu, mainMenuBoxPos, colors[1], 0f, mainMenuBoxCenter, mainMenuBoxScale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, quit, quitBoxPos, colors[2], 0f, quitBoxCenter, quitBoxScale, SpriteEffects.None, 0f);
         }
     }
 }

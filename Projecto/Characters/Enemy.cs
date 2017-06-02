@@ -32,13 +32,15 @@ namespace Projecto
             this.MagicDmgRes = 1;
             #endregion
         }
-        public void EnemyMovement(GameTime gameTime, PlayerManager player)
+        public void EnemyMovement(GameTime gameTime, ref PlayerManager player)
         {
             deltaPosition = Vector2.Zero;
             Tile aux;
 
-            LinkedList<Tile> path = aStar.Search(new Tile(0, new Vector2(this.Coordinates.X, this.Coordinates.Y), 5),
-                                new Tile(0, new Vector2(player.Coordinates.X, player.Coordinates.Y), 5), null);
+            Vector2 enemyPos = new Vector2(this.Coordinates.X, this.Coordinates.Y);
+            Vector2 playerPos = new Vector2(player.Coordinates.X, player.Coordinates.Y);
+
+            LinkedList <Tile> path = aStar.Search(ref enemyPos, ref playerPos, null);
 
             if (path.First.Next != null)
                 aux = path.First.Next.Value;
@@ -50,57 +52,21 @@ namespace Projecto
             Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
             deltaPosition += auxVector * movingSpeed;
 
-            if (deltaPosition != Vector2.Zero)
+            /*if (deltaPosition != Vector2.Zero)
                 this.enemyCollider.UpdateDelta(ref deltaPosition);
+            {*/
+            if (deltaPosition != Vector2.Zero)
             {
-                if (deltaPosition != Vector2.Zero)
-                {
-                    this.Move(deltaPosition);
-                    this.enemyCollider.UpdateBounds(Position, Size);
-                    this.Position = this.enemyCollider.UpdatePosition(Position, Size);
-                    this.Coordinates = enemyCollider.UpdateTiles(Position, Size);
-                    this.enemyCollider.UpdateBounds(Position, Size);
-                }
+                this.Move(deltaPosition);
+                this.enemyCollider.UpdateBounds(Position, Size);
+                this.Position = this.enemyCollider.UpdatePosition(Position, Size);
+                this.Coordinates = enemyCollider.UpdateTiles(Position, Size);
+                this.enemyCollider.UpdateBounds(Position, Size);
             }
         }
-        //this.currentAnimation.Play(gameTime);
     }
-
-    //public void AttackEnemy(Enemy enemy)
-    //{
-    //    if (PhysDmg >= enemy.PhysDmgRes)
-    //    {
-    //        // Lower the defender's health by the amount of damage
-    //        enemy.HP -= (int)(PhysDmg - PhysDmgRes);
-    //        // Write a combat message to the debug log.ideia
-    //        /* Debug.WriteLine("{0} hit {1} for {2} and he has {3} health remaining.",
-    //           damage, player.Health);*/
-    //        /*     if (player.HP <= 0)
-    //             {
-    //                 if (player is PlayerManager)
-    //                 {
-    //                     var enemy = player as PlayerManager;
-    //                     // When an enemies health dropped below 0 they died
-    //                     // Remove that enemy from the game
-    //                     GameState.p
-    //                 }
-    //             }*/
-    //    }
-    //    else if (MagicDmg >= MagicDmgRes)
-    //    {
-    //        enemy.HP -= (int)(MagicDmg - enemy.MagicDmgRes);
-    //        /*if (player.HP <= 0)
-    //        {
-    //            if (player is PlayerManager)
-    //            {
-    //                var enemy = player as PlayerManager;
-    //                // When an enemies health dropped below 0 they died
-    //                // Remove that enemy from the game
-    //                GameState.PlayerOne.Remove(enemy);
-    //            }
-    //        }*/
-    //    }
-    //}
+    //this.currentAnimation.Play(gameTime);
 }
+
 
 

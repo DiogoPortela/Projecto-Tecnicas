@@ -27,6 +27,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.Xna.Framework;
 
 namespace SettlersEngine
 {
@@ -144,17 +145,13 @@ namespace SettlersEngine
         /// Returns null, if no path is found. Start- and End-Node are included in returned path. The user context
         /// is passed to IsWalkable().
         /// </summary>
-        internal LinkedList<TPathNode> Search(Tile inStartNode, Tile inEndNode, TUserContext inUserContext)
+        internal LinkedList<TPathNode> Search(ref Vector2 inStartNode, ref Vector2 inEndNode, TUserContext inUserContext)
         {
-            PathNode startNode = m_SearchSpace[(int)inStartNode.Coordinates.X, (int)inStartNode.Coordinates.Y];
-            PathNode endNode = m_SearchSpace[(int)inEndNode.Coordinates.X, (int)inEndNode.Coordinates.Y];
-
-            //System.Diagnostics.Stopwatch watch = new System.Diagnostics.Stopwatch();
-            //watch.Start();
+            PathNode startNode = m_SearchSpace[(int)inStartNode.X, (int)inStartNode.Y];
+            PathNode endNode = m_SearchSpace[(int)inEndNode.X, (int)inEndNode.Y];
 
             if (startNode == endNode)
                 return new LinkedList<TPathNode>(new TPathNode[] { startNode.UserContext });
-
             PathNode[] neighborNodes = new PathNode[8]; //4 for non diagonal, 8 for diagonal
 
             m_ClosedSet.Clear();

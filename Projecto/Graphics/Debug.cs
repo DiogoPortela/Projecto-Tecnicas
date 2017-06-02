@@ -2,6 +2,8 @@
 using System.Linq;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
+using System.IO;
 
 namespace Projecto
 {
@@ -17,6 +19,8 @@ namespace Projecto
         static private string textPlayer;
         static public Texture2D debugTexture;
         static private int counter;
+        static private Stopwatch watch;
+        static private int fps;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -32,6 +36,7 @@ namespace Projecto
             textStr = "";
             text = new List<string>();
             LoadFont(font);
+            watch = new Stopwatch();
         }
         /// <summary>
         /// Enable rendering.
@@ -59,6 +64,19 @@ namespace Projecto
             }
         }
 
+        public static void StartTimer()
+        {
+            watch.Reset();
+            watch.Start();
+        }
+        public static void StopTimer(string functionName)
+        {
+            StreamWriter sw = new StreamWriter("debugger.txt", true);
+            watch.Stop();
+            NewLine(functionName + " time: " + watch.ElapsedMilliseconds);
+            sw.WriteLine(functionName + " - " + watch.ElapsedMilliseconds);
+            sw.Close();
+        }
         /// <summary>
         /// Adds a line to be drawn in the screen.
         /// </summary>
