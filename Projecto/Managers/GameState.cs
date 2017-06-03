@@ -22,6 +22,7 @@ namespace Projecto
 
         static private Vector2 debugPlayerOnePosition;
         static private Vector2 debugPlayerTwoPosition;
+        static private Vector2 debugTextPosition;
 
         #region ZONA DE TESTE
         static ParticleSystem teste2;
@@ -62,13 +63,14 @@ namespace Projecto
             #region Debugger
             debugPlayerOnePosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 0));
             debugPlayerTwoPosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 10));
+            debugTextPosition = Game1.mainCamera.CalculatePixelPoint(new Vector2(60, 20));
             #endregion
 
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
 
-            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne, 10);
-            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
+            PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerOne, 3);
+            PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 3);
             isPaused = false;
             SoundManager.StopAllSounds();
             //SoundManager.StartSound("mainGameTheme", true);
@@ -78,10 +80,10 @@ namespace Projecto
             teste2.Start();
             ParticlesList.Add(teste2);
 
-
-            for(int i = 0; i < 30; i++)
+            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns();
+            for (int i = 0; i < 100; i++)
             {
-                Enemy enemyAux = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[0], Vector2.One * 5, 10);
+                Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * 5, 10);
                 EnemyList.Add(enemyAux);
             }
             #endregion
@@ -138,6 +140,7 @@ namespace Projecto
             Debug.DrawText();
             Debug.DrawPlayerInfo(debugPlayerOnePosition, PlayerOne);
             Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
+            Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString(), debugTextPosition);
 
             if (isPaused)
             {
@@ -167,7 +170,6 @@ namespace Projecto
                 p.Draw(camera);
             }
 
-            Debug.DrawColliders(camera, PlayerOne, PlayerOne.playerCollider);
             Game1.spriteBatch.End();
         }
     }

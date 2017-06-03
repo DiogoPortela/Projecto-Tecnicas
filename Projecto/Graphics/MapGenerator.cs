@@ -146,6 +146,9 @@ namespace Projecto
                 }
             }
         }
+        /// <summary>
+        /// Fills the corners of the map.
+        /// </summary>
         private void FillCorners()
         {
             for(int y = 0; y < Height; y++)
@@ -510,7 +513,7 @@ namespace Projecto
         static public List<Vector2> FindEnemySpawns()
         {
             List<Vector2> enemySpawns = new List<Vector2>();
-            float aux, maxMobs = 10f;
+            float aux, maxMobs = 100f;
             Coordinate c;
             foreach (Room r in MapRooms)
             {

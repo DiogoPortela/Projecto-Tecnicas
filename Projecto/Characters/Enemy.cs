@@ -96,9 +96,9 @@ namespace Projecto
                 this.Coordinates = enemyCollider.UpdateTiles(Position, Size);
                 this.enemyCollider.UpdateBounds(Position, Size);
             }
+            //this.currentAnimation.Play(gameTime);
         }
     }
-    //this.currentAnimation.Play(gameTime);
 }
 
 

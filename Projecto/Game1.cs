@@ -102,6 +102,10 @@ namespace Projecto
         protected override void Update(GameTime gameTime)
         {
             currentFrameState = Keyboard.GetState();
+            if (InputManager.PressedLastFrame.F2 == ButtonState.Pressed)
+            {
+                Debug.Toggle();
+            }
             if (selectedScreen == ScreenSelect.Quit)
                 Exit();
             else if (selectedScreen == ScreenSelect.MainMenu)
@@ -117,8 +121,7 @@ namespace Projecto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.HotPink);
-
+            GraphicsDevice.Clear(Color.Black);
             if (selectedScreen == ScreenSelect.MainMenu)
                 MainMenu.Draw();
             if (selectedScreen == ScreenSelect.Playing)

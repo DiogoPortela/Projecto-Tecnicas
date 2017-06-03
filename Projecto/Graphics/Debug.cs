@@ -52,6 +52,13 @@ namespace Projecto
         {
             isActive = false;
         }
+        /// <summary>
+        /// Toggle rendering.
+        /// </summary>
+        public static void Toggle()
+        {
+            isActive = !isActive;
+        }
 
         /// <summary>
         /// Loads the Arial font if none is existant.
@@ -77,6 +84,7 @@ namespace Projecto
             sw.WriteLine(functionName + " - " + watch.ElapsedMilliseconds);
             sw.Close();
         }
+
         /// <summary>
         /// Adds a line to be drawn in the screen.
         /// </summary>
@@ -136,6 +144,18 @@ namespace Projecto
                                 "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
                                 "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y;
                 Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+            }
+        }
+        /// <summary>
+        /// Draws a given text in a given position.
+        /// </summary>
+        /// <param name="text">Text. </param>
+        /// <param name="pos">Position. </param>
+        public static void DrawTextAt(string text, Vector2 pos)
+        {
+            if(isActive)
+            {
+                Game1.spriteBatch.DrawString(font, text, pos, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>

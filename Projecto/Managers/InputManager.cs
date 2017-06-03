@@ -59,6 +59,8 @@ namespace Projecto
         public ButtonState Q { get { return GetState(Keys.Q); } }
         public ButtonState L { get { return GetState(Keys.L); } }
         public ButtonState K { get { return GetState(Keys.K); } }
+
+        public ButtonState F2 { get { return GetState(Keys.F2); } }
         public ButtonState Esc { get { return GetState(Keys.Escape); } }
         public ButtonState Enter { get { return GetState(Keys.Enter); } }
     }

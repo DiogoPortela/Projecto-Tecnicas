@@ -72,17 +72,14 @@ namespace Projecto
                 {
                     //position.X = Tiles[0].Collider.MinBound.X - size.X;
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Right");
                 }
                 else if ((!TilesDiagonal[0].isWalkable(this) || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[0].Collider.MinBound.X <= MaxBound.X)
                 {
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Right");
                 }
                 else if ((!TilesDiagonal[3].isWalkable(this) || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[3].Collider.MinBound.X <= MaxBound.X)
                 {
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Right");
                 }
             }
 
@@ -91,17 +88,14 @@ namespace Projecto
                 if ((!Tiles[2].isWalkable(this) || Tiles[2].isSomethingOnTop) && Tiles[2].Collider.MaxBound.X >= MinBound.X)
                 {
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Left");
                 }
                 else if ((!TilesDiagonal[1].isWalkable(this) || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MinBound.Y < MaxBound.Y && TilesDiagonal[1].Collider.MaxBound.X >= MinBound.X)
                 {
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Left");
                 }
                 else if ((!TilesDiagonal[2].isWalkable(this) || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.Y > MinBound.Y && TilesDiagonal[2].Collider.MaxBound.X >= MinBound.X)
                 {
                     deltaPosition.X = 0;
-                    Debug.NewLine("Stop Left");
                 }
             }
             if (deltaPosition.Y > 0)
@@ -109,17 +103,14 @@ namespace Projecto
                 if ((!Tiles[1].isWalkable(this) || Tiles[1].isSomethingOnTop) && Tiles[1].Collider.MinBound.Y <= MaxBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Top");
                 }
                 else if ((!TilesDiagonal[0].isWalkable(this) || TilesDiagonal[0].isSomethingOnTop) && TilesDiagonal[0].Collider.MinBound.X < MaxBound.X && TilesDiagonal[0].Collider.MinBound.Y <= MaxBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Top");
                 }
                 else if ((!TilesDiagonal[1].isWalkable(this) || TilesDiagonal[1].isSomethingOnTop) && TilesDiagonal[1].Collider.MaxBound.X > MinBound.X && TilesDiagonal[1].Collider.MinBound.Y <= MaxBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Top");
                 }
             }
             if (deltaPosition.Y < 0)
@@ -127,17 +118,14 @@ namespace Projecto
                 if ((!Tiles[3].isWalkable(this) || Tiles[3].isSomethingOnTop) && Tiles[3].Collider.MaxBound.Y >= MinBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Bottom");
                 }
                 else if ((!TilesDiagonal[2].isWalkable(this) || TilesDiagonal[2].isSomethingOnTop) && TilesDiagonal[2].Collider.MaxBound.X > MinBound.X && TilesDiagonal[2].Collider.MaxBound.Y >= MinBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Bottom");
                 }
                 else if ((!TilesDiagonal[3].isWalkable(this) || TilesDiagonal[3].isSomethingOnTop) && TilesDiagonal[3].Collider.MinBound.X < MaxBound.X && TilesDiagonal[3].Collider.MaxBound.Y >= MinBound.Y)
                 {
                     deltaPosition.Y = 0;
-                    Debug.NewLine("Stop Bottom");
                 }
             }
         }
