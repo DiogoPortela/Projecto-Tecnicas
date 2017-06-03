@@ -45,7 +45,6 @@ namespace Projecto
             FillTileMap();
             FindPlayerSpawn();
             FindMapWalkableTiles();
-
         }
 
         private void RandomFillMap()
@@ -169,7 +168,7 @@ namespace Projecto
         /// <param name="gridX"></param>
         /// <param name="gridY"></param>
         /// <returns>The count of walls</returns>
-        static private int GetSurroundingWallCount(int gridX, int gridY)
+        static public int GetSurroundingWallCount(int gridX, int gridY)
         {
             int wallCount = 0;
             for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -528,7 +527,8 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0)
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0 &&
+                                TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;
@@ -542,7 +542,8 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0)
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0 &&
+                                TilesMap[c.tileX,c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;
