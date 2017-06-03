@@ -2,8 +2,6 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-//using SettlersEngine;
-using System;
 
 namespace Projecto
 {
@@ -75,9 +73,9 @@ namespace Projecto
             BulletList = new List<Bullet>();
 
             #region LoadWeapons
-            Weapon aux = new Weapon("Staff", true, 10, 0, 50, 1.5f, 1, 1, 1, 1);
+            Weapon aux = new Weapon("Staff", true, 25, 0, 25, 1.5f, 1, 1, 1, 1);
             WeaponList.Add(aux.Name, aux);
-            aux = new Weapon("Sword", false, 0, 10, 3, 1, 1, 1, 1, 1);
+            aux = new Weapon("Sword", false, 0, 25, 3, 1, 1, 1, 1, 1);
             WeaponList.Add(aux.Name, aux);
             #endregion
 
@@ -117,19 +115,15 @@ namespace Projecto
             }
             if (!isPaused)
             {
-                PlayerOne.PlayerMovement(gameTime);
-                PlayerOne.DamageManage();
-
+                PlayerOne.Update(gameTime);
                 cameraLeft.LookAt(PlayerOne);
 
-                PlayerTwo.PlayerMovement(gameTime);
-                PlayerTwo.DamageManage();
-
+                PlayerTwo.Update(gameTime);
                 cameraRight.LookAt(PlayerTwo);
 
                 foreach (Enemy e in EnemyList)
                 {
-                    e.EnemyMovement(gameTime, ref PlayerOne);
+                    e.Update(gameTime);
                 }
 
                 for(int i = 0; i < BulletList.Count; i++)

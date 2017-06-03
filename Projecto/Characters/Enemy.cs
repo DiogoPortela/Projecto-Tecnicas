@@ -40,7 +40,11 @@ namespace Projecto
             this.MagicDmgRes = 1;
             #endregion
         }
-        public void EnemyMovement(GameTime gameTime, ref PlayerManager player)
+        public void Update(GameTime gameTime)
+        {
+            EnemyMovement(gameTime);
+        }
+        public void EnemyMovement(GameTime gameTime)
         {
             deltaPosition = Vector2.Zero;
 

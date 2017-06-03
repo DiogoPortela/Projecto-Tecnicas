@@ -51,6 +51,11 @@ namespace Projecto
         }
 
         //------------->FUNCTIONS && METHODS<-------------//
+        public void Update(GameTime gameTime)
+        {
+            PlayerMovement(gameTime);
+            DamageManage();
+        }
         /// <summary>
         /// Deals with all the movement and animations.
         /// </summary>

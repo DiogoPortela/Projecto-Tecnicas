@@ -12,22 +12,62 @@ namespace Projecto
     {
         private int range;
         private Vector2 start;
-        public Bullet(Vector2 position, Vector2 direction, int range) : base("DebugPixel", position - Vector2.One, new Vector2(2,2), 0)
+        private GameObject parent;
+        //------------->CONSTRUCTORS<-------------//
+
+        public Bullet(Vector2 position, Vector2 direction, int range, GameObject parent) : base("DebugPixel", position + new Vector2(-1, 1), new Vector2(2, 2), 0)
         {
-            this.start = position - Vector2.One;
+            this.start = position + new Vector2(-1, 1);
             this.range = range;
+            this.parent = parent;
             direction.Normalize();
-            this.objectDiretion = direction * 0.5f;
+            this.objectDiretion = direction * 0.9f;
         }
+
+        //------------->FUNCTIONS && METHODS<-------------//
 
         public void Update()
         {
             this.Move(this.objectDiretion);
-            float auxVector = Math.Abs(Position.X - start.X) + Math.Abs(Position.Y - start.Y);
-            if(auxVector > range)
+            float auxVector = Math.Abs((Position - start).Length());
+            if (auxVector > range)
             {
                 GameState.BulletList.Remove(this);
             }
+            if (parent is PlayerManager)
+            {
+                List<Enemy> auxList = new List<Enemy>();
+
+                foreach(Enemy e in GameState.EnemyList)
+                {
+                    if (this.Rectangle.Intersects(e.Rectangle))
+                    {
+                        auxList.Add(e);
+                        GameState.BulletList.Remove(this);
+                    }
+                }
+                for (int i = 0; i < auxList.Count; i++)
+                {
+                    (parent as DamageManager).EnemyTakeDamage(auxList[i]);
+                    if (auxList[i].HP <= 0)
+                        GameState.EnemyList.Remove(auxList[i]);
+                }
+
+            }
+            else if (parent is Enemy)
+            {
+                if (this.Rectangle.Contains(GameState.PlayerOne.Rectangle))
+                {
+                    (parent as Enemy).PlayerTakeDamage(GameState.PlayerOne);
+                    GameState.BulletList.Remove(this);
+                }
+                if (this.Rectangle.Contains(GameState.PlayerTwo.Rectangle))
+                {
+                    (parent as Enemy).PlayerTakeDamage(GameState.PlayerTwo);
+                    GameState.BulletList.Remove(this);
+                }
+            }
+
         }
         public override void DrawObject(Camera camera)
         {
@@ -151,7 +191,7 @@ namespace Projecto
         {
             if (mainHandWeapon.isRanged)
             {
-                Bullet bullet = new Bullet(this.Center, this.objectDiretion, mainHandWeapon.MainAtackRange);
+                Bullet bullet = new Bullet(this.Center, this.objectDiretion, mainHandWeapon.MainAtackRange, this);
                 GameState.BulletList.Add(bullet);
             }
             else
