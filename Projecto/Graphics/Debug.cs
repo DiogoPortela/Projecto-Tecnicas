@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using System.Diagnostics;
+using System.IO;
 
 namespace Projecto
 {
@@ -20,6 +19,8 @@ namespace Projecto
         static private string textPlayer;
         static public Texture2D debugTexture;
         static private int counter;
+        static private Stopwatch watch;
+        static private int fps;
 
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -28,13 +29,14 @@ namespace Projecto
         /// </summary>
         /// <param name="font">Font for the text.</param>
         /// <param name="maxLines">Number Max of lines.</param>
-        public static void Init(SpriteFont font, int maxLines)
+        public static void Start(SpriteFont font, int maxLines)
         {
             debugTexture = Game1.content.Load<Texture2D>("DebugPixel");
             MAXLINES = maxLines;
             textStr = "";
             text = new List<string>();
             LoadFont(font);
+            watch = new Stopwatch();
         }
         /// <summary>
         /// Enable rendering.
@@ -50,6 +52,13 @@ namespace Projecto
         {
             isActive = false;
         }
+        /// <summary>
+        /// Toggle rendering.
+        /// </summary>
+        public static void Toggle()
+        {
+            isActive = !isActive;
+        }
 
         /// <summary>
         /// Loads the Arial font if none is existant.
@@ -60,6 +69,20 @@ namespace Projecto
             {
                 font = Game1.content.Load<SpriteFont>("Arial");
             }
+        }
+
+        public static void StartTimer()
+        {
+            watch.Reset();
+            watch.Start();
+        }
+        public static void StopTimer(string functionName)
+        {
+            StreamWriter sw = new StreamWriter("debugger.txt", true);
+            watch.Stop();
+            NewLine(functionName + " time: " + watch.ElapsedMilliseconds);
+            sw.WriteLine(functionName + " - " + watch.ElapsedMilliseconds);
+            sw.Close();
         }
 
         /// <summary>
@@ -100,7 +123,6 @@ namespace Projecto
         /// <summary>
         /// Draws the MAXLINES amount of lines on the camera.
         /// </summary>
-        /// <param name="camera">Camera to draw to.</param>
         public static void DrawText()
         {
             if(isActive)
@@ -111,10 +133,9 @@ namespace Projecto
         /// <summary>
         /// Draws some important info on screen.
         /// </summary>
-        /// <param name="camera">Camera to draw to.</param>
         /// <param name="drawPosition">Position to draw to.</param>
         /// <param name="player">Player information.</param>
-        public static void DrawPlayerInfo(Camera camera,Vector2 drawPosition, PlayerManager player, Enemy enemy)
+        public static void DrawPlayerInfo(Vector2 drawPosition, PlayerManager player)
         {
             if(isActive)
             {
@@ -124,6 +145,18 @@ namespace Projecto
                                 "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" +
                                 "Eenemy HP:" + enemy.HP;
                 Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+            }
+        }
+        /// <summary>
+        /// Draws a given text in a given position.
+        /// </summary>
+        /// <param name="text">Text. </param>
+        /// <param name="pos">Position. </param>
+        public static void DrawTextAt(string text, Vector2 pos)
+        {
+            if(isActive)
+            {
+                Game1.spriteBatch.DrawString(font, text, pos, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>

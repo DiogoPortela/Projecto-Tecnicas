@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Projecto
@@ -25,7 +20,10 @@ namespace Projecto
         public Animation(string name, string texture, Vector2 size, int numberFrames, float frameRate)
         {
             this.name = name;
-            spriteTexture = Game1.content.Load<Texture2D>(texture);
+            if (Game1.textureList.ContainsKey(name))
+                spriteTexture = Game1.textureList[name];
+            else
+                Debug.NewLine("FILE MISSING: " + name);
             this.size = size;
             maxFrames = numberFrames;
             this.frameRate = frameRate;

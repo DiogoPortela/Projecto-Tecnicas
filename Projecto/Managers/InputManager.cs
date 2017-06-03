@@ -47,11 +47,22 @@ namespace Projecto
             return ButtonState.Released;
         }
 
+        public ButtonState UpOne { get { return GetState(Keys.W); } }
+        public ButtonState DownOne { get { return GetState(Keys.S); } }
+        public ButtonState LeftOne { get { return GetState(Keys.A); } }
+        public ButtonState RightOne { get { return GetState(Keys.D); } }
+        public ButtonState UpTwo { get { return GetState(Keys.Up); } }
+        public ButtonState DownTwo { get { return GetState(Keys.Down); } }
+        public ButtonState LeftTwo { get { return GetState(Keys.Left); } }
+        public ButtonState RightTwo { get { return GetState(Keys.Right); } }
         public ButtonState Space { get { return GetState(Keys.Space); } }
         public ButtonState Q { get { return GetState(Keys.Q); } }
         public ButtonState L { get { return GetState(Keys.L); } }
         public ButtonState K { get { return GetState(Keys.K); } }
+
+        public ButtonState F2 { get { return GetState(Keys.F2); } }
         public ButtonState Esc { get { return GetState(Keys.Escape); } }
+        public ButtonState Enter { get { return GetState(Keys.Enter); } }
     }
     static class InputManager
     {

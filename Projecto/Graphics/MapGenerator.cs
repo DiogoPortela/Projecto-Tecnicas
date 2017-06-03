@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using SettlersEngine;
 
 namespace Projecto
 {
@@ -23,7 +24,7 @@ namespace Projecto
         static public Tile[,] TilesMap;
         static public List<Room> MapRooms;
         static public Room Spawn;
-        static int[,] infoMap;
+        static public int[,] infoMap;
         static private int WalkableTiles;
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -40,9 +41,11 @@ namespace Projecto
                 SmoothMap();
             }
             ProcessMap();
+            FillCorners();
             FillTileMap();
             FindPlayerSpawn();
             FindMapWalkableTiles();
+
         }
 
         private void RandomFillMap()
@@ -142,6 +145,23 @@ namespace Projecto
                     }
                 }
             }
+        }
+        /// <summary>
+        /// Fills the corners of the map.
+        /// </summary>
+        private void FillCorners()
+        {
+            for(int y = 0; y < Height; y++)
+            {
+                infoMap[0, y] = 1;
+                infoMap[Width - 1, y] = 1;
+            }
+            for (int x = 0; x < Width; x++)
+            {
+                infoMap[x, 0] = 1;
+                infoMap[x, Height - 1] = 1;
+            }
+
         }
         /// <summary>
         /// Given two Coordinates of the map, gets the count of walls around it.
@@ -276,7 +296,7 @@ namespace Projecto
             List<Coordinate> line = GetLine(tileA, tileB);
             foreach (Coordinate c in line)
             {
-                DrawCircle(c, 2);
+                DrawCircle(c, 4);
             }
         }
         /// <summary>
@@ -367,7 +387,7 @@ namespace Projecto
         /// <returns>A Vector2 with the given Coordinates</returns>
         static private Vector2 CoordinateToWorldPoint(Coordinate tile)
         {
-            return new Vector2(-Width / 2 + 0.5f + tile.tileX, -Height / 2 + 0.5f + tile.tileY);
+            return new Vector2(tile.tileX * TileSize, tile.tileY * TileSize);
         }
         /// <summary>
         /// Given the tileType, this function gets all the regions in the map. 
@@ -419,7 +439,7 @@ namespace Projecto
                 Coordinate tile = queue.Dequeue();
                 tiles.Add(tile);
 
-                //identiifca tile relacionado com startx e starty
+                //identifica tile relacionado com startx e starty
                 for (int x = tile.tileX - 1; x <= tile.tileX + 1; x++)
                 {
                     for (int y = tile.tileY - 1; y <= tile.tileY + 1; y++)
@@ -481,30 +501,55 @@ namespace Projecto
             }
             Spawn.isSpawn = true;
         }
-
+        static private Coordinate RandomCoord(Room r)
+        {
+            return r.tiles[Game1.random.Next(r.tiles.Count())];
+        }
         //---------------------------Player & Enemy Position--------------------------------//
         /// <summary>
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
-        static public Vector2 FindEnemyPosition()
+        static public List<Vector2> FindEnemySpawns()
         {
-            Vector2 positionToSpawnTo = Vector2.Zero;
-            Room RoomToSpawnTo = new Room();
-            int rand = Game1.random.Next(WalkableTiles);
-            foreach(Room r in MapRooms)
+            List<Vector2> enemySpawns = new List<Vector2>();
+            float aux, maxMobs = 100f;
+            Coordinate c;
+            foreach (Room r in MapRooms)
             {
-                if(rand <= r.roomSize)
+                if (!r.isSpawn)
                 {
-                    RoomToSpawnTo = r;
-                }
-                else
-                {
-                    break;
+                    aux = (float)r.roomSize / (float)WalkableTiles;
+
+                    if (r.isMainRoom)
+                    {
+                        for (int i = 0; i < maxMobs;)
+                        {
+                            c = RandomCoord(r);
+
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            {
+                                enemySpawns.Add(CoordinateToWorldPoint(c));
+                                i++;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < aux * maxMobs;)
+                        {
+                            c = RandomCoord(r);
+
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            {
+                                enemySpawns.Add(CoordinateToWorldPoint(c));
+                                i++;
+                            }
+                        }
+                    }
                 }
             }
-            rand = Game1.random.Next(RoomToSpawnTo.roomSize);
-            return positionToSpawnTo = CoordinateToWorldPoint(RoomToSpawnTo.tiles[rand]);
+            return enemySpawns;
         }
         /// <summary>
         /// This function calculates a position in the spawn for the player.
@@ -529,3 +574,4 @@ namespace Projecto
         }
     }
 }
+

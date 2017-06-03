@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Xna.Framework;
+﻿using Microsoft.Xna.Framework;
 
 namespace Projecto
 {
@@ -18,19 +13,34 @@ namespace Projecto
         public Vector2 Position { get { return position; } }
         public float Widht { get { return width; } }
         public float Height { get { return height; } }
-    
+
         //------------->CONSTRUCTORS<-------------//
 
+        /// <summary>
+        /// Set the camera window size;
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="width"></param>
+        public Camera(Vector2 position, float width)
+        {
+            this.position = position;
+            this.width = width;
+            height = width * Game1.graphics.PreferredBackBufferHeight / Game1.graphics.PreferredBackBufferWidth;
+            ratio = -1;
+            centerCamera = new Vector2(width / 2, height / 2);
+            cameraWindowToPixelRatio();
+        }
         /// <summary>
         /// Set the camera window size.
         /// </summary>
         /// <param name="position"> Camera position. </param>
         /// <param name="width"> Width of the camera. </param>
-        public Camera(Vector2 position, float width, float heighRatio)
+        /// <param name="heigthRatio"> Ratio of the height. </param>
+        public Camera(Vector2 position, float width, float heightRatio)
         {
             this.position = position;
             this.width = width;
-            height = width * heighRatio;
+            height = width * heightRatio;
             ratio = -1;
             centerCamera = new Vector2(width / 2, height / 2);
             cameraWindowToPixelRatio();
