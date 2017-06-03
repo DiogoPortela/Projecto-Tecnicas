@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 
 namespace Projecto
@@ -143,8 +140,6 @@ namespace Projecto
                 {
                     path.Push(node.Location);
                     node = node.ParentNode;
-                    if (node.H > 50)
-                        return new Stack<Vector2>();
                 }
 
                 // Reverse the list so it's in the correct order when returned
@@ -177,110 +172,113 @@ namespace Projecto
             }
         }
 
+        ///// <summary>
+        ///// Attempts to find a path to the destination node using <paramref name="currentNode"/> as the starting location
+        ///// </summary>
+        ///// <param name="currentNode">The node from which to find a path</param>
+        ///// <returns>True if a path to the destination has been found, otherwise false</returns>
+        //private bool Search(Node currentNode)
+        //{
+        //    // Set the current node to Closed since it cannot be traversed more than once
+        //    currentNode.State = NodeState.Closed;
+        //    List<Node> nextNodes = GetAdjacentWalkableNodes(currentNode);
+
+        //    // Sort by F-value so that the shortest possible routes are considered first
+        //    nextNodes.Sort((node1, node2) => node1.F.CompareTo(node2.F));
+        //    foreach (Node nextNode in nextNodes)
+        //    {
+        //        // Check whether the end node has been reached
+        //        if (nextNode.Location == this.endNode.Location)
+        //        {
+        //            return true;
+        //        }
+        //        else
+        //        {
+        //            // If not, check the next set of nodes
+        //            if (Search(nextNode)) // Note: Recurses back into Search(Node)
+        //                return true;
+        //        }
+        //    }
+
+        //    // The method returns false if this path leads to be a dead end
+        //    return false;
+        //}
+
+        ///// <summary>
+        ///// Returns any nodes that are adjacent to <paramref name="fromNode"/> and may be considered to form the next step in the path
+        ///// </summary>
+        ///// <param name="fromNode">The node from which to return the next possible nodes in the path</param>
+        ///// <returns>A list of next possible nodes in the path</returns>
+        //private List<Node> GetAdjacentWalkableNodes(Node fromNode)
+        //{
+        //    List<Node> walkableNodes = new List<Node>();
+        //    IEnumerable<Vector2> nextLocations = GetAdjacentLocations(fromNode.Location);
+
+        //    foreach (Vector2 location in nextLocations)
+        //    {
+        //        int x = (int)location.X;
+        //        int y = (int)location.Y;
+
+        //        // Stay within the grid's boundaries
+        //        if (x < 0 || x >= this.width || y < 0 || y >= this.height)
+        //            continue;
+
+        //        Node node = this.nodes[x, y];
+        //        // Ignore non-walkable nodes
+        //        if (!node.IsWalkable)
+        //            continue;
+
+        //        // Ignore already-closed nodes
+        //        if (node.State == NodeState.Closed)
+        //            continue;
+
+        //        // Already-open nodes are only added to the list if their G-value is lower going via this route.
+        //        if (node.State == NodeState.Open)
+        //        {
+        //            float traversalCost = Node.GetTraversalCost(node.Location, node.ParentNode.Location);
+        //            float gTemp = fromNode.G + traversalCost;
+        //            if (gTemp < node.G)
+        //            {
+        //                node.ParentNode = fromNode;
+        //                walkableNodes.Add(node);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // If it's untested, set the parent and flag it as 'Open' for consideration
+        //            node.ParentNode = fromNode;
+        //            node.State = NodeState.Open;
+        //            walkableNodes.Add(node);
+        //        }
+        //    }
+
+        //    return walkableNodes;
+        //}
+
+        ///// <summary>
+        ///// Returns the eight locations immediately adjacent (orthogonally and diagonally) to <paramref name="fromLocation"/>
+        ///// </summary>
+        ///// <param name="fromLocation">The location from which to return all adjacent vectors</param>
+        ///// <returns>The locations as an IEnumerable of vectors</returns>
+        //private static IEnumerable<Vector2> GetAdjacentLocations(Vector2 fromLocation)
+        //{
+        //    return new Vector2[]
+        //    {
+        //        new Vector2(fromLocation.X-1, fromLocation.Y-1),
+        //        new Vector2(fromLocation.X-1, fromLocation.Y  ),
+        //        new Vector2(fromLocation.X-1, fromLocation.Y+1),
+        //        new Vector2(fromLocation.X,   fromLocation.Y+1),
+        //        new Vector2(fromLocation.X+1, fromLocation.Y+1),
+        //        new Vector2(fromLocation.X+1, fromLocation.Y  ),
+        //        new Vector2(fromLocation.X+1, fromLocation.Y-1),
+        //        new Vector2(fromLocation.X,   fromLocation.Y-1)
+        //    };
+        //}
+
         /// <summary>
-        /// Attempts to find a path to the destination node using <paramref name="currentNode"/> as the starting location
+        /// Attempts to find a path to the destination.
         /// </summary>
-        /// <param name="currentNode">The node from which to find a path</param>
         /// <returns>True if a path to the destination has been found, otherwise false</returns>
-        private bool Search(Node currentNode)
-        {
-            // Set the current node to Closed since it cannot be traversed more than once
-            currentNode.State = NodeState.Closed;
-            List<Node> nextNodes = GetAdjacentWalkableNodes(currentNode);
-
-            // Sort by F-value so that the shortest possible routes are considered first
-            nextNodes.Sort((node1, node2) => node1.F.CompareTo(node2.F));
-            foreach (Node nextNode in nextNodes)
-            {
-                // Check whether the end node has been reached
-                if (nextNode.Location == this.endNode.Location)
-                {
-                    return true;
-                }
-                else
-                {
-                    // If not, check the next set of nodes
-                    if (Search(nextNode)) // Note: Recurses back into Search(Node)
-                        return true;
-                }
-            }
-
-            // The method returns false if this path leads to be a dead end
-            return false;
-        }
-
-        /// <summary>
-        /// Returns any nodes that are adjacent to <paramref name="fromNode"/> and may be considered to form the next step in the path
-        /// </summary>
-        /// <param name="fromNode">The node from which to return the next possible nodes in the path</param>
-        /// <returns>A list of next possible nodes in the path</returns>
-        private List<Node> GetAdjacentWalkableNodes(Node fromNode)
-        {
-            List<Node> walkableNodes = new List<Node>();
-            IEnumerable<Vector2> nextLocations = GetAdjacentLocations(fromNode.Location);
-
-            foreach (Vector2 location in nextLocations)
-            {
-                int x = (int)location.X;
-                int y = (int)location.Y;
-
-                // Stay within the grid's boundaries
-                if (x < 0 || x >= this.width || y < 0 || y >= this.height)
-                    continue;
-
-                Node node = this.nodes[x, y];
-                // Ignore non-walkable nodes
-                if (!node.IsWalkable)
-                    continue;
-
-                // Ignore already-closed nodes
-                if (node.State == NodeState.Closed)
-                    continue;
-
-                // Already-open nodes are only added to the list if their G-value is lower going via this route.
-                if (node.State == NodeState.Open)
-                {
-                    float traversalCost = Node.GetTraversalCost(node.Location, node.ParentNode.Location);
-                    float gTemp = fromNode.G + traversalCost;
-                    if (gTemp < node.G)
-                    {
-                        node.ParentNode = fromNode;
-                        walkableNodes.Add(node);
-                    }
-                }
-                else
-                {
-                    // If it's untested, set the parent and flag it as 'Open' for consideration
-                    node.ParentNode = fromNode;
-                    node.State = NodeState.Open;
-                    walkableNodes.Add(node);
-                }
-            }
-
-            return walkableNodes;
-        }
-
-        /// <summary>
-        /// Returns the eight locations immediately adjacent (orthogonally and diagonally) to <paramref name="fromLocation"/>
-        /// </summary>
-        /// <param name="fromLocation">The location from which to return all adjacent vectors</param>
-        /// <returns>The locations as an IEnumerable of vectors</returns>
-        private static IEnumerable<Vector2> GetAdjacentLocations(Vector2 fromLocation)
-        {
-            return new Vector2[]
-            {
-                new Vector2(fromLocation.X-1, fromLocation.Y-1),
-                new Vector2(fromLocation.X-1, fromLocation.Y  ),
-                new Vector2(fromLocation.X-1, fromLocation.Y+1),
-                new Vector2(fromLocation.X,   fromLocation.Y+1),
-                new Vector2(fromLocation.X+1, fromLocation.Y+1),
-                new Vector2(fromLocation.X+1, fromLocation.Y  ),
-                new Vector2(fromLocation.X+1, fromLocation.Y-1),
-                new Vector2(fromLocation.X,   fromLocation.Y-1)
-            };
-        }
-
-
         private bool Search()
         {
             List<Node> openSet = new List<Node>();
@@ -329,6 +327,11 @@ namespace Projecto
             }
             return false;
         }
+        /// <summary>
+        /// Returns the surrounding nodes.
+        /// </summary>
+        /// <param name="node">Node to search surronds.</param>
+        /// <returns></returns>
         public List<Node> GetNeighbours(Node node)
         {
             List<Node> neighbours = new List<Node>();

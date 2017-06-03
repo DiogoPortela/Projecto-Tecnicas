@@ -41,6 +41,7 @@ namespace Projecto
                 SmoothMap();
             }
             ProcessMap();
+            FillCorners();
             FillTileMap();
             FindPlayerSpawn();
             FindMapWalkableTiles();
@@ -144,6 +145,20 @@ namespace Projecto
                     }
                 }
             }
+        }
+        private void FillCorners()
+        {
+            for(int y = 0; y < Height; y++)
+            {
+                infoMap[0, y] = 1;
+                infoMap[Width - 1, y] = 1;
+            }
+            for (int x = 0; x < Width; x++)
+            {
+                infoMap[x, 0] = 1;
+                infoMap[x, Height - 1] = 1;
+            }
+
         }
         /// <summary>
         /// Given two Coordinates of the map, gets the count of walls around it.

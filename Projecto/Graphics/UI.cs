@@ -101,6 +101,7 @@ namespace Projecto
                         }
                     case 1:
                         {
+                            SoundManager.StopAllSounds();
                             Game1.selectedScreen = ScreenSelect.MainMenu;
                             break;
                         }

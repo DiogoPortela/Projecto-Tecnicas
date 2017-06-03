@@ -2,7 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using SettlersEngine;
+//using SettlersEngine;
 using System;
 
 namespace Projecto
@@ -15,7 +15,7 @@ namespace Projecto
         static public List<ParticleSystem> ParticlesList;
         static public bool isPaused;
         static public MapGenerator map;
-        static public SpatialAStar<Tile, Object> aStar;
+        //static public SpatialAStar<Tile, Object> aStar;
 
         static private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft;
@@ -24,7 +24,6 @@ namespace Projecto
         static private Vector2 debugPlayerTwoPosition;
 
         #region ZONA DE TESTE
-        static Enemy e, e2, e3;
         static ParticleSystem teste2;
         #endregion
 
@@ -42,7 +41,7 @@ namespace Projecto
             MapGenerator.Width = (int)Cons.MAXWIDTH; //100;
             MapGenerator.Height = (int)Cons.MAXHEIGHT;
             map.GenerateMap(5);
-            aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
+            //aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
             #endregion
 
             #region Camera. Split screen
@@ -72,17 +71,19 @@ namespace Projecto
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
             isPaused = false;
             SoundManager.StopAllSounds();
+            //SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone            
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
             teste2.Start();
             ParticlesList.Add(teste2);
-            e = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[0], Vector2.One * 5, 10, ref aStar);
-            e2 = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[1], Vector2.One * 5, 10, ref aStar);
-            e3 = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[2], Vector2.One * 5, 10, ref aStar);
-            EnemyList.Add(e);
-            EnemyList.Add(e2);
-            EnemyList.Add(e3);
+
+
+            for(int i = 0; i < 30; i++)
+            {
+                Enemy enemyAux = new Enemy("New Piskel", MapGenerator.FindEnemySpawns()[0], Vector2.One * 5, 10);
+                EnemyList.Add(enemyAux);
+            }
             #endregion
         }
         /// <summary>

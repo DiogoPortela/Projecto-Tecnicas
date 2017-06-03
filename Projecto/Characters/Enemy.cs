@@ -1,5 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
-using SettlersEngine;
+//using SettlersEngine;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +10,7 @@ namespace Projecto
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
         public Collider enemyCollider;
-        private SpatialAStar<Tile, Object> aStar;
+        //private SpatialAStar<Tile, Object> aStar;
         private const float movingSpeed = 0.2f;
 
         private PathFinder pathFinder;
@@ -23,10 +23,10 @@ namespace Projecto
 
 
         //------------->CONSTRUCTORS<-------------//
-        public Enemy(string texture, Vector2 position, Vector2 size, int range, ref SpatialAStar<Tile, Object> aStar) : base("New Piskel", position, size, range)
+        public Enemy(string texture, Vector2 position, Vector2 size, int range) : base("New Piskel", position, size, range)
         {
             playerLastPosition = -Vector2.One;
-            this.aStar = aStar;
+            //this.aStar = aStar;
             Coordinates = (position / size);
             Coordinates.X = (int)Coordinates.X;
             Coordinates.Y = (int)Coordinates.Y;
@@ -48,7 +48,7 @@ namespace Projecto
             playerOneDistance = Math.Abs((this.Coordinates - GameState.PlayerOne.Coordinates).Length());
             playerTwoDistance = Math.Abs((this.Coordinates - GameState.PlayerTwo.Coordinates).Length());
 
-            if (playerOneDistance <= playerTwoDistance && GameState.PlayerOne.Coordinates != playerLastPosition)
+            if (playerOneDistance <= playerTwoDistance && playerOneDistance < 10 && GameState.PlayerOne.Coordinates != playerLastPosition)
             {
                 playerLastPosition = GameState.PlayerOne.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerOne.Coordinates, ref MapGenerator.infoMap);
@@ -56,7 +56,7 @@ namespace Projecto
                 if (listVectors.Count > 0)
                     nextPosition = listVectors.Pop();
             }
-            else if (playerOneDistance > playerTwoDistance && GameState.PlayerTwo.Coordinates != playerLastPosition)
+            else if (playerOneDistance > playerTwoDistance && playerTwoDistance < 10 && GameState.PlayerTwo.Coordinates != playerLastPosition)
             {
                 playerLastPosition = GameState.PlayerTwo.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerTwo.Coordinates, ref MapGenerator.infoMap);
@@ -87,11 +87,6 @@ namespace Projecto
 
             //Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
             deltaPosition = new Vector2(nextPosition.X - this.Coordinates.X, nextPosition.Y - this.Coordinates.Y) * movingSpeed;
-
-            /*if (deltaPosition != Vector2.Zero)
-                this.enemyCollider.UpdateDelta(ref deltaPosition);
-            {*/
-
 
             if (deltaPosition != Vector2.Zero)
             {
