@@ -348,6 +348,14 @@ namespace Projecto
 
                     if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
                     {
+                        if (x == -1 && y == -1 && !nodes[checkX - 1, checkY].IsWalkable && !nodes[checkX, checkY - 1].IsWalkable)
+                            continue;
+                        else if (x == 1 && y == -1 && !nodes[checkX + 1, checkY].IsWalkable && !nodes[checkX, checkY - 1].IsWalkable)
+                            continue;
+                        else if (x == -1 && y == 1 && !nodes[checkX - 1, checkY].IsWalkable && !nodes[checkX, checkY + 1].IsWalkable)
+                            continue;
+                        else if (x == 1 && y == 1 && !nodes[checkX + 1, checkY].IsWalkable && !nodes[checkX, checkY + 1].IsWalkable)
+                            continue;
                         neighbours.Add(nodes[checkX, checkY]);
                     }
                 }

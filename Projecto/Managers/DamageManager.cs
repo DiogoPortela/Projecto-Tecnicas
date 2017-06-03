@@ -31,14 +31,14 @@ namespace Projecto
             this.Move(this.objectDiretion);
             float auxVector = Math.Abs((Position - start).Length());
             if (auxVector > range)
-            {
                 GameState.BulletList.Remove(this);
-            }
-            if (parent is PlayerManager)
+            else if (MapGenerator.infoMap[(int)(this.Position.X / 5 + 0.5f), (int)(this.Position.Y / 5 + 0.5f)] == 1)
+                GameState.BulletList.Remove(this);
+            else if (parent is PlayerManager)
             {
                 List<Enemy> auxList = new List<Enemy>();
 
-                foreach(Enemy e in GameState.EnemyList)
+                foreach (Enemy e in GameState.EnemyList)
                 {
                     if (this.Rectangle.Intersects(e.Rectangle))
                     {
