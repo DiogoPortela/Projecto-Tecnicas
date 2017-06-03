@@ -30,6 +30,10 @@
     {
         playerOne = 1, playerTwo
     }
+    internal enum WeaponHand
+    {
+        MainHand, OffHand
+    }
     internal enum CurrentInput
     {
         NoInput, Up, Down, Right, Left, Attack, Defend

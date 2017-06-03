@@ -63,7 +63,7 @@
     <Compile Include="AI\PathFinding.cs" />
     <Compile Include="Characters\Boss.cs" />
     <Compile Include="Characters\PlayerManager.cs" />
-    <Compile Include="Characters\Weapon.cs" />
+    <Compile Include="Items\Weapon.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Debug.cs" />
     <Compile Include="Graphics\MapGenerator.cs" />

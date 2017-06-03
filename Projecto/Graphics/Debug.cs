@@ -11,7 +11,7 @@ namespace Projecto
     {
         static private List<string> text;                       //List with all the debug logs.
         static private SpriteFont font;                         //Font to use.
-        static private int MAXLINES;                       //Maximum Lines to draw on screen at once.
+        static private int MAXLINES;                            //Maximum Lines to draw on screen at once.
         static public bool isActive = true;                     //Should it draw o on screen?
 
         //AUXILIARY
@@ -20,8 +20,8 @@ namespace Projecto
         static public Texture2D debugTexture;
         static private int counter;
         static private Stopwatch watch;
-        static private int fps;
 
+        
         //------------->FUNCTIONS && METHODS<-------------//
 
         /// <summary>
@@ -139,11 +139,11 @@ namespace Projecto
         {
             if(isActive)
             {
-                textPlayer =   "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
+                textPlayer = "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
                                 "Coordinate X:" + player.Coordinates.X + " Coordinate Y:" + player.Coordinates.Y + "\n" +
                                 "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
-                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" +
-                                "Eenemy HP:" + enemy.HP;
+                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" /*+
+                                "Weapon: " + player.MHweapon.Name*/;
                 Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }

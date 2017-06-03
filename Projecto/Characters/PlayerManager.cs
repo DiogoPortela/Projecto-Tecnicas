@@ -18,7 +18,7 @@ namespace Projecto
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, range)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -28,15 +28,13 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
-            this.MHweapon = GameState.AllWeapons[0]; // Staff
-            this.OHweapon = GameState.AllWeapons[1]; // Sword
 
             #region Stats initializer
             this.HP = 100;
-            this.PhysDmg = 18.0f;
-            this.MagicDmg = 8.0f;
-            this.PhysDmgRes = 5.0f;
-            this.MagicDmgRes = 5.0f;
+            //this.PhysDmg = 18.0f;
+            //this.MagicDmg = 8.0f;
+            //this.PhysDmgRes = 5.0f;
+            //this.MagicDmgRes = 5.0f;
             #endregion
 
             if (number == PlayerNumber.playerOne)
@@ -165,7 +163,9 @@ namespace Projecto
             }
             //this.currentAnimation.Play(gameTime);
         }
-
+        /// <summary>
+        /// Deals with all player/enemy damage.
+        /// </summary>
         public void DamageManage()
         {
             #region playerone
@@ -174,20 +174,7 @@ namespace Projecto
             {
                 if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
                 {
-                    List<Enemy> auxEnemy = new List<Enemy>();
-                    //animação de attack
-
-                    foreach (Enemy enemy in GameState.EnemyList)
-                    {
-                        if (this.IsInRange(enemy) == true)
-                        {
-                            auxEnemy.Add(EnemyTakeDamage(enemy));
-                        }
-                    }
-                    foreach (Enemy enemy in auxEnemy)
-                    {
-                        GameState.EnemyList.Remove(enemy);
-                    }
+                     Attack();
                 }
                 if (InputManager.PressedLastFrame.Q == ButtonState.Pressed)
                 {
@@ -201,19 +188,7 @@ namespace Projecto
             {
                 if (InputManager.PressedLastFrame.L == ButtonState.Pressed)
                 {
-                    List<Enemy> auxEnemy = new List<Enemy>();
-                    //animação de attack
-                    foreach (Enemy enemy in GameState.EnemyList)
-                    {
-                        if (this.IsInRange(enemy) == true)
-                        {
-                            auxEnemy.Add(EnemyTakeDamage(enemy));
-                        }
-                    }
-                    foreach (Enemy enemy in auxEnemy)
-                    {
-                        GameState.EnemyList.Remove(enemy);
-                    }
+                    Attack();
                 }
                 if (InputManager.PressedLastFrame.K == ButtonState.Pressed)
                 {
@@ -224,7 +199,6 @@ namespace Projecto
             #endregion
         }
 
- 
         /// <summary>
         /// Draws on screen an object, using a camera.
         /// </summary>
@@ -240,18 +214,3 @@ namespace Projecto
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
