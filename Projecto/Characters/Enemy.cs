@@ -13,10 +13,19 @@ namespace Projecto
         private SpatialAStar<Tile, Object> aStar;
         private const float movingSpeed = 0.2f;
 
+        private PathFinder pathFinder;
+        private Stack<Vector2> listVectors;
+        private Vector2 playerLastPosition;
+        private Vector2 nextPosition;
+        private float playerOneDistance;
+        private float playerTwoDistance;
+
+
 
         //------------->CONSTRUCTORS<-------------//
         public Enemy(string texture, Vector2 position, Vector2 size, int range, ref SpatialAStar<Tile, Object> aStar) : base("New Piskel", position, size, range)
         {
+            playerLastPosition = -Vector2.One;
             this.aStar = aStar;
             Coordinates = (position / size);
             Coordinates.X = (int)Coordinates.X;
@@ -35,26 +44,55 @@ namespace Projecto
         public void EnemyMovement(GameTime gameTime, ref PlayerManager player)
         {
             deltaPosition = Vector2.Zero;
-            Tile aux;
 
-            Vector2 enemyPos = new Vector2(this.Coordinates.X, this.Coordinates.Y);
-            Vector2 playerPos = new Vector2(player.Coordinates.X, player.Coordinates.Y);
+            playerOneDistance = Math.Abs((this.Coordinates - GameState.PlayerOne.Coordinates).Length());
+            playerTwoDistance = Math.Abs((this.Coordinates - GameState.PlayerTwo.Coordinates).Length());
 
-            LinkedList <Tile> path = aStar.Search(ref enemyPos, ref playerPos, null);
+            if (playerOneDistance <= playerTwoDistance && GameState.PlayerOne.Coordinates != playerLastPosition)
+            {
+                playerLastPosition = GameState.PlayerOne.Coordinates;
+                pathFinder = new PathFinder(this.Coordinates, GameState.PlayerOne.Coordinates, ref MapGenerator.infoMap);
+                listVectors = pathFinder.FindPath();
+                if (listVectors.Count > 0)
+                    nextPosition = listVectors.Pop();
+            }
+            else if (playerOneDistance > playerTwoDistance && GameState.PlayerTwo.Coordinates != playerLastPosition)
+            {
+                playerLastPosition = GameState.PlayerTwo.Coordinates;
+                pathFinder = new PathFinder(this.Coordinates, GameState.PlayerTwo.Coordinates, ref MapGenerator.infoMap);
+                listVectors = pathFinder.FindPath();
+                if (listVectors.Count > 0)
+                    nextPosition = listVectors.Pop();
+            }
 
-            if (path.First.Next != null)
-                aux = path.First.Next.Value;
-            else
-                return;
+
+            if (nextPosition == this.Coordinates && listVectors.Count > 0)
+            {
+                nextPosition = listVectors.Pop();
+            }
+
+            //Tile aux;
+
+            //Vector2 enemyPos = new Vector2(this.Coordinates.X, this.Coordinates.Y);
+            //Vector2 playerPos = new Vector2(player.Coordinates.X, player.Coordinates.Y);
+
+            //LinkedList<Tile> path = aStar.Search(ref enemyPos, ref playerPos, null);
+
+            //if (path.First.Next != null)
+            //    aux = path.First.Next.Value;
+            //else
+            //    return;
 
             //Debug.NewLine(aux.Coordinates.X.ToString() + ", " + aux.Coordinates.Y.ToString());
 
-            Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
-            deltaPosition += auxVector * movingSpeed;
+            //Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
+            deltaPosition = new Vector2(nextPosition.X - this.Coordinates.X, nextPosition.Y - this.Coordinates.Y) * movingSpeed;
 
             /*if (deltaPosition != Vector2.Zero)
                 this.enemyCollider.UpdateDelta(ref deltaPosition);
             {*/
+
+
             if (deltaPosition != Vector2.Zero)
             {
                 this.Move(deltaPosition);

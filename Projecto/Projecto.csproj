@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AI\PriorityQueue.cs" />
     <Compile Include="AI\SpatialAStar.cs" />
+    <Compile Include="AI\PathFinding.cs" />
     <Compile Include="Characters\Boss.cs" />
     <Compile Include="Characters\PlayerManager.cs" />
     <Compile Include="Graphics\Animation.cs" />
