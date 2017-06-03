@@ -514,6 +514,7 @@ namespace Projecto
         {
             List<Vector2> enemySpawns = new List<Vector2>();
             float aux, maxMobs = 100f;
+            int[,] mapFlags = new int[Width, Height];
             Coordinate c;
             foreach (Room r in MapRooms)
             {
@@ -527,9 +528,10 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                mapFlags[c.tileX, c.tileY] = 1;
                                 i++;
                             }
                         }
@@ -540,9 +542,10 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                mapFlags[c.tileX, c.tileY] = 1;
                                 i++;
                             }
                         }
