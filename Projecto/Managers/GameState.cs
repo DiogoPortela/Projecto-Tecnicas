@@ -2,6 +2,7 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace Projecto
 {
@@ -26,7 +27,7 @@ namespace Projecto
         static private Vector2 debugTextPosition;
 
         #region ZONA DE TESTE
-        static ParticleSystem teste2;
+        
         #endregion
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -98,10 +99,12 @@ namespace Projecto
             SoundManager.StopAllSounds();
             //SoundManager.StartSound("mainGameTheme", true);
 
-            #region TestZone            
-            teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
-            teste2.Start();
-            ParticlesList.Add(teste2);
+            #region TestZone
+            //ParticleSystem p = new ParticleSystem(ParticleType.Explosion, "DebugPixel", PlayerOne.Position, Vector2.One * 0.5f, 20, 0, 1, 1000, 2000, 1);
+            //ParticleSystem p = new ParticleSystem(ParticleType.Random, "DebugPixel", PlayerOne.Position, Vector2.One * 0.5f, 20, 0, 2, 0, 2000, 1);
+            //ParticleSystem p = new ParticleSystem(ParticleType.Smoke, "DebugPixel", PlayerOne.Position, Vector2.One * 0.5f, 20, 5, 5, 0, 2000, 1);
+            //p.Start();
+            //ParticlesList.Add(p);
             #endregion
         }
         /// <summary>
@@ -121,18 +124,16 @@ namespace Projecto
                 PlayerTwo.Update(gameTime);
                 cameraRight.LookAt(PlayerTwo);
 
-                foreach (Enemy e in EnemyList)
-                {
-                    e.Update(gameTime);
-                }
-
+                foreach (Enemy e in EnemyList)              
+                    e.Update(gameTime);               
                 for(int i = 0; i < BulletList.Count; i++)
                     BulletList[i].Update();
-
-
-                //Particle Update.
-                teste2.Update(gameTime, PlayerOne.Center);
-
+                for (int i = 0; i < ParticlesList.Count; i++)
+                {
+                    ParticlesList[i].Update(gameTime);
+                    if (!ParticlesList[i].isLoop && ParticlesList[i].TimeLeft.Milliseconds < 0)
+                        ParticlesList.Remove(ParticlesList[i]);
+                }
             }
             else
             {

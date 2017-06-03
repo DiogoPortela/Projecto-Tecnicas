@@ -44,6 +44,7 @@ namespace Projecto
                     {
                         auxList.Add(e);
                         GameState.BulletList.Remove(this);
+                        break;
                     }
                 }
                 for (int i = 0; i < auxList.Count; i++)

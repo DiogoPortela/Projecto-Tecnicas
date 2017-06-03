@@ -340,13 +340,13 @@ namespace Projecto
             {
                 for (int y = -1; y <= 1; y++)
                 {
-                    if (x == 0 && y == 0)
-                        continue;
+                    if (x == 0 && y == 0 ) 
+                        continue;                   
 
                     int checkX = (int)(node.Location.X + x);
                     int checkY = (int)(node.Location.Y + y);
 
-                    if (checkX >= 0 && checkX < width && checkY >= 0 && checkY < height)
+                    if (checkX - 1 >= 0 && checkX + 1 < width && checkY - 1 >= 0 && checkY + 1 < height)
                     {
                         if (x == -1 && y == -1 && !nodes[checkX - 1, checkY].IsWalkable && !nodes[checkX, checkY - 1].IsWalkable)
                             continue;
