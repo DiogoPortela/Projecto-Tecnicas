@@ -43,6 +43,9 @@ namespace Projecto
                     if (this.Rectangle.Intersects(e.Rectangle))
                     {
                         auxList.Add(e);
+                        ParticleSystem p = new ParticleSystem(ParticleType.Explosion, "DebugPixel", e.Center, Vector2.One * 0.9f, 20, 0, 3, 500, 500, 10);
+                        p.Start();
+                        GameState.ParticlesList.Add(p);
                         GameState.BulletList.Remove(this);
                         break;
                     }
@@ -60,11 +63,13 @@ namespace Projecto
                 if (this.Rectangle.Contains(GameState.PlayerOne.Rectangle))
                 {
                     (parent as Enemy).PlayerTakeDamage(GameState.PlayerOne);
+                    GameState.ParticlesList.Add(new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerOne.Center, Vector2.One * 0.9f, 20, 0, 3, 500, 500, 10));
                     GameState.BulletList.Remove(this);
                 }
                 if (this.Rectangle.Contains(GameState.PlayerTwo.Rectangle))
                 {
                     (parent as Enemy).PlayerTakeDamage(GameState.PlayerTwo);
+                    GameState.ParticlesList.Add(new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerTwo.Center, Vector2.One * 0.9f, 20, 0, 3, 500, 500, 10));
                     GameState.BulletList.Remove(this);
                 }
             }
@@ -209,6 +214,9 @@ namespace Projecto
 
                 foreach (Enemy enemy in auxEnemy)
                 {
+                    ParticleSystem p = new ParticleSystem(ParticleType.Smoke, "DebugPixel", enemy.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+                    p.Start();
+                    GameState.ParticlesList.Add(p);                 
                     EnemyTakeDamage(enemy);
                     if (enemy.HP <= 0)
                         GameState.EnemyList.Remove(enemy);

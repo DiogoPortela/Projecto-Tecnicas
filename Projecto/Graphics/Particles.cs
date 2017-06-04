@@ -200,7 +200,7 @@ namespace Projecto
             }
             else if(Type == ParticleType.Smoke)
             {
-                PosFinal = new Vector2( Game1.random.Next((int)-SpawnRadius, (int)SpawnRadius), Game1.random.Next((int)SpawnRadius));
+                PosFinal = new Vector2( Game1.random.Next((int)-SpawnRadius * 100, (int)SpawnRadius * 100) /100, Game1.random.Next((int)SpawnRadius * 100) / 100);
                 DirFinal = Vector2.UnitY;
                 PosFinal += this.Position;
             }

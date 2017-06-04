@@ -191,7 +191,7 @@ namespace Projecto
             #region playertwo
             if (pNumber == PlayerNumber.playerTwo)
             {
-                if (InputManager.PressedLastFrame.L == ButtonState.Pressed)
+                if (InputManager.PressedLastFrame.Numpad0 == ButtonState.Pressed)
                 {
                     Attack();
                 }
