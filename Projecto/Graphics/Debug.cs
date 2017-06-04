@@ -21,6 +21,8 @@ namespace Projecto
         static private int counter;
         static private Stopwatch watch;
 
+        static private Color debugColor;
+
         
         //------------->FUNCTIONS && METHODS<-------------//
 
@@ -37,6 +39,7 @@ namespace Projecto
             text = new List<string>();
             LoadFont(font);
             watch = new Stopwatch();
+            debugColor = Color.OrangeRed;
         }
         /// <summary>
         /// Enable rendering.
@@ -127,7 +130,7 @@ namespace Projecto
         {
             if(isActive)
             {            
-                Game1.spriteBatch.DrawString(font, textStr, Vector2.Zero, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, textStr, Vector2.Zero, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }          
         }
         /// <summary>
@@ -144,7 +147,7 @@ namespace Projecto
                                 "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
                                 "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" /*+
                                 "Weapon: " + player.MHweapon.Name*/;
-                Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>
@@ -156,7 +159,7 @@ namespace Projecto
         {
             if(isActive)
             {
-                Game1.spriteBatch.DrawString(font, text, pos, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, text, pos, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>
@@ -168,7 +171,7 @@ namespace Projecto
         {
             if(isActive)
             {
-                Game1.spriteBatch.Draw(debugTexture, rect, Color.LightGreen);
+                Game1.spriteBatch.Draw(debugTexture, rect, debugColor);
             }
         }
     }

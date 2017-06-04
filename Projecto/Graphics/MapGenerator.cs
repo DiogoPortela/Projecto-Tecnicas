@@ -21,7 +21,6 @@ namespace Projecto
 
         public int RandomFillPercent;
 
-        //public Tile tile;
         static public Tile[,] TilesMap;
         static public List<Room> MapRooms;
         static public Room Spawn;
@@ -141,7 +140,12 @@ namespace Projecto
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        Tile tile = new Tile(infoMap[x, y], new Vector2(x, y), TileSize);
+                        int aux = 0;
+                        if(infoMap[x, y] == 1)
+                        {
+                            aux = Game1.random.Next(1, 3);
+                        }
+                        Tile tile = new Tile(aux, new Vector2(x, y), TileSize);
                         TilesMap[x, y] = tile;
                     }
                 }

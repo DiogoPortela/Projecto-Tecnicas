@@ -30,7 +30,7 @@ namespace Projecto
             this.MainAtackRange = attackRange;
             this.MainAtackSpeed = attackSpeed;
 
-            this.ModAttackRange = modMagicalDamage;
+            this.ModMagicalDamage = modMagicalDamage;
             this.ModPhysicalDamage = modPhysicalDamage;
             this.ModAttackRange = modAttackRange;
             this.ModAttackSpeed = modAttackSpeed;
