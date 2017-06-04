@@ -16,6 +16,8 @@ namespace Projecto
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
 
+        public Dictionary<string, Item> ItemDictionary;
+
         //------------->CONSTRUCTORS<-------------//
 
         public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("Drude", position, size, range)
@@ -28,13 +30,10 @@ namespace Projecto
             Coordinates.Y = (int)Coordinates.Y;
             this.playerCollider = new Collider(position, size);
             this.playerCollider.UpdateTiles(position, size);
+            this.ItemDictionary = new Dictionary<string, Item>();
 
             #region Stats initializer
             this.HP = 100;
-            //this.PhysDmg = 18.0f;
-            //this.MagicDmg = 8.0f;
-            //this.PhysDmgRes = 5.0f;
-            //this.MagicDmgRes = 5.0f;
             #endregion
 
             if (number == PlayerNumber.playerOne)
@@ -55,6 +54,20 @@ namespace Projecto
         {
             PlayerMovement(gameTime);
             DamageManage();
+
+            List<Item> auxList = new List<Item>();
+            foreach (KeyValuePair<string, Item> i in GameState.ItemDictionary)
+            {
+                if (this.Rectangle.Intersects(i.Value.Rectangle))
+                {
+                    i.Value.Pickup(this);
+                    auxList.Add(i.Value);
+                }
+            }
+            foreach(Item i in auxList)
+            {
+                GameState.ItemDictionary.Remove(i.Name);
+            }
         }
         /// <summary>
         /// Deals with all the movement and animations.
@@ -166,6 +179,7 @@ namespace Projecto
                     this.playerCollider.UpdateBounds(Position, Size);
                 }
             }
+         
             //this.currentAnimation.Play(gameTime);
         }
         /// <summary>

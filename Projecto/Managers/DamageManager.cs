@@ -32,7 +32,7 @@ namespace Projecto
             float auxVector = Math.Abs((Position - start).Length());
             if (auxVector > range)
                 GameState.BulletList.Remove(this);
-            else if (MapGenerator.infoMap[(int)(this.Position.X / 5 + 0.5f), (int)(this.Position.Y / 5 + 0.5f)] == 1)
+            else if (MapGenerator.infoMap[(int)(this.Position.X / (int)Constants.GRIDSIZE + 0.5f), (int)(this.Position.Y / (int)Constants.GRIDSIZE + 0.5f)] == 1)
                 GameState.BulletList.Remove(this);
             else if (parent is PlayerManager)
             {
@@ -131,8 +131,8 @@ namespace Projecto
                 this.AtackSpeed *= offHandWeapon.ModAttackSpeed;
             }
 
-            this.MagicDmgRes = (float)Cons.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
-            this.PhysDmgRes = (float)Cons.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
+            this.MagicDmgRes = (float)Constants.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
+            this.PhysDmgRes = (float)Constants.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
 
             //if (this.MHweapon == GameState.AllWeapons[1] && this.OHweapon == GameState.AllWeapons[0]) // Staff + Sword
             //{
@@ -195,7 +195,9 @@ namespace Projecto
 
         public void Attack()
         {
-            if (mainHandWeapon.isRanged)
+            if (mainHandWeapon == null)
+                return;
+            else if (mainHandWeapon.isRanged)
             {
                 Bullet bullet = new Bullet(this.Center, this.objectDiretion, mainHandWeapon.MainAtackRange, this);
                 GameState.BulletList.Add(bullet);
@@ -216,7 +218,7 @@ namespace Projecto
                 {
                     ParticleSystem p = new ParticleSystem(ParticleType.Smoke, "DebugPixel", enemy.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
                     p.Start();
-                    GameState.ParticlesList.Add(p);                 
+                    GameState.ParticlesList.Add(p);
                     EnemyTakeDamage(enemy);
                     if (enemy.HP <= 0)
                         GameState.EnemyList.Remove(enemy);

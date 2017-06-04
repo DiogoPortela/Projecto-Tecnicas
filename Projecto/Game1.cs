@@ -62,6 +62,8 @@ namespace Projecto
             auxString.Add("Tile4");
             auxString.Add("New Piskel");
             auxString.Add("DebugPixel");
+            auxString.Add("Sword");
+            auxString.Add("Staff");
 
             foreach (string s in auxString)
             {
