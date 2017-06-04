@@ -157,7 +157,9 @@ namespace Projecto
             Debug.DrawText();
             Debug.DrawPlayerInfo(debugPlayerOnePosition, PlayerOne);
             Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
-            Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString() + " Particles: " + ParticlesList.Count.ToString() + " Bullets: " + BulletList.Count.ToString(), debugTextPosition);
+            Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString() + " Particles: " + ParticlesList.Count.ToString() + " Bullets: " + BulletList.Count.ToString()
+                               + "\nItems: " + ItemDictionary.Count.ToString(), debugTextPosition);
+                            
 
             if (isPaused)
             {
