@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SettlersEngine;
+using System.IO;
 
 namespace Projecto
 {
@@ -184,9 +185,7 @@ namespace Projecto
                         }
                     }
                     else
-                    {
                         wallCount++;
-                    }
                 }
             }
             return wallCount;
@@ -206,13 +205,9 @@ namespace Projecto
                 foreach (Room room in allRooms)
                 {
                     if (room.isAccessibleFromMainRoom)
-                    {
                         roomListB.Add(room);
-                    }
                     else
-                    {
                         roomListA.Add(room);
-                    }
                 }
             }
             else
@@ -264,9 +259,7 @@ namespace Projecto
                 }
 
                 if (possibleConnectionFound && !forceAccessibilityFromMainRoom)
-                {
                     CreatePassage(bestRoomA, bestRoomB, bestTileA, bestTileB);
-                }
             }
             if (possibleConnectionFound && forceAccessibilityFromMainRoom)
             {
@@ -276,9 +269,7 @@ namespace Projecto
 
 
             if (!forceAccessibilityFromMainRoom)
-            {
                 ConnectClosestRooms(allRooms, true);
-            }
 
         }
         /// <summary>
@@ -295,9 +286,7 @@ namespace Projecto
 
             List<Coordinate> line = GetLine(tileA, tileB);
             foreach (Coordinate c in line)
-            {
                 DrawCircle(c, 4);
-            }
         }
         /// <summary>
         /// Given a Coordinate and a radius, this function draws a circle around the Coordinate.
@@ -515,6 +504,7 @@ namespace Projecto
             List<Vector2> enemySpawns = new List<Vector2>();
             float aux, maxMobs = 100f;
             Coordinate c;
+            StreamWriter sw = new StreamWriter("file.txt");
             foreach (Room r in MapRooms)
             {
                 if (!r.isSpawn)
@@ -527,9 +517,10 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                sw.WriteLine(c.tileX + ", " + c.tileY);
                                 i++;
                             }
                         }
@@ -540,15 +531,17 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0)
+                            if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                sw.WriteLine(c.tileX + ", " + c.tileY);
                                 i++;
                             }
                         }
                     }
                 }
             }
+            sw.Close();
             return enemySpawns;
         }
         /// <summary>

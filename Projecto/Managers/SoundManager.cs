@@ -26,11 +26,11 @@ namespace Projecto
             //stringAux.Add("mainMenuTheme");
             stringAux.Add("mainGameTheme");
 
-            foreach(string s in stringAux)
-            {
-                SoundEffect SoundFX = Game1.content.Load<SoundEffect>(s);
-                listSounds.Add(s, SoundFX);
-            }
+            //foreach(string s in stringAux)
+            //{
+            //    //SoundEffect SoundFX = Game1.content.Load<SoundEffect>(s);
+            //    //listSounds.Add(s, SoundFX);
+            //}
         }
         /// <summary>
         /// Starts a sound.
