@@ -58,5 +58,10 @@ namespace Projecto
             this.Rectangle = camera.CalculatePixelRectangle(this.Position, new Vector2((int)Constants.GRIDSIZE, (int)Constants.GRIDSIZE));
             Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
         }
+        public void DrawItemMenu(Camera camera)
+        {
+            this.Rectangle = camera.CalculatePixelRectangle(this.Position, new Vector2(10,10));
+            Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+        }
     }
 }
