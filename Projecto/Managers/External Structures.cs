@@ -15,14 +15,26 @@
     {
         MainMenu, Playing, ScoreScreen, Quit
     }
-    enum Cons
+    internal enum Constants
     {
         MAXWIDTH=100,
-        MAXHEIGHT=75
+        MAXHEIGHT=75,
+        GRIDSIZE = 5,
+        PhysicalDamage = 20,
+        MagicalDamage = 15,
+        AtackSpeed = 1,
+        AtackRange = 1,
+        MagicalResistance = 15,
+        PhysicalResistance = 15,
+
     }
     internal enum PlayerNumber
     {
         playerOne = 1, playerTwo
+    }
+    internal enum WeaponHand
+    {
+        MainHand, OffHand
     }
     internal enum CurrentInput
     {

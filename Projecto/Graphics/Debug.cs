@@ -11,7 +11,7 @@ namespace Projecto
     {
         static private List<string> text;                       //List with all the debug logs.
         static private SpriteFont font;                         //Font to use.
-        static private int MAXLINES;                       //Maximum Lines to draw on screen at once.
+        static private int MAXLINES;                            //Maximum Lines to draw on screen at once.
         static public bool isActive = true;                     //Should it draw o on screen?
 
         //AUXILIARY
@@ -20,8 +20,9 @@ namespace Projecto
         static public Texture2D debugTexture;
         static private int counter;
         static private Stopwatch watch;
-        static private int fps;
 
+        static private Color debugColor;
+        
         //------------->FUNCTIONS && METHODS<-------------//
 
         /// <summary>
@@ -37,6 +38,7 @@ namespace Projecto
             text = new List<string>();
             LoadFont(font);
             watch = new Stopwatch();
+            debugColor = Color.OrangeRed;
         }
         /// <summary>
         /// Enable rendering.
@@ -110,10 +112,10 @@ namespace Projecto
         {
             if(isActive)
             {
-                Rectangle rect1 = camera.CalculatePixelRectangle(new Vector2(collider.MinBound.X, collider.MinBound.Y), new Vector2(5, 0.2f));
-                Rectangle rect2 = camera.CalculatePixelRectangle(new Vector2(collider.MaxBound.X - 0.2f, collider.MaxBound.Y), new Vector2(0.2f, 5));
-                Rectangle rect3 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2(5, 0.2f));
-                Rectangle rect4 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2(0.2f, 5));
+                Rectangle rect1 = camera.CalculatePixelRectangle(new Vector2(collider.MinBound.X, collider.MinBound.Y), new Vector2((int)Constants.GRIDSIZE, 0.2f));
+                Rectangle rect2 = camera.CalculatePixelRectangle(new Vector2(collider.MaxBound.X - 0.2f, collider.MaxBound.Y), new Vector2(0.2f, (int)Constants.GRIDSIZE));
+                Rectangle rect3 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2((int)Constants.GRIDSIZE, 0.2f));
+                Rectangle rect4 = camera.CalculatePixelRectangle(new Vector2(gameObject.Position.X, gameObject.Position.Y), new Vector2(0.2f, (int)Constants.GRIDSIZE));
                 DrawLine(camera, rect1);
                 DrawLine(camera, rect2);
                 DrawLine(camera, rect3);
@@ -127,7 +129,7 @@ namespace Projecto
         {
             if(isActive)
             {            
-                Game1.spriteBatch.DrawString(font, textStr, Vector2.Zero, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, textStr, Vector2.Zero, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }          
         }
         /// <summary>
@@ -139,11 +141,12 @@ namespace Projecto
         {
             if(isActive)
             {
-                textPlayer =   "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
+                textPlayer = "X:" + player.Position.X + " Y:" + player.Position.Y + "\n" +
                                 "Coordinate X:" + player.Coordinates.X + " Coordinate Y:" + player.Coordinates.Y + "\n" +
                                 "MinBound X:" + player.playerCollider.MinBound.X + " MinBound Y:" + player.playerCollider.MinBound.Y + "\n" +
-                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y;
-                Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                                "MaxBound X:" + player.playerCollider.MaxBound.X + " MaxBound Y:" + player.playerCollider.MaxBound.Y + "\n" /*+
+                                "Weapon: " + player.MHweapon.Name*/;
+                Game1.spriteBatch.DrawString(font, textPlayer, drawPosition, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>
@@ -155,7 +158,7 @@ namespace Projecto
         {
             if(isActive)
             {
-                Game1.spriteBatch.DrawString(font, text, pos, Color.Green, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
+                Game1.spriteBatch.DrawString(font, text, pos, debugColor, 0f, Vector2.Zero, 0.8f, SpriteEffects.None, 1);
             }
         }
         /// <summary>
@@ -167,7 +170,7 @@ namespace Projecto
         {
             if(isActive)
             {
-                Game1.spriteBatch.Draw(debugTexture, rect, Color.LightGreen);
+                Game1.spriteBatch.Draw(debugTexture, rect, debugColor);
             }
         }
     }

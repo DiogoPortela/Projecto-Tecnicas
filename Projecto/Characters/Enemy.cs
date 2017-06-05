@@ -1,7 +1,6 @@
-﻿using Microsoft.Xna.Framework;
-//using SettlersEngine;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using Microsoft.Xna.Framework;
 
 namespace Projecto
 {
@@ -27,11 +26,13 @@ namespace Projecto
         {
             playerLastPosition = -Vector2.One;
             //this.aStar = aStar;
-            Coordinates = (position / size);
+            Coordinates = (position / (float)Constants.GRIDSIZE);
             Coordinates.X = (int)Coordinates.X;
             Coordinates.Y = (int)Coordinates.Y;
             this.enemyCollider = new Collider(position, size);
             this.enemyCollider.UpdateTiles(position, size);
+            this.listVectors = new Stack<Vector2>();
+            nextPosition = Vector2.Zero;
 
             #region Stats initializer
             this.HP = 50;
@@ -41,7 +42,11 @@ namespace Projecto
             this.MagicDmgRes = 1;
             #endregion
         }
-        public void EnemyMovement(GameTime gameTime, ref PlayerManager player)
+        public void Update(GameTime gameTime)
+        {
+            EnemyMovement(gameTime);
+        }
+        public void EnemyMovement(GameTime gameTime)
         {
             deltaPosition = Vector2.Zero;
 
@@ -71,24 +76,15 @@ namespace Projecto
                 nextPosition = listVectors.Pop();
             }
 
-            //Tile aux;
-
-            //Vector2 enemyPos = new Vector2(this.Coordinates.X, this.Coordinates.Y);
-            //Vector2 playerPos = new Vector2(player.Coordinates.X, player.Coordinates.Y);
-
-            //LinkedList<Tile> path = aStar.Search(ref enemyPos, ref playerPos, null);
-
-            //if (path.First.Next != null)
-            //    aux = path.First.Next.Value;
-            //else
-            //    return;
-
-            //Debug.NewLine(aux.Coordinates.X.ToString() + ", " + aux.Coordinates.Y.ToString());
-
-            //Vector2 auxVector = new Vector2(aux.Coordinates.X - this.Coordinates.X, aux.Coordinates.Y - this.Coordinates.Y);
             deltaPosition = new Vector2(nextPosition.X - this.Coordinates.X, nextPosition.Y - this.Coordinates.Y) * movingSpeed;
 
-            if (deltaPosition != Vector2.Zero)
+            //if (nextPosition != Vector2.Zero && deltaPosition != Vector2.Zero)
+            //{
+            //    this.Move(deltaPosition);
+            //    this.Coordinates = new Vector2((int)(this.Position.X / (float)Constants.GRIDSIZE + 0.5f), (int)(this.Position.Y / (int)Constants.GRIDSIZE + 0.5f));
+            //}
+
+            if (nextPosition != Vector2.Zero && deltaPosition != Vector2.Zero)
             {
                 this.Move(deltaPosition);
                 this.enemyCollider.UpdateBounds(Position, Size);
@@ -100,6 +96,3 @@ namespace Projecto
         }
     }
 }
-
-
-

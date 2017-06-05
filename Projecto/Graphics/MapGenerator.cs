@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using SettlersEngine;
+using System.IO;
 
 namespace Projecto
 {
@@ -20,7 +21,6 @@ namespace Projecto
 
         public int RandomFillPercent;
 
-        //public Tile tile;
         static public Tile[,] TilesMap;
         static public List<Room> MapRooms;
         static public Room Spawn;
@@ -36,7 +36,7 @@ namespace Projecto
             MapRooms = new List<Room>();
             infoMap = new int[Width, Height];
             RandomFillMap();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SmoothMap();
             }
@@ -139,7 +139,16 @@ namespace Projecto
                 {
                     for (int y = 0; y < Height; y++)
                     {
-                        Tile tile = new Tile(infoMap[x, y], new Vector2(x, y), TileSize);
+                        int aux = 0;
+                        if(infoMap[x, y] == 1)
+                        {
+                            aux = Game1.random.Next(1, 3);
+                        }
+                        else
+                        {
+                            aux = Game1.random.Next(10, 13);
+                        }
+                        Tile tile = new Tile(aux, new Vector2(x, y), TileSize);
                         TilesMap[x, y] = tile;
                     }
                 }
@@ -183,9 +192,7 @@ namespace Projecto
                         }
                     }
                     else
-                    {
                         wallCount++;
-                    }
                 }
             }
             return wallCount;
@@ -205,13 +212,9 @@ namespace Projecto
                 foreach (Room room in allRooms)
                 {
                     if (room.isAccessibleFromMainRoom)
-                    {
                         roomListB.Add(room);
-                    }
                     else
-                    {
                         roomListA.Add(room);
-                    }
                 }
             }
             else
@@ -263,9 +266,7 @@ namespace Projecto
                 }
 
                 if (possibleConnectionFound && !forceAccessibilityFromMainRoom)
-                {
                     CreatePassage(bestRoomA, bestRoomB, bestTileA, bestTileB);
-                }
             }
             if (possibleConnectionFound && forceAccessibilityFromMainRoom)
             {
@@ -275,9 +276,7 @@ namespace Projecto
 
 
             if (!forceAccessibilityFromMainRoom)
-            {
                 ConnectClosestRooms(allRooms, true);
-            }
 
         }
         /// <summary>
@@ -294,9 +293,7 @@ namespace Projecto
 
             List<Coordinate> line = GetLine(tileA, tileB);
             foreach (Coordinate c in line)
-            {
                 DrawCircle(c, 4);
-            }
         }
         /// <summary>
         /// Given a Coordinate and a radius, this function draws a circle around the Coordinate.
@@ -509,11 +506,15 @@ namespace Projecto
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
-        static public List<Vector2> FindEnemySpawns()
+        static public List<Vector2> FindEnemySpawns(int maxMobs)
         {
             List<Vector2> enemySpawns = new List<Vector2>();
+<<<<<<< HEAD
             float aux, maxMobs = 100f;
             int[,] mapFlags = new int[Width, Height];
+=======
+            float aux;
+>>>>>>> WeaponMechanics
             Coordinate c;
             foreach (Room r in MapRooms)
             {
@@ -527,8 +528,12 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
+<<<<<<< HEAD
                             if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0 &&
                                 TilesMap[c.tileX, c.tileY].isWall == false)
+=======
+                            if (TilesMap[c.tileX, c.tileY].isWall == false)
+>>>>>>> WeaponMechanics
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;
@@ -542,8 +547,12 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
+<<<<<<< HEAD
                             if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0 &&
                                 TilesMap[c.tileX,c.tileY].isWall == false)
+=======
+                            if (TilesMap[c.tileX, c.tileY].isWall == false)
+>>>>>>> WeaponMechanics
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;
@@ -578,4 +587,3 @@ namespace Projecto
         }
     }
 }
-

@@ -62,14 +62,16 @@
     <Compile Include="AI\SpatialAStar.cs" />
     <Compile Include="AI\PathFinding.cs" />
     <Compile Include="Characters\Boss.cs" />
-    <Compile Include="Characters\PlayerManager.cs" />
+    <Compile Include="Characters\Player.cs" />
+    <Compile Include="Items\Item.cs" />
+    <Compile Include="Items\Weapon.cs" />
     <Compile Include="Graphics\Animation.cs" />
     <Compile Include="Graphics\Debug.cs" />
     <Compile Include="Graphics\MapGenerator.cs" />
     <Compile Include="Graphics\Particles.cs" />
     <Compile Include="Graphics\Room.cs" />
     <Compile Include="Graphics\UI.cs" />
-    <Compile Include="Managers\CollisionManager.cs" />
+    <Compile Include="Graphics\CollisionManager.cs" />
     <Compile Include="Managers\DamageManager.cs" />
     <Compile Include="Managers\External Structures.cs" />
     <Compile Include="Graphics\GameObject.cs" />
@@ -99,10 +101,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Icon.ico" />
-    <Content Include="Content\Drude.png">
+    <Content Include="Content\Tile10.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Content\Tile11.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Tile12.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\ui_center.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Tile1.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\Tile2.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Icon.ico" />
     <Content Include="Content\DebugPixel.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -112,19 +129,13 @@
     <Content Include="Content\mainGameTheme.mp3">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Tile0.png">
+    <Content Include="Content\personagem_frente-02.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Tile1.png">
+    <Content Include="Content\Staff.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Content\Tile2.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\Tile4.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Content\tile_TreeBranch.png">
+    <Content Include="Content\Sword.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

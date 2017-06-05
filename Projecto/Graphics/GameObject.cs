@@ -12,7 +12,7 @@ namespace Projecto
     {
         public Texture2D Texture;            //Texture image.
         public Vector2 TextureCenter;           //For rotations.
-        protected Rectangle Rectangle;          //Rectangle to draw to.
+        public Rectangle Rectangle;          //Rectangle to draw to.
 
         public Vector2 Position { get; set; }
         public Vector2 Center;

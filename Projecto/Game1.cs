@@ -55,13 +55,18 @@ namespace Projecto
             textureList = new Dictionary<string, Texture2D>();
             List<string> auxString = new List<string>();
 
-            auxString.Add("Drude");
-            auxString.Add("Tile0");
+            auxString.Add("personagem_frente-02");
             auxString.Add("Tile1");
             auxString.Add("Tile2");
-            auxString.Add("Tile4");
+            auxString.Add("Tile10");
+            auxString.Add("Tile11");
+            auxString.Add("Tile12");
+
             auxString.Add("New Piskel");
             auxString.Add("DebugPixel");
+            auxString.Add("Sword");
+            auxString.Add("Staff");
+            auxString.Add("ui_center");
 
             foreach (string s in auxString)
             {
