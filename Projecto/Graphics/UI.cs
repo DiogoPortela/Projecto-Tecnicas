@@ -4,6 +4,25 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Projecto
 {
+    internal class UI_Static_Item
+    {
+        public Texture2D Texture;
+        public Rectangle Rectangle;
+
+        public UI_Static_Item(string texture, Vector2 position, Vector2 size, Camera camera)
+        {
+            if(Game1.textureList.ContainsKey(texture))
+            {
+                this.Texture = Game1.textureList[texture];           
+            }
+            this.Rectangle = camera.CalculatePixelRectangle(position, size);
+        }
+
+        public void Draw()
+        {
+            Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+        }
+    }
     static class UI
     {
         static public SpriteFont GameFont;

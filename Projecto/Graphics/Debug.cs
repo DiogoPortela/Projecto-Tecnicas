@@ -22,7 +22,6 @@ namespace Projecto
         static private Stopwatch watch;
 
         static private Color debugColor;
-
         
         //------------->FUNCTIONS && METHODS<-------------//
 

@@ -12,14 +12,12 @@ namespace Projecto
         static public PlayerManager PlayerTwo;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
-        //static public Dictionary<string, Weapon> WeaponList;
         static public List<Bullet> BulletList;
         static public Dictionary<string, Item> ItemDictionary;
+        static public List<UI_Static_Item> UI_Static_ItemsList;
 
         static public bool isPaused;
         static public MapGenerator map;
-        //static public SpatialAStar<Tile, Object> aStar;
-
         static private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft;
 
@@ -71,9 +69,9 @@ namespace Projecto
 
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
-            //WeaponList = new Dictionary<string, Weapon>();
             BulletList = new List<Bullet>();
             ItemDictionary = new Dictionary<string, Item>();
+            UI_Static_ItemsList = new List<UI_Static_Item>();
 
             #region LoadWeapons
             Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 25, 0, 25, 1.5f, 1, 1, 1, 1);
@@ -85,17 +83,17 @@ namespace Projecto
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerOne, 3);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
           
-            //PlayerOne.ChangeWeapon(WeaponHand.MainHand, WeaponList["Staff"]);
-            //PlayerTwo.ChangeWeapon(WeaponHand.MainHand, WeaponList["Sword"]);
-
             #region Enemies
-            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns();
+            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(50);
             for (int i = 0; i < enemyPosList.Count; i++)
             {
                 Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * (int)Constants.GRIDSIZE, 10);
                 EnemyList.Add(enemyAux);
             }
             #endregion
+
+            UI_Static_Item uiCentralBar = new UI_Static_Item("ui_center", new Vector2(49, 75), new Vector2(2, 75), Game1.mainCamera);
+            UI_Static_ItemsList.Add(uiCentralBar);
 
             isPaused = false;
             SoundManager.StopAllSounds();
@@ -160,6 +158,10 @@ namespace Projecto
             Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString() + " Particles: " + ParticlesList.Count.ToString() + " Bullets: " + BulletList.Count.ToString()
                                + "\nItems: " + ItemDictionary.Count.ToString(), debugTextPosition);
                             
+            foreach(UI_Static_Item ui in UI_Static_ItemsList)
+            {
+                ui.Draw();
+            }
 
             if (isPaused)
             {

@@ -36,7 +36,7 @@ namespace Projecto
             MapRooms = new List<Room>();
             infoMap = new int[Width, Height];
             RandomFillMap();
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 SmoothMap();
             }
@@ -144,6 +144,10 @@ namespace Projecto
                         if(infoMap[x, y] == 1)
                         {
                             aux = Game1.random.Next(1, 3);
+                        }
+                        else
+                        {
+                            aux = Game1.random.Next(10, 13);
                         }
                         Tile tile = new Tile(aux, new Vector2(x, y), TileSize);
                         TilesMap[x, y] = tile;
@@ -503,12 +507,11 @@ namespace Projecto
         /// Randomizes the starting position of the player(s). This Coordinate will be a part of the Player spawn room
         /// </summary>
         /// <returns>A vector2 in which the player will spawn</returns>
-        static public List<Vector2> FindEnemySpawns()
+        static public List<Vector2> FindEnemySpawns(int maxMobs)
         {
             List<Vector2> enemySpawns = new List<Vector2>();
-            float aux, maxMobs = 100f;
+            float aux;
             Coordinate c;
-            StreamWriter sw = new StreamWriter("file.txt");
             foreach (Room r in MapRooms)
             {
                 if (!r.isSpawn)
@@ -524,7 +527,6 @@ namespace Projecto
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
-                                sw.WriteLine(c.tileX + ", " + c.tileY);
                                 i++;
                             }
                         }
@@ -538,14 +540,12 @@ namespace Projecto
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
-                                sw.WriteLine(c.tileX + ", " + c.tileY);
                                 i++;
                             }
                         }
                     }
                 }
             }
-            sw.Close();
             return enemySpawns;
         }
         /// <summary>
@@ -571,4 +571,3 @@ namespace Projecto
         }
     }
 }
-
