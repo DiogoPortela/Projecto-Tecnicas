@@ -25,28 +25,12 @@ namespace Projecto
 
             //stringAux.Add("mainMenuTheme");
             stringAux.Add("mainGameTheme");
-<<<<<<< Updated upstream
 
-<<<<<<< HEAD
             //foreach(string s in stringAux)
             //{
             //    //SoundEffect SoundFX = Game1.content.Load<SoundEffect>(s);
             //    //listSounds.Add(s, SoundFX);
             //}
-=======
-            foreach(string s in stringAux)
-=======
-            stringAux.Add("attack_magico");
-            stringAux.Add("attack1");
-            stringAux.Add("morrer");
-            stringAux.Add("troca_arma");
-            foreach (string s in stringAux)
->>>>>>> Stashed changes
-            {
-                SoundEffect SoundFX = Game1.content.Load<SoundEffect>(s);
-                listSounds.Add(s, SoundFX);
-            }
->>>>>>> Sound
         }
         /// <summary>
         /// Starts a sound.
@@ -60,7 +44,7 @@ namespace Projecto
                 SoundEffectInstance aux = listSounds[name].CreateInstance();
                 aux.Play();
                 aux.IsLooped = isLoop;
-                //listPlayingSounds.Add(name, aux);
+                listPlayingSounds.Add(name, aux);
             }
             else
             {

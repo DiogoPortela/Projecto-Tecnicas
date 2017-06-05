@@ -19,27 +19,3 @@
 /processorParam:Quality=Best
 /build:mainGameTheme.mp3
 
-#begin attack_magico.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:attack_magico.mp3
-
-#begin attack1.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:attack1.mp3
-
-#begin troca_arma.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:troca_arma.mp3
-
-#begin morrer.mp3
-/importer:Mp3Importer
-/processor:SoundEffectProcessor
-/processorParam:Quality=Best
-/build:morrer.mp3
-
