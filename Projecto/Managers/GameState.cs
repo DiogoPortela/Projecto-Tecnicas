@@ -196,7 +196,7 @@ namespace Projecto
 
             SoundManager.StopAllSounds();
 
-            //SoundManager.StartSound("mainGameTheme", true);
+            SoundManager.StartSound("mainGameTheme", true);
 
 
 
