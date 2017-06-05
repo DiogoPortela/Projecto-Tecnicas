@@ -73,6 +73,13 @@ namespace Projecto
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * 5, PlayerNumber.playerTwo, 10);
             isPaused = false;
             SoundManager.StopAllSounds();
+<<<<<<< Updated upstream
+=======
+            SoundManager.StartSound("mainGameTheme", true);
+            
+
+            #region TestZone
+>>>>>>> Stashed changes
 
             #region TestZone            
             teste2 = new ParticleSystem("DebugPixel", PlayerOne.Position, Vector2.One / 2, 40, 100, 10, 1000, 1000, 4);
