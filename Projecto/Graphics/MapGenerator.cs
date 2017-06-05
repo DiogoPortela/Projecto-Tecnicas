@@ -509,12 +509,8 @@ namespace Projecto
         static public List<Vector2> FindEnemySpawns(int maxMobs)
         {
             List<Vector2> enemySpawns = new List<Vector2>();
-<<<<<<< HEAD
-            float aux, maxMobs = 100f;
-            int[,] mapFlags = new int[Width, Height];
-=======
             float aux;
->>>>>>> WeaponMechanics
+            int[,] mapFlags = new int[Width, Height];
             Coordinate c;
             foreach (Room r in MapRooms)
             {
@@ -528,12 +524,9 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-<<<<<<< HEAD
                             if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0 &&
                                 TilesMap[c.tileX, c.tileY].isWall == false)
-=======
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
->>>>>>> WeaponMechanics
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;
@@ -547,12 +540,9 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
-<<<<<<< HEAD
                             if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0 &&
                                 TilesMap[c.tileX,c.tileY].isWall == false)
-=======
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
->>>>>>> WeaponMechanics
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
                                 mapFlags[c.tileX, c.tileY] = 1;

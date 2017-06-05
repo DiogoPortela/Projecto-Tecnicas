@@ -101,16 +101,12 @@ namespace Projecto
 
             #region TestZone
 
-<<<<<<< HEAD
-            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns();
-
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < enemyPosList.Count; i++)
             {
                 Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * 5, 10);
                 EnemyList.Add(enemyAux);
             }
-=======
->>>>>>> WeaponMechanics
+
             #endregion
         }
         /// <summary>
