@@ -83,7 +83,6 @@ namespace Projecto
                         infoMap[x, y] = 1;
                     else if (neighbourWallTiles < 4)
                         infoMap[x, y] = 0;
-
                 }
             }
         }
@@ -563,6 +562,11 @@ namespace Projecto
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
             return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
         }
+
+        static public Vector2 GetPortalSpawn()
+        {
+            return new Vector2(MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX, MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX);
+        } 
 
         /// <summary>
         /// Draws the finished map on the given camera.
