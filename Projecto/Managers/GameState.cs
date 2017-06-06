@@ -10,9 +10,11 @@ namespace Projecto
     {
         static public PlayerManager PlayerOne;
         static public PlayerManager PlayerTwo;
+        static public Portal portal;
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
         static public List<Bullet> BulletList;
+
         static public Dictionary<string, Item> ItemDictionary;
         static public List<UI_Static_Item> UI_Static_ItemsList;
 
@@ -20,18 +22,15 @@ namespace Projecto
         static public MapGenerator map;
         static private Viewport defaultView, leftView, rightView;
         static public Camera cameraRight, cameraLeft;
-
         static private Vector2 debugPlayerOnePosition;
         static private Vector2 debugPlayerTwoPosition;
         static private Vector2 debugTextPosition;
 
         #region ZONA DE TESTE
 
-
         #endregion
 
         //------------->FUNCTIONS && METHODS<-------------//
-
         /// <summary>
         /// Starts the class values.
         /// </summary>
@@ -67,8 +66,7 @@ namespace Projecto
 
             EnemyList = new List<Enemy>();
             ParticlesList = new List<ParticleSystem>();
-            BulletList = new List<Bullet>();
-            ItemDictionary = new Dictionary<string, Item>();
+            BulletList = new List<Bullet>(); ItemDictionary = new Dictionary<string, Item>();
             UI_Static_ItemsList = new List<UI_Static_Item>();
 
             #region LoadWeapons
@@ -80,7 +78,8 @@ namespace Projecto
 
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerOne, 3);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
-          
+            portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * (int)Constants.GRIDSIZE);
+
             #region Enemies
             List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(50);
             for (int i = 0; i < enemyPosList.Count; i++)
@@ -91,22 +90,21 @@ namespace Projecto
             #endregion
 
             UI_Static_Item uiCentralBar = new UI_Static_Item("ui_center", new Vector2(49, 75), new Vector2(2, 75), Game1.mainCamera);
-            UI_Static_ItemsList.Add(uiCentralBar);
 
+            UI_Static_ItemsList.Add(uiCentralBar);
             isPaused = false;
             SoundManager.StopAllSounds();
             SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
-
             for (int i = 0; i < enemyPosList.Count; i++)
             {
                 Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * 5, 10);
                 EnemyList.Add(enemyAux);
             }
             #endregion
-        }
 
+        }
         /// <summary>
         /// Updates the whole gamestate.
         /// </summary>
@@ -114,21 +112,20 @@ namespace Projecto
         {
             if (InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
                 isPaused = !isPaused;
-
             if (!isPaused)
             {
+
                 PlayerOne.Update(gameTime);
                 cameraLeft.LookAt(PlayerOne);
-
                 PlayerTwo.Update(gameTime);
                 cameraRight.LookAt(PlayerTwo);
 
                 //Collider.UpdateMovingEnemies();
 
-                foreach (Enemy e in EnemyList)              
-                    e.Update(gameTime);               
+                foreach (Enemy e in EnemyList)
 
-                for(int i = 0; i < BulletList.Count; i++)
+                    e.Update(gameTime);
+                for (int i = 0; i < BulletList.Count; i++)
                     BulletList[i].Update();
 
                 for (int i = 0; i < ParticlesList.Count; i++)
@@ -137,15 +134,19 @@ namespace Projecto
                     if (!ParticlesList[i].isLoop && ParticlesList[i].TimeLeft.Milliseconds < 0)
                         ParticlesList.Remove(ParticlesList[i]);
                 }
-                if (EnemyList.Count == 0)
+                //Particle Update.
+                portal.Update(gameTime, ref EnemyList);
+                if (portal.isOpen && (PlayerOne.Rectangle.Intersects(portal.Rectangle) || PlayerTwo.Rectangle.Intersects(portal.Rectangle)))
                 {
-                    //SPAWN END PORTAL
+                    Start();
+                    //contador niveis
+                    //aparecer no ecra em q nivel estamos
                 }
             }
+
             else
                 UI.PauseUpdate();
         }
-
         /// <summary>
         /// Draws the whole gamestate.
         /// </summary>
@@ -154,11 +155,9 @@ namespace Projecto
             //Draws the left side
             Game1.graphics.GraphicsDevice.Viewport = leftView;
             DrawCameraView(cameraLeft);
-
             //Draws the right side
             Game1.graphics.GraphicsDevice.Viewport = rightView;
             DrawCameraView(cameraRight);
-
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
@@ -169,19 +168,15 @@ namespace Projecto
             Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString() + " Particles: " + ParticlesList.Count.ToString() + " Bullets: " + BulletList.Count.ToString()
                                + "\nItems: " + ItemDictionary.Count.ToString(), debugTextPosition);
 
-
-            foreach(UI_Static_Item ui in UI_Static_ItemsList)
+            foreach (UI_Static_Item ui in UI_Static_ItemsList)
                 ui.Draw();
-
-
 
             if (isPaused)
                 UI.DrawPauseMenu();
-
             Game1.spriteBatch.End();
             #endregion
         }
-   
+
         /// <summary>
         /// Draws the whole world for one camera.
         /// </summary>
@@ -192,19 +187,16 @@ namespace Projecto
             map.Draw(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
-
+            portal.DrawObject(camera);
             foreach (Enemy e in EnemyList)
                 e.DrawObject(camera);
-
             foreach (ParticleSystem p in ParticlesList)
                 p.Draw(camera);
-
-            foreach (KeyValuePair<string,Item> i in ItemDictionary)
+            foreach (KeyValuePair<string, Item> i in ItemDictionary)
                 i.Value.Draw(camera);
 
             foreach (Bullet b in BulletList)
                 b.DrawObject(camera);
-
             Game1.spriteBatch.End();
         }
     }

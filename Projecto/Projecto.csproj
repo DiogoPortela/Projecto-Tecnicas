@@ -69,6 +69,7 @@
     <Compile Include="Graphics\Debug.cs" />
     <Compile Include="Graphics\MapGenerator.cs" />
     <Compile Include="Graphics\Particles.cs" />
+    <Compile Include="Graphics\Portal.cs" />
     <Compile Include="Graphics\Room.cs" />
     <Compile Include="Graphics\UI.cs" />
     <Compile Include="Graphics\CollisionManager.cs" />
