@@ -30,6 +30,7 @@ namespace Projecto
             this.frameRate = 1000 / frameRate;
             currentFrame = 0;
             LastFrameTime = 0;
+            currentFrameRec = new Rectangle(0,0, (int)size.X, (int)size.Y);
         }
 
         //------------->FUNCTIONS && METHODS<-------------//

@@ -57,6 +57,7 @@ namespace Projecto
 
             auxString.Add("personagem (1)");
             auxString.Add("PlayerOne_SideWalk_NoWeapon");
+            auxString.Add("PlayerOne_SideWalk2_NoWeapon");
             auxString.Add("PlayerOne_Standing_NoWeapon");
             auxString.Add("PlayerOne_Walking_NoWeapon");
             auxString.Add("PlayerOne_BackWalking_NoWeapon");
