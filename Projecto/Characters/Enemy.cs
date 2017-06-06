@@ -9,7 +9,6 @@ namespace Projecto
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
         public Collider enemyCollider;
-        //private SpatialAStar<Tile, Object> aStar;
         private const float movingSpeed = 0.2f;
 
         private PathFinder pathFinder;
@@ -123,8 +122,7 @@ namespace Projecto
                 if (e.hasAttacked == false)
                 {
                     PlayerTakeDamage(GameState.PlayerOne);
-                    PlayerGetKnockedBack(GameState.PlayerOne,
-                        new Vector2(e.Coordinates.X - GameState.PlayerOne.Coordinates.X, e.Coordinates.Y - GameState.PlayerOne.Coordinates.Y));
+                    //PlayerGetKnockedBack(GameState.PlayerOne, new Vector2(e.Coordinates.X + GameState.PlayerOne.Coordinates.X, e.Coordinates.Y + GameState.PlayerOne.Coordinates.Y));
                     p.Start();
                     GameState.ParticlesList.Add(p);
                     e.hasAttacked = true;
@@ -144,8 +142,7 @@ namespace Projecto
                 if (hasAttacked == false)
                 {
                     PlayerTakeDamage(GameState.PlayerTwo);
-                    PlayerGetKnockedBack(GameState.PlayerTwo,
-                        new Vector2(e.Coordinates.X - GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y - GameState.PlayerTwo.Coordinates.Y));
+                    //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
                     p.Start();
                     GameState.ParticlesList.Add(p);
                     e.hasAttacked = true;

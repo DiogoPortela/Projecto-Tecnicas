@@ -282,8 +282,8 @@ namespace Projecto
 
         public void PlayerGetKnockedBack(PlayerManager defender, Vector2 direction)
         {
-            defender.Coordinates.X -= direction.X;
-            defender.Coordinates.Y -= direction.Y;
+            //player e empurrado
+            defender.Position -= direction;
         }
         /// <summary>
         /// Returns true if an enemy is in range.
