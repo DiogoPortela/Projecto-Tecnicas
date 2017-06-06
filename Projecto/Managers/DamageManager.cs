@@ -133,48 +133,12 @@ namespace Projecto
 
             this.MagicDmgRes = (float)Constants.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
             this.PhysDmgRes = (float)Constants.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
-
-            //if (this.MHweapon == GameState.AllWeapons[1] && this.OHweapon == GameState.AllWeapons[0]) // Staff + Sword
-            //{
-            //    //this.PhysDmg = PhysDmg + MHweapon.WeaponPhysicalDamage+(OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
-            //    this.PhysDmg = 0f;
-            //    this.MagicDmg = (float)Cons.MagicalDamage + MHweapon.WeaponMagicalDamage + (OHweapon.WeaponMagicalDamage * 0.5f); // dano magico
-            //    this.MagicDmgRes = (float)Cons.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
-            //    this.PhysDmgRes = (float)Cons.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
-            //    this.Range = MHweapon.WeaponAtackRange + (int)Cons.AtackRange; // Range
-            //    this.AtackSpeed = MHweapon.WeaponAtackSpeed * (float)Cons.AtackSpeed; // AtackSpeed
-            //    Debug.NewLine(this.MagicDmg.ToString());
-            //    Debug.NewLine(this.PhysDmg.ToString());
-            //}
-            //else if (this.MHweapon == GameState.AllWeapons[0] && this.OHweapon == GameState.AllWeapons[1]) // sword+ staff
-            //{
-            //    this.PhysDmg = (float)Cons.PhysicalDamage + MHweapon.WeaponPhysicalDamage + (OHweapon.WeaponPhysicalDamage * 0.5f); // dano fisico
-            //    //this.MagicDmg = MagicDmg + MHweapon.WeaponMagicalDamage + (OHweapon.WeaponMagicalDamage * 0.5f); // dano magico
-            //    this.MagicDmg = 0f;
-            //    this.MagicDmgRes = (float)Cons.MagicalResistance + (MagicDmg * 0.2f); // resistencia a magic
-            //    this.PhysDmgRes = (float)Cons.PhysicalResistance + (PhysDmgRes * 0.2f); // resistencia a fisico
-            //    this.Range = MHweapon.WeaponAtackRange + (int)Cons.AtackRange; // Range
-            //    this.AtackSpeed = MHweapon.WeaponAtackSpeed * (float)Cons.AtackSpeed; // Atack Speed
-            //    Debug.NewLine(this.MagicDmg.ToString());
-            //    Debug.NewLine(this.PhysDmg.ToString());
-            //}
         }
         /// <summary>
         /// Switches player weapons
         /// </summary>
         public void SwitchWeapons()
         {
-            //if (InputManager.PressedLastFrame.K == ButtonState.Pressed && this.MHweapon == GameState.AllWeapons[0]
-            //    && this.OHweapon == GameState.AllWeapons[1])
-            //{
-            //    this.MHweapon = GameState.AllWeapons[1];
-            //    this.OHweapon = GameState.AllWeapons[0];
-            //}else if(InputManager.PressedLastFrame.K == ButtonState.Pressed && this.MHweapon == GameState.AllWeapons[1]
-            //    && this.OHweapon == GameState.AllWeapons[0])
-            //{
-            //    this.MHweapon = GameState.AllWeapons[0];
-            //    this.OHweapon = GameState.AllWeapons[1];
-            //}
             Weapon aux = this.mainHandWeapon;
             this.mainHandWeapon = this.offHandWeapon;
             this.offHandWeapon = aux;
@@ -223,10 +187,8 @@ namespace Projecto
                     GameState.ParticlesList.Add(p);
                     EnemyTakeDamage(enemy);
                     if (enemy.HP <= 0)
-                    {
                         GameState.EnemyList.Remove(enemy);
-                        SoundManager.StartSound("morrer", false);
-                    }
+                    SoundManager.StartSound("morrer", false);
                 }
                 SoundManager.StartSound("attack1", false);
             }
@@ -285,6 +247,7 @@ namespace Projecto
             //player e empurrado
             defender.Position -= direction;
         }
+
         /// <summary>
         /// Returns true if an enemy is in range.
         /// </summary>
@@ -294,7 +257,8 @@ namespace Projecto
         {
             Vector2 v = (this.Position) - (enemy.Position);
             float distance = Math.Abs(v.Length());
-            if ((this.Size.X + Range) + enemy.Size.X > distance) return true;
+            if ((this.Size.X + Range) + enemy.Size.X > distance)
+                return true;
             return false;
         }
         /// <summary>

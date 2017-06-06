@@ -13,6 +13,7 @@ namespace Projecto
         protected Tile[] TilesDiagonal = new Tile[4];
         internal Vector2 MinBound;
         internal Vector2 MaxBound;
+        private static List<Enemy> movingEnemiesList = new List<Enemy>();
 
         //------------->CONSTRUCTORS<-------------//
 
@@ -154,6 +155,33 @@ namespace Projecto
                 position.Y = Tiles[3].Collider.MaxBound.Y + size.Y;
             }
             return position;
-        }      
+        }
+
+        public static void UpdateMovingEnemies()
+        {
+            foreach (Enemy e in GameState.EnemyList)
+            {
+                if (e.listVectors.Count() > 0)
+                    movingEnemiesList.Add(e);
+            }
+            for (int i = 0; i < movingEnemiesList.Count(); i++)
+            {
+                if (movingEnemiesList[i].listVectors.Count() == 0)
+                    movingEnemiesList.Remove(movingEnemiesList[i]);
+            }
+        }
+        public void EnemyCollision(Enemy thisEnemy, ref Vector2 deltaPosition)
+        {
+            foreach (Enemy e in movingEnemiesList)
+            {
+                //if (thisEnemy != e && thisEnemy.Rectangle.Intersects(e.Rectangle))
+                //    deltaPosition = -deltaPosition;
+
+                if (thisEnemy != e && thisEnemy.Rectangle.Intersects(e.Rectangle))
+                {
+                    deltaPosition = Vector2.Zero;
+                }
+            }
+        }
     }
 }

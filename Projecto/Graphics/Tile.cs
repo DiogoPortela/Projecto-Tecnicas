@@ -22,7 +22,10 @@ namespace Projecto
         public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber, coordinates * size, new Vector2(size, size), 0f)
         {
             if (tileNumber < 10)
+            {
+                isWall = true;
                 this.Color = new Color(Game1.random.Next(150, 256), Game1.random.Next(150, 256), 255);
+            }
             else
                 this.Color = new Color(Game1.random.Next(200, 256), Game1.random.Next(200, 256), 255);
             this.TileNumber = tileNumber;
@@ -30,10 +33,6 @@ namespace Projecto
             this.isSomethingOnTop = false;
             this.Collider = new Collider(coordinates * size, new Vector2(size, size));
 
-            if (tileNumber == 1 || tileNumber == 2)
-            {
-                isWall = true;
-            }
         }
 
         //------------->FUNCTIONS && METHODS<-------------//

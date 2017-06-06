@@ -20,7 +20,7 @@ namespace Projecto
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("personagem_frente-02", position, size, range)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("personagem (1)", position, size, range)
         {
             this.animations = new Animation[18];
             this.pNumber = number;
@@ -38,14 +38,21 @@ namespace Projecto
 
             if (number == PlayerNumber.playerOne)
             {
-                //animations[2] = new Animation("walkAdult", "Walk Final P1", Vector2.One * 64, 8, 100f);
-                //animations[3] = new Animation("walkKid", "Walk Kid P1", Vector2.One * 32, 8, 100f);
-                //this.currentAnimation = animations[3];
+                animations[0] = new Animation("Standing", "PlayerOne_Standing_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[1] = new Animation("Walking", "PlayerOne_Walking_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
+                this.currentAnimation = animations[0];
             }
             else
             {
-                //animations[1] = new Animation("walk", "Walk Final P2", Vector2.One * 64, 8, 100f);
-                //this.currentAnimation = animations[1];
+                animations[0] = new Animation("Standing", "PlayerOne_Standing_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[1] = new Animation("Walking", "PlayerOne_Walking_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
+                this.currentAnimation = animations[0];
             }
         }
 
@@ -68,6 +75,13 @@ namespace Projecto
             {
                 GameState.ItemDictionary.Remove(i.Name);
             }
+
+            if (Game1.lastFrameState.GetPressedKeys().Length == 0)
+            {
+                currentAnimation = animations[0];
+                currentInput = CurrentInput.NoInput;
+            }
+            currentAnimation.Play(gameTime);
         }
         /// <summary>
         /// Deals with all the movement and animations.
@@ -85,8 +99,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Right)
                     {
-                        //this.currentAnimation.Stop();
-                        //this.currentAnimation = animations[3];
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[4];
                         this.objectDiretion = Vector2.UnitX;
                         currentInput = CurrentInput.Right;
                     }
@@ -96,6 +110,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Left)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[3];
                         this.objectDiretion = -Vector2.UnitX;
                         currentInput = CurrentInput.Left;
                     }
@@ -105,6 +121,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Up)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[2];
                         this.objectDiretion = Vector2.UnitY;
                         currentInput = CurrentInput.Up;
                     }
@@ -114,6 +132,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Down)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[1];
                         this.objectDiretion = -Vector2.UnitY;
                         currentInput = CurrentInput.Down;
                     }
@@ -130,8 +150,8 @@ namespace Projecto
                     if (currentInput != CurrentInput.Right)
                     {
                         this.objectDiretion = Vector2.UnitX;
-                        //this.currentAnimation.Stop();
-                        //this.currentAnimation = animations[3];
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[4];
                         currentInput = CurrentInput.Right;
                     }
                     deltaPosition += Vector2.UnitX * movingSpeed;
@@ -140,6 +160,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Left)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[3];
                         this.objectDiretion = -Vector2.UnitX;
                         currentInput = CurrentInput.Left;
                     }
@@ -149,6 +171,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Up)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[2];
                         this.objectDiretion = Vector2.UnitY;
                         currentInput = CurrentInput.Up;
                     }
@@ -158,6 +182,8 @@ namespace Projecto
                 {
                     if (currentInput != CurrentInput.Down)
                     {
+                        this.currentAnimation.Stop();
+                        this.currentAnimation = animations[1];
                         this.objectDiretion = -Vector2.UnitY;
                         currentInput = CurrentInput.Down;
                     }
@@ -180,7 +206,6 @@ namespace Projecto
                 }
             }
          
-            //this.currentAnimation.Play(gameTime);
         }
         /// <summary>
         /// Deals with all player/enemy damage.
@@ -231,8 +256,8 @@ namespace Projecto
             if (isActive)
             {
                 this.Rectangle = camera.CalculatePixelRectangle(this.Position, this.Size);
-                Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
-                //Game1.spriteBatch.Draw(currentAnimation.spriteTexture, this.Rectangle, currentAnimation.currentFrameRec, Color.White);
+                //Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+                Game1.spriteBatch.Draw(currentAnimation.spriteTexture, this.Rectangle, currentAnimation.currentFrameRec, Color.White);
             }
         }
     }

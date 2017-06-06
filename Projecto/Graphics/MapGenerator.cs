@@ -141,7 +141,7 @@ namespace Projecto
                         int aux = 0;
                         if(infoMap[x, y] == 1)
                         {
-                            aux = Game1.random.Next(1, 3);
+                            aux = Game1.random.Next(1, 4);
                         }
                         else
                         {
