@@ -62,6 +62,8 @@ namespace Projecto
             auxString.Add("PlayerOne_Walking_NoWeapon");
             auxString.Add("PlayerOne_BackWalking_NoWeapon");
 
+            auxString.Add("portal");
+
             auxString.Add("Tile1");
             auxString.Add("Tile2");
             auxString.Add("Tile3");

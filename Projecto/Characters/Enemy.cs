@@ -133,12 +133,12 @@ namespace Projecto
                 if (!e.IsInRange(GameState.PlayerOne))
                     auxEnemy1.Remove(e);
             }
-            foreach (Enemy e in auxEnemy2)
+            for(int i = 0; i < auxEnemy2.Count; i++ )
             { 
-                if (gameTime.TotalGameTime.TotalSeconds > e.enemyTimerStart + e.enemyCooldown)
+                if (gameTime.TotalGameTime.TotalSeconds > auxEnemy2[i].enemyTimerStart + auxEnemy2[i].enemyCooldown)
                 {
-                    e.enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
-                    e.hasAttacked = false;
+                    auxEnemy2[i].enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
+                    auxEnemy2[i].hasAttacked = false;
                 }
  
                 if (hasAttacked == false)
@@ -147,11 +147,11 @@ namespace Projecto
                     //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
                     p.Start();
                     GameState.ParticlesList.Add(p);
-                    e.hasAttacked = true;
+                    auxEnemy2[i].hasAttacked = true;
                 }
             
-                if (!e.IsInRange(GameState.PlayerOne) == false)
-                    auxEnemy2.Remove(e);
+                if (!auxEnemy2[i].IsInRange(GameState.PlayerOne) == false)
+                    auxEnemy2.Remove(auxEnemy2[i]);
             }
         }
     }

@@ -20,10 +20,10 @@ namespace Projecto
         {
             this.isOpen = false;
             this.portalCollider = new Collider(Position, Size);
-            if (Game1.textureList.ContainsKey("openPortal"))
-                openTexture = Game1.textureList["openPortal"];
-            else if (Game1.textureList.ContainsKey("closedPortal"))
-                closedTexture = Game1.textureList["closedPortal"];
+            if (Game1.textureList.ContainsKey("portal"))
+                openTexture = Game1.textureList["portal"];
+            if (Game1.textureList.ContainsKey("portal"))
+                closedTexture = Game1.textureList["portal"];
             currentTexture = closedTexture;
         }
 

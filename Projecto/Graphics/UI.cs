@@ -90,7 +90,7 @@ namespace Projecto
         {
             if (font == null)
             {
-                GameFont = Game1.content.Load<SpriteFont>("Arial");
+                GameFont = Game1.content.Load<SpriteFont>("Silkscreen");
             }
             else
             {
