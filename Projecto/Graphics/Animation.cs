@@ -1,5 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using System;
 
 namespace Projecto
 {
@@ -20,13 +21,13 @@ namespace Projecto
         public Animation(string name, string texture, Vector2 size, int numberFrames, float frameRate)
         {
             this.name = name;
-            if (Game1.textureList.ContainsKey(name))
-                spriteTexture = Game1.textureList[name];
+            if (Game1.textureList.ContainsKey(texture))
+                spriteTexture = Game1.textureList[texture];
             else
                 Debug.NewLine("FILE MISSING: " + name);
             this.size = size;
             maxFrames = numberFrames;
-            this.frameRate = frameRate;
+            this.frameRate = 1000 / frameRate;
             currentFrame = 0;
             LastFrameTime = 0;
         }

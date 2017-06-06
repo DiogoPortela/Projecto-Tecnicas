@@ -76,7 +76,7 @@ namespace Projecto
             #region LoadWeapons
             Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 25, 0, 25, 1.5f, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
-            aux = new Weapon("Sword", "Sword", MapGenerator.GetPlayerStartingPosition(), false, 0, 25, 3, 1, 1, 1, 1, 1);
+            aux = new Weapon("Sword", "Sword", MapGenerator.GetPlayerStartingPosition(), false, 0, 25, 1, 1, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
             #endregion
 
@@ -120,6 +120,8 @@ namespace Projecto
                 PlayerTwo.Update(gameTime);
                 cameraRight.LookAt(PlayerTwo);
 
+                //Collider.UpdateMovingEnemies();
+
                 foreach (Enemy e in EnemyList)              
                     e.Update(gameTime);               
                 for(int i = 0; i < BulletList.Count; i++)
@@ -129,6 +131,10 @@ namespace Projecto
                     ParticlesList[i].Update(gameTime);
                     if (!ParticlesList[i].isLoop && ParticlesList[i].TimeLeft.Milliseconds < 0)
                         ParticlesList.Remove(ParticlesList[i]);
+                }
+                if (EnemyList.Count == 0)
+                {
+                    //SPAWN END PORTAL
                 }
             }
             else

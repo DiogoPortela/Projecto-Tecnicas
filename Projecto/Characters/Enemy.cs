@@ -13,7 +13,7 @@ namespace Projecto
         private const float movingSpeed = 0.2f;
 
         private PathFinder pathFinder;
-        private Stack<Vector2> listVectors;
+        public Stack<Vector2> listVectors;
         private Vector2 playerLastPosition;
         private Vector2 nextPosition;
         private float playerOneDistance;
@@ -53,7 +53,7 @@ namespace Projecto
             playerOneDistance = Math.Abs((this.Coordinates - GameState.PlayerOne.Coordinates).Length());
             playerTwoDistance = Math.Abs((this.Coordinates - GameState.PlayerTwo.Coordinates).Length());
 
-            if (playerOneDistance <= playerTwoDistance && playerOneDistance < 10 && GameState.PlayerOne.Coordinates != playerLastPosition)
+            if (playerOneDistance <= playerTwoDistance && playerOneDistance < 5 /*&& GameState.PlayerOne.Coordinates != playerLastPosition*/)
             {
                 playerLastPosition = GameState.PlayerOne.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerOne.Coordinates, ref MapGenerator.infoMap);
@@ -61,7 +61,7 @@ namespace Projecto
                 if (listVectors.Count > 0)
                     nextPosition = listVectors.Pop();
             }
-            else if (playerOneDistance > playerTwoDistance && playerTwoDistance < 10 && GameState.PlayerTwo.Coordinates != playerLastPosition)
+            else if (playerOneDistance > playerTwoDistance && playerTwoDistance < 5 /*&& GameState.PlayerTwo.Coordinates != playerLastPosition*/)
             {
                 playerLastPosition = GameState.PlayerTwo.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerTwo.Coordinates, ref MapGenerator.infoMap);
@@ -83,6 +83,8 @@ namespace Projecto
             //    this.Move(deltaPosition);
             //    this.Coordinates = new Vector2((int)(this.Position.X / (float)Constants.GRIDSIZE + 0.5f), (int)(this.Position.Y / (int)Constants.GRIDSIZE + 0.5f));
             //}
+            if (deltaPosition != Vector2.Zero)
+                this.enemyCollider.EnemyCollision(this, ref deltaPosition);
 
             if (nextPosition != Vector2.Zero && deltaPosition != Vector2.Zero)
             {
