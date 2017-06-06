@@ -222,6 +222,65 @@ namespace Projecto
         /// <summary>
         /// Use this method to defense
         /// </summary>
+        /// 
+
+
+        public void EnemyDamage(GameTime gameTime)
+        {
+            List<Enemy> auxEnemy1 = new List<Enemy>();
+            List<Enemy> auxEnemy2 = new List<Enemy>();
+            ParticleSystem p = new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerOne.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+
+            foreach (Enemy enemy in GameState.EnemyList)
+            {
+                if (enemy.IsInRange(GameState.PlayerOne) == true)
+                    auxEnemy1.Add(enemy);
+                if (enemy.IsInRange(GameState.PlayerTwo) == true)
+                    auxEnemy2.Add(enemy);
+            }
+
+            for (int i = 0; i < auxEnemy1.Count; i++)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds > auxEnemy1[i].enemyTimerStart + auxEnemy1[i].enemyCooldown)
+                {
+                    auxEnemy1[i].enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
+                    auxEnemy1[i].hasAttacked = false;
+                }
+
+                if (auxEnemy1[i].hasAttacked == false)
+                {
+                    PlayerTakeDamage(GameState.PlayerOne);
+                    //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
+                    p.Start();
+                    GameState.ParticlesList.Add(p);
+                    auxEnemy1[i].hasAttacked = true;
+                }
+
+                if (!auxEnemy1[i].IsInRange(GameState.PlayerOne) == false)
+                    auxEnemy1.Remove(auxEnemy1[i]);
+            }
+        
+            for (int i = 0; i < auxEnemy2.Count; i++)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds > auxEnemy2[i].enemyTimerStart + auxEnemy2[i].enemyCooldown)
+                {
+                    auxEnemy2[i].enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
+                    auxEnemy2[i].hasAttacked = false;
+                }
+
+                if (auxEnemy2[i].hasAttacked == false)
+                {
+                    PlayerTakeDamage(GameState.PlayerTwo);
+                    //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
+                    p.Start();
+                    GameState.ParticlesList.Add(p);
+                    auxEnemy2[i].hasAttacked = true;
+                }
+
+                if (!auxEnemy2[i].IsInRange(GameState.PlayerOne) == false)
+                    auxEnemy2.Remove(auxEnemy2[i]);
+            }
+        }
         public void PlayerTakeDamage(PlayerManager defender)
         {
             if (PhysDmg >= defender.PhysDmgRes)

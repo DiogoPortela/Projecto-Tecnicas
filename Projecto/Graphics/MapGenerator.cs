@@ -565,7 +565,20 @@ namespace Projecto
 
         static public Vector2 GetPortalSpawn()
         {
-            return new Vector2(MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX, MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX);
+            Coordinate maxX = MapRooms[0].tiles[0], minX = MapRooms[0].tiles[0], maxY = MapRooms[0].tiles[0], minY = MapRooms[0].tiles[0];
+
+            foreach (Coordinate c in MapRooms[0].tiles)
+            {
+                if (c.tileX > maxX.tileX)
+                    maxX = c;
+                if (c.tileX < minX.tileX)
+                    minX = c;
+                if (c.tileY > maxY.tileY)
+                    maxY = c;
+                if (c.tileY < minY.tileY)
+                    minY = c;
+            }
+            return new Vector2(maxX.tileX - minX.tileX, maxY.tileY - minY.tileY);
         } 
 
         /// <summary>

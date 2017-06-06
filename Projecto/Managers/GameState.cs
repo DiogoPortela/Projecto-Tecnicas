@@ -54,7 +54,7 @@ namespace Projecto
             leftView.Width /= 2;
             rightView.X = leftView.Width;
             //Initializing cameras.
-            cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
+            cameraLeft = new Camera(Vector2.Zero, 150, ((float)leftView.Height / leftView.Width));
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
             #endregion
 
@@ -78,7 +78,7 @@ namespace Projecto
 
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerOne, 3);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
-            portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * (int)Constants.GRIDSIZE);
+            portal = new Portal(MapGenerator.GetPortalSpawn() * (int)Constants.GRIDSIZE, Vector2.One * (int)Constants.GRIDSIZE);
 
             #region Enemies
             List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(50);
@@ -123,7 +123,6 @@ namespace Projecto
                 //Collider.UpdateMovingEnemies();
 
                 foreach (Enemy e in EnemyList)
-
                     e.Update(gameTime);
                 for (int i = 0; i < BulletList.Count; i++)
                     BulletList[i].Update();
@@ -185,9 +184,10 @@ namespace Projecto
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);
+            portal.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
-            portal.DrawObject(camera);
+            
             foreach (Enemy e in EnemyList)
                 e.DrawObject(camera);
             foreach (ParticleSystem p in ParticlesList)
