@@ -279,6 +279,12 @@ namespace Projecto
             }
             Debug.NewLine(defender.HP.ToString());
         }
+
+        public void PlayerGetKnockedBack(PlayerManager defender, Vector2 direction)
+        {
+            defender.Coordinates.X -= direction.X;
+            defender.Coordinates.Y -= direction.Y;
+        }
         /// <summary>
         /// Returns true if an enemy is in range.
         /// </summary>

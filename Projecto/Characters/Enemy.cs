@@ -123,6 +123,8 @@ namespace Projecto
                 if (e.hasAttacked == false)
                 {
                     PlayerTakeDamage(GameState.PlayerOne);
+                    PlayerGetKnockedBack(GameState.PlayerOne,
+                        new Vector2(e.Coordinates.X - GameState.PlayerOne.Coordinates.X, e.Coordinates.Y - GameState.PlayerOne.Coordinates.Y));
                     p.Start();
                     GameState.ParticlesList.Add(p);
                     e.hasAttacked = true;
@@ -142,6 +144,8 @@ namespace Projecto
                 if (hasAttacked == false)
                 {
                     PlayerTakeDamage(GameState.PlayerTwo);
+                    PlayerGetKnockedBack(GameState.PlayerTwo,
+                        new Vector2(e.Coordinates.X - GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y - GameState.PlayerTwo.Coordinates.Y));
                     p.Start();
                     GameState.ParticlesList.Add(p);
                     e.hasAttacked = true;
