@@ -142,6 +142,7 @@ namespace Projecto
             Weapon aux = this.mainHandWeapon;
             this.mainHandWeapon = this.offHandWeapon;
             this.offHandWeapon = aux;
+            SoundManager.StartSound("troca_arma", false);
         }
         /// <summary>
         /// Changes a player weapon by a new one.
@@ -165,6 +166,7 @@ namespace Projecto
             {
                 Bullet bullet = new Bullet(this.Center, this.objectDiretion, mainHandWeapon.MainAtackRange, this);
                 GameState.BulletList.Add(bullet);
+                SoundManager.StartSound("attack_magico", false);
             }
             else
             {
@@ -186,7 +188,9 @@ namespace Projecto
                     EnemyTakeDamage(enemy);
                     if (enemy.HP <= 0)
                         GameState.EnemyList.Remove(enemy);
+                    SoundManager.StartSound("morrer", false);
                 }
+                SoundManager.StartSound("attack1", false);
             }
         }
         /// <summary>
@@ -237,6 +241,13 @@ namespace Projecto
             }
             Debug.NewLine(defender.HP.ToString());
         }
+
+        public void PlayerGetKnockedBack(PlayerManager defender, Vector2 direction)
+        {
+            //player e empurrado
+            defender.Position -= direction;
+        }
+
         /// <summary>
         /// Returns true if an enemy is in range.
         /// </summary>

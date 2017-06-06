@@ -45,7 +45,6 @@ namespace Projecto
             FillTileMap();
             FindPlayerSpawn();
             FindMapWalkableTiles();
-
         }
 
         private void RandomFillMap()
@@ -84,7 +83,6 @@ namespace Projecto
                         infoMap[x, y] = 1;
                     else if (neighbourWallTiles < 4)
                         infoMap[x, y] = 0;
-
                 }
             }
         }
@@ -178,7 +176,7 @@ namespace Projecto
         /// <param name="gridX"></param>
         /// <param name="gridY"></param>
         /// <returns>The count of walls</returns>
-        static private int GetSurroundingWallCount(int gridX, int gridY)
+        static public int GetSurroundingWallCount(int gridX, int gridY)
         {
             int wallCount = 0;
             for (int neighbourX = gridX - 1; neighbourX <= gridX + 1; neighbourX++)
@@ -511,6 +509,7 @@ namespace Projecto
         {
             List<Vector2> enemySpawns = new List<Vector2>();
             float aux;
+            int[,] mapFlags = new int[Width, Height];
             Coordinate c;
             foreach (Room r in MapRooms)
             {
@@ -524,9 +523,12 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX,c.tileY] == 0 &&
+                                TilesMap[c.tileX, c.tileY].isWall == false)
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                mapFlags[c.tileX, c.tileY] = 1;
                                 i++;
                             }
                         }
@@ -537,9 +539,12 @@ namespace Projecto
                         {
                             c = RandomCoord(r);
 
+                            if (GetSurroundingWallCount(c.tileX, c.tileY) == 0 && mapFlags[c.tileX, c.tileY] == 0 &&
+                                TilesMap[c.tileX,c.tileY].isWall == false)
                             if (TilesMap[c.tileX, c.tileY].isWall == false)
                             {
                                 enemySpawns.Add(CoordinateToWorldPoint(c));
+                                mapFlags[c.tileX, c.tileY] = 1;
                                 i++;
                             }
                         }
@@ -557,6 +562,11 @@ namespace Projecto
             Coordinate aux = Spawn.tiles[Game1.random.Next(Spawn.tiles.Count())];
             return new Vector2(aux.tileX * TileSize, aux.tileY * TileSize);
         }
+
+        static public Vector2 GetPortalSpawn()
+        {
+            return new Vector2(MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX, MapRooms[0].tiles[MapRooms[0].tiles.Count / 2].tileX);
+        } 
 
         /// <summary>
         /// Draws the finished map on the given camera.

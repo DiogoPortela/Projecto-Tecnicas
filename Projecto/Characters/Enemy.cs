@@ -9,7 +9,6 @@ namespace Projecto
         public Vector2 Coordinates;
         private Vector2 deltaPosition;
         public Collider enemyCollider;
-        //private SpatialAStar<Tile, Object> aStar;
         private const float movingSpeed = 0.2f;
 
         private PathFinder pathFinder;
@@ -18,6 +17,9 @@ namespace Projecto
         private Vector2 nextPosition;
         private float playerOneDistance;
         private float playerTwoDistance;
+        private float enemyTimerStart = 0f;
+        private float enemyCooldown = 2f;
+        private bool hasAttacked;
 
 
 
@@ -45,6 +47,7 @@ namespace Projecto
         public void Update(GameTime gameTime)
         {
             EnemyMovement(gameTime);
+            EnemyDamage(gameTime);
         }
         public void EnemyMovement(GameTime gameTime)
         {
@@ -95,6 +98,61 @@ namespace Projecto
                 this.enemyCollider.UpdateBounds(Position, Size);
             }
             //this.currentAnimation.Play(gameTime);
+        }
+        public void EnemyDamage(GameTime gameTime)
+        {
+            List<Enemy> auxEnemy1 = new List<Enemy>();
+            List<Enemy> auxEnemy2 = new List<Enemy>();
+            ParticleSystem p = new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerOne.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+
+            foreach (Enemy enemy in GameState.EnemyList)
+            {
+                if (enemy.IsInRange(GameState.PlayerOne) == true)
+                    auxEnemy1.Add(enemy);
+                if (enemy.IsInRange(GameState.PlayerTwo) == true)
+                    auxEnemy2.Add(enemy);
+            }
+
+            foreach (Enemy e in auxEnemy1)
+            {
+                if (gameTime.TotalGameTime.TotalSeconds > e.enemyTimerStart + e.enemyCooldown)
+                {
+                    e.enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
+                    e.hasAttacked = false;
+                }
+
+                if (e.hasAttacked == false)
+                {
+                    PlayerTakeDamage(GameState.PlayerOne);
+                    //PlayerGetKnockedBack(GameState.PlayerOne, new Vector2(e.Coordinates.X + GameState.PlayerOne.Coordinates.X, e.Coordinates.Y + GameState.PlayerOne.Coordinates.Y));
+                    p.Start();
+                    GameState.ParticlesList.Add(p);
+                    e.hasAttacked = true;
+                }
+
+                if (!e.IsInRange(GameState.PlayerOne))
+                    auxEnemy1.Remove(e);
+            }
+            foreach (Enemy e in auxEnemy2)
+            { 
+                if (gameTime.TotalGameTime.TotalSeconds > e.enemyTimerStart + e.enemyCooldown)
+                {
+                    e.enemyTimerStart = (float)gameTime.TotalGameTime.TotalSeconds;
+                    e.hasAttacked = false;
+                }
+ 
+                if (hasAttacked == false)
+                {
+                    PlayerTakeDamage(GameState.PlayerTwo);
+                    //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
+                    p.Start();
+                    GameState.ParticlesList.Add(p);
+                    e.hasAttacked = true;
+                }
+            
+                if (!e.IsInRange(GameState.PlayerOne) == false)
+                    auxEnemy2.Remove(e);
+            }
         }
     }
 }

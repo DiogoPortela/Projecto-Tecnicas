@@ -26,7 +26,8 @@ namespace Projecto
         static private Vector2 debugTextPosition;
 
         #region ZONA DE TESTE
-        
+
+
         #endregion
 
         //------------->FUNCTIONS && METHODS<-------------//
@@ -43,19 +44,16 @@ namespace Projecto
             MapGenerator.Width = (int)Constants.MAXWIDTH; //100;
             MapGenerator.Height = (int)Constants.MAXHEIGHT;
             map.GenerateMap((int)Constants.GRIDSIZE);
-            //aStar = new SpatialAStar<Tile, Object>(MapGenerator.TilesMap);
             #endregion
 
             #region Camera. Split screen
             //Viewports           
             defaultView = Game1.graphics.GraphicsDevice.Viewport;
             leftView = rightView = defaultView;
-
             //Dividing it in half, and adjusting the positioning.
             rightView.Width /= 2;
             leftView.Width /= 2;
             rightView.X = leftView.Width;
-
             //Initializing cameras.
             cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
@@ -97,21 +95,26 @@ namespace Projecto
 
             isPaused = false;
             SoundManager.StopAllSounds();
-            //SoundManager.StartSound("mainGameTheme", true);
+            SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
 
+            for (int i = 0; i < enemyPosList.Count; i++)
+            {
+                Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * 5, 10);
+                EnemyList.Add(enemyAux);
+            }
             #endregion
         }
+
         /// <summary>
         /// Updates the whole gamestate.
         /// </summary>
         static public void StateUpdate(GameTime gameTime)
         {
             if (InputManager.PressedLastFrame.Esc == ButtonState.Pressed)
-            {
                 isPaused = !isPaused;
-            }
+
             if (!isPaused)
             {
                 PlayerOne.Update(gameTime);
@@ -124,8 +127,10 @@ namespace Projecto
 
                 foreach (Enemy e in EnemyList)              
                     e.Update(gameTime);               
+
                 for(int i = 0; i < BulletList.Count; i++)
                     BulletList[i].Update();
+
                 for (int i = 0; i < ParticlesList.Count; i++)
                 {
                     ParticlesList[i].Update(gameTime);
@@ -138,10 +143,9 @@ namespace Projecto
                 }
             }
             else
-            {
                 UI.PauseUpdate();
-            }
         }
+
         /// <summary>
         /// Draws the whole gamestate.
         /// </summary>
@@ -154,6 +158,7 @@ namespace Projecto
             //Draws the right side
             Game1.graphics.GraphicsDevice.Viewport = rightView;
             DrawCameraView(cameraRight);
+
             #region Draws the whole picture.
             Game1.graphics.GraphicsDevice.Viewport = defaultView;
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
@@ -163,20 +168,20 @@ namespace Projecto
             Debug.DrawPlayerInfo(debugPlayerTwoPosition, PlayerTwo);
             Debug.DrawTextAt("Enemys: " + EnemyList.Count.ToString() + " Particles: " + ParticlesList.Count.ToString() + " Bullets: " + BulletList.Count.ToString()
                                + "\nItems: " + ItemDictionary.Count.ToString(), debugTextPosition);
-                            
+
+
             foreach(UI_Static_Item ui in UI_Static_ItemsList)
-            {
                 ui.Draw();
-            }
+
+
 
             if (isPaused)
-            {
                 UI.DrawPauseMenu();
-            }
 
             Game1.spriteBatch.End();
             #endregion
         }
+   
         /// <summary>
         /// Draws the whole world for one camera.
         /// </summary>
@@ -189,15 +194,14 @@ namespace Projecto
             PlayerTwo.DrawObject(camera);
 
             foreach (Enemy e in EnemyList)
-            {
                 e.DrawObject(camera);
-            }
+
             foreach (ParticleSystem p in ParticlesList)
-            {
                 p.Draw(camera);
-            }
+
             foreach (KeyValuePair<string,Item> i in ItemDictionary)
                 i.Value.Draw(camera);
+
             foreach (Bullet b in BulletList)
                 b.DrawObject(camera);
 
