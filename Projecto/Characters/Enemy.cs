@@ -54,7 +54,7 @@ namespace Projecto
             playerOneDistance = Math.Abs((this.Coordinates - GameState.PlayerOne.Coordinates).Length());
             playerTwoDistance = Math.Abs((this.Coordinates - GameState.PlayerTwo.Coordinates).Length());
 
-            if (playerOneDistance <= playerTwoDistance && playerOneDistance < 5 /*&& GameState.PlayerOne.Coordinates != playerLastPosition*/)
+            if ((playerOneDistance <= playerTwoDistance && playerOneDistance < 5) || (playerOneDistance <= playerTwoDistance && GameState.EnemyList.Count <= 5))
             {
                 playerLastPosition = GameState.PlayerOne.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerOne.Coordinates, ref MapGenerator.infoMap);
@@ -62,7 +62,7 @@ namespace Projecto
                 if (listVectors.Count > 0)
                     nextPosition = listVectors.Pop();
             }
-            else if (playerOneDistance > playerTwoDistance && playerTwoDistance < 5 /*&& GameState.PlayerTwo.Coordinates != playerLastPosition*/)
+            else if ((playerOneDistance > playerTwoDistance && playerTwoDistance < 5) || (playerOneDistance <= playerTwoDistance && GameState.EnemyList.Count <= 5))
             {
                 playerLastPosition = GameState.PlayerTwo.Coordinates;
                 pathFinder = new PathFinder(this.Coordinates, GameState.PlayerTwo.Coordinates, ref MapGenerator.infoMap);
