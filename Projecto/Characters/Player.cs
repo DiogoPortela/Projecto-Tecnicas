@@ -20,7 +20,7 @@ namespace Projecto
 
         //------------->CONSTRUCTORS<-------------//
 
-        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base("personagem (1)", position, size, range)
+        public PlayerManager(Vector2 position, Vector2 size, PlayerNumber number, int range) : base(null, position, size, range)
         {
             this.animations = new Animation[18];
             this.pNumber = number;

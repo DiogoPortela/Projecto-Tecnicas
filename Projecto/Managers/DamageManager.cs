@@ -229,7 +229,9 @@ namespace Projecto
         {
             List<Enemy> auxEnemy1 = new List<Enemy>();
             List<Enemy> auxEnemy2 = new List<Enemy>();
-            ParticleSystem p = new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerOne.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+            ParticleSystem p1 = new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerOne.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+            ParticleSystem p2 = new ParticleSystem(ParticleType.Explosion, "DebugPixel", GameState.PlayerTwo.Center, Vector2.One * 0.5f, 4, 0, 3, 500, 500, 10);
+
 
             foreach (Enemy enemy in GameState.EnemyList)
             {
@@ -251,8 +253,8 @@ namespace Projecto
                 {
                     PlayerTakeDamage(GameState.PlayerOne);
                     //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
-                    p.Start();
-                    GameState.ParticlesList.Add(p);
+                    p1.Start();
+                    GameState.ParticlesList.Add(p1);
                     auxEnemy1[i].hasAttacked = true;
                 }
 
@@ -272,12 +274,12 @@ namespace Projecto
                 {
                     PlayerTakeDamage(GameState.PlayerTwo);
                     //PlayerGetKnockedBack(GameState.PlayerTwo, new Vector2(e.Coordinates.X + GameState.PlayerTwo.Coordinates.X, e.Coordinates.Y + GameState.PlayerTwo.Coordinates.Y));
-                    p.Start();
-                    GameState.ParticlesList.Add(p);
+                    p2.Start();
+                    GameState.ParticlesList.Add(p2);
                     auxEnemy2[i].hasAttacked = true;
                 }
 
-                if (!auxEnemy2[i].IsInRange(GameState.PlayerOne) == false)
+                if (!auxEnemy2[i].IsInRange(GameState.PlayerTwo) == false)
                     auxEnemy2.Remove(auxEnemy2[i]);
             }
         }

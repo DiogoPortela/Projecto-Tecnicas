@@ -59,6 +59,18 @@ namespace Projecto
             this.Scale = scale;
             this.Color = Color.White;
         }
+
+        public void ChangeText(string text)
+        {
+            this.Text = text;
+        }
+
+        public void Draw()
+        {
+            Game1.spriteBatch.DrawString(UI.GameFont, Text, Position, Color, 0f, Center, Scale, SpriteEffects.None, 0f);
+
+        }
+
     }
     static class UI
     {
@@ -77,6 +89,9 @@ namespace Projecto
         static private string cont;
         static private string mainMenu;
         static private string quit;
+
+        static private Color[] colorsOne;
+        static private Color[] colorsTwo;
 
         static private int selectedOne;
         static private int selectedTwo;
@@ -106,6 +121,17 @@ namespace Projecto
             selectedOne = 0;
             selectedTwo = 0;
 
+            colorsOne = new Color[3];
+            colorsTwo = new Color[3];
+
+            for ( int i = 0; i < 3; i++)
+            {
+                colorsOne[i] = Color.White;
+                colorsTwo[i] = Color.White;
+            }
+            colorsOne[0] = Color.Yellow;
+            colorsTwo[0] = Color.Yellow;
+
             ContinueOne = new UI_Text_Box(cont, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 10)), TextAlignment.Left, 2);
             MainMenuOne = new UI_Text_Box(mainMenu, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 20)), TextAlignment.Left, 2);
             QuitOne = new UI_Text_Box(quit, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 30)), TextAlignment.Left, 2);
@@ -122,27 +148,29 @@ namespace Projecto
         {
             if (InputManager.PressedLastFrame.UpTwo == ButtonState.Pressed  && selectedTwo > 0)
             {
-                //colors[selected] = Color.White;
+                colorsTwo[selectedTwo] = Color.White;
                 selectedTwo--;
-                //colors[selected] = Color.Yellow;
+                colorsTwo[selectedTwo] = Color.Yellow;
             }
             
             else if (InputManager.PressedLastFrame.DownTwo == ButtonState.Pressed && selectedTwo < 2)
             {
-                //colors[selected] = Color.White;
+                colorsTwo[selectedTwo] = Color.White;
                 selectedTwo++;
-                //colors[selected] = Color.Yellow;
+                colorsTwo[selectedTwo] = Color.Yellow;
             }
 
             if (InputManager.PressedLastFrame.UpOne == ButtonState.Pressed && selectedOne > 0)
             {
+                colorsOne[selectedOne] = Color.White;
                 selectedOne--;
+                colorsOne[selectedOne] = Color.Yellow;
             }
             else if (InputManager.PressedLastFrame.DownOne == ButtonState.Pressed  && selectedOne < 2)
             {
-                //colors[selected] = Color.White;
-                selectedTwo++;
-                //colors[selected] = Color.Yellow;
+                colorsOne[selectedOne] = Color.White;
+                selectedOne++;
+                colorsOne[selectedOne] = Color.Yellow;
             }
 
             if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
@@ -197,13 +225,13 @@ namespace Projecto
         {
             Game1.spriteBatch.Draw(Debug.debugTexture, ScreenArea, pauseColor);
 
-            Game1.spriteBatch.DrawString(UI.GameFont, ContinueOne.Text, ContinueOne.Position, ContinueOne.Color, 0f, ContinueOne.Center, ContinueOne.Scale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, MainMenuOne.Text, MainMenuOne.Position, MainMenuOne.Color, 0f, MainMenuOne.Center, MainMenuOne.Scale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, QuitOne.Text, QuitOne.Position, QuitOne.Color, 0f, QuitOne.Center, QuitOne.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, ContinueOne.Text, ContinueOne.Position, colorsOne[0], 0f, ContinueOne.Center, ContinueOne.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, MainMenuOne.Text, MainMenuOne.Position, colorsOne[1], 0f, MainMenuOne.Center, MainMenuOne.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, QuitOne.Text, QuitOne.Position, colorsOne[2], 0f, QuitOne.Center, QuitOne.Scale, SpriteEffects.None, 0f);
 
-            Game1.spriteBatch.DrawString(UI.GameFont, ContinueTwo.Text, ContinueTwo.Position, ContinueOne.Color, 0f, ContinueTwo.Center, ContinueTwo.Scale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, MainMenuTwo.Text, MainMenuTwo.Position, MainMenuTwo.Color, 0f, MainMenuTwo.Center, MainMenuTwo.Scale, SpriteEffects.None, 0f);
-            Game1.spriteBatch.DrawString(UI.GameFont, QuitTwo.Text, QuitTwo.Position, QuitTwo.Color, 0f, QuitTwo.Center, QuitTwo.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, ContinueTwo.Text, ContinueTwo.Position, colorsTwo[0], 0f, ContinueTwo.Center, ContinueTwo.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, MainMenuTwo.Text, MainMenuTwo.Position, colorsTwo[1], 0f, MainMenuTwo.Center, MainMenuTwo.Scale, SpriteEffects.None, 0f);
+            Game1.spriteBatch.DrawString(UI.GameFont, QuitTwo.Text, QuitTwo.Position, colorsTwo[2], 0f, QuitTwo.Center, QuitTwo.Scale, SpriteEffects.None, 0f);
         }
     }
 }

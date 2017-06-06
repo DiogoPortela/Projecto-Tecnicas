@@ -41,13 +41,14 @@ namespace Projecto
         /// <param name="name"> Sound name. </param>
         /// <param name="isLoop"> True if the sound should be on loop. </param>
         static public void StartSound(string name, bool isLoop)
-        { 
+        {
             if (listSounds.ContainsKey(name))
             {
                 SoundEffectInstance aux = listSounds[name].CreateInstance();
                 aux.Play();
                 aux.IsLooped = isLoop;
-                //listPlayingSounds.Add(name, aux);
+                if (!listPlayingSounds.ContainsKey(name))
+                    listPlayingSounds.Add(name, aux);
             }
             else
             {
@@ -60,7 +61,7 @@ namespace Projecto
         /// <param name="name">Sound name.</param>
         static public void StopSound(string name)
         {
-            if(listPlayingSounds.ContainsKey(name))
+            if (listPlayingSounds.ContainsKey(name))
             {
                 listPlayingSounds[name].Stop();
                 listPlayingSounds.Remove(name);
@@ -75,7 +76,7 @@ namespace Projecto
         /// </summary>
         static public void StopAllSounds()
         {
-            foreach(KeyValuePair<string, SoundEffectInstance> soundFX in listPlayingSounds)
+            foreach (KeyValuePair<string, SoundEffectInstance> soundFX in listPlayingSounds)
             {
                 soundFX.Value.Stop();
             }

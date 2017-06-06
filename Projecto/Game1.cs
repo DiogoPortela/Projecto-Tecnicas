@@ -55,12 +55,13 @@ namespace Projecto
             textureList = new Dictionary<string, Texture2D>();
             List<string> auxString = new List<string>();
 
-            auxString.Add("personagem (1)");
             auxString.Add("PlayerOne_SideWalk_NoWeapon");
             auxString.Add("PlayerOne_SideWalk2_NoWeapon");
             auxString.Add("PlayerOne_Standing_NoWeapon");
             auxString.Add("PlayerOne_Walking_NoWeapon");
             auxString.Add("PlayerOne_BackWalking_NoWeapon");
+
+            auxString.Add("enemy");
 
             auxString.Add("portal");
 
@@ -71,7 +72,6 @@ namespace Projecto
             auxString.Add("Tile11");
             auxString.Add("Tile12");
 
-            auxString.Add("New Piskel");
             auxString.Add("DebugPixel");
             auxString.Add("Sword");
             auxString.Add("Staff");

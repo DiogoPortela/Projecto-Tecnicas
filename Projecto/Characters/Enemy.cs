@@ -22,7 +22,7 @@ namespace Projecto
         public bool hasAttacked;
 
         //------------->CONSTRUCTORS<-------------//
-        public Enemy(string texture, Vector2 position, Vector2 size, int range) : base("New Piskel", position, size, range)
+        public Enemy(string texture, Vector2 position, Vector2 size, int range) : base(texture, position, size, range)
         {
             playerLastPosition = -Vector2.One;
             //this.aStar = aStar;
@@ -36,8 +36,8 @@ namespace Projecto
 
             #region Stats initializer
             this.HP = 50;
-            this.PhysDmg = 5;
-            this.MagicDmg = 5;
+            this.PhysDmg = 20;
+            this.MagicDmg = 20;
             this.PhysDmgRes = 1;
             this.MagicDmgRes = 1;
             #endregion

@@ -17,6 +17,7 @@ namespace Projecto
 
         static public Dictionary<string, Item> ItemDictionary;
         static public List<UI_Static_Item> UI_Static_ItemsList;
+        static public List<UI_Text_Box> UI_Text_BoxList;
 
         static public bool isPaused;
         static public MapGenerator map;
@@ -54,7 +55,7 @@ namespace Projecto
             leftView.Width /= 2;
             rightView.X = leftView.Width;
             //Initializing cameras.
-            cameraLeft = new Camera(Vector2.Zero, 150, ((float)leftView.Height / leftView.Width));
+            cameraLeft = new Camera(Vector2.Zero, 50, ((float)leftView.Height / leftView.Width));
             cameraRight = new Camera(Vector2.Zero, 50, ((float)rightView.Height / rightView.Width));
             #endregion
 
@@ -68,9 +69,10 @@ namespace Projecto
             ParticlesList = new List<ParticleSystem>();
             BulletList = new List<Bullet>(); ItemDictionary = new Dictionary<string, Item>();
             UI_Static_ItemsList = new List<UI_Static_Item>();
+            UI_Text_BoxList = new List<UI_Text_Box>();
 
             #region LoadWeapons
-            Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 25, 0, 25, 1.5f, 1, 1, 1, 1);
+            Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 30, 0, 25, 1.5f, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
             aux = new Weapon("Sword", "Sword", MapGenerator.GetPlayerStartingPosition(), false, 0, 25, 1, 1, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
@@ -78,30 +80,28 @@ namespace Projecto
 
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerOne, 3);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
-            portal = new Portal(MapGenerator.GetPortalSpawn() * (int)Constants.GRIDSIZE, Vector2.One * (int)Constants.GRIDSIZE);
+            portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * (int)Constants.GRIDSIZE);
 
             #region Enemies
-            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(50);
+            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(30);
             for (int i = 0; i < enemyPosList.Count; i++)
             {
-                Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * (int)Constants.GRIDSIZE, 10);
+                Enemy enemyAux = new Enemy("enemy", enemyPosList[i], Vector2.One * (int)Constants.GRIDSIZE, 10);
                 EnemyList.Add(enemyAux);
             }
             #endregion
 
             UI_Static_Item uiCentralBar = new UI_Static_Item("ui_center", new Vector2(49, 75), new Vector2(2, 75), Game1.mainCamera);
-
             UI_Static_ItemsList.Add(uiCentralBar);
+            UI_Text_Box uiEnemyCounter = new UI_Text_Box(EnemyList.Count.ToString(), new Vector2(400, 0), TextAlignment.Central, 3);
+            UI_Text_BoxList.Add(uiEnemyCounter);
+
             isPaused = false;
             SoundManager.StopAllSounds();
             SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
-            for (int i = 0; i < enemyPosList.Count; i++)
-            {
-                Enemy enemyAux = new Enemy("New Piskel", enemyPosList[i], Vector2.One * 5, 10);
-                EnemyList.Add(enemyAux);
-            }
+
             #endregion
 
         }
@@ -141,6 +141,8 @@ namespace Projecto
                     //contador niveis
                     //aparecer no ecra em q nivel estamos
                 }
+
+                UI_Text_BoxList[0].Text = EnemyList.Count.ToString();
             }
 
             else
@@ -169,6 +171,8 @@ namespace Projecto
 
             foreach (UI_Static_Item ui in UI_Static_ItemsList)
                 ui.Draw();
+            foreach (UI_Text_Box ui in UI_Text_BoxList)
+                ui.Draw();
 
             if (isPaused)
                 UI.DrawPauseMenu();
@@ -187,7 +191,7 @@ namespace Projecto
             portal.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
-            
+
             foreach (Enemy e in EnemyList)
                 e.DrawObject(camera);
             foreach (ParticleSystem p in ParticlesList)
