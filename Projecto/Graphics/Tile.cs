@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Projecto
 {
-    internal class Tile : GameObject//, SettlersEngine.IPathNode<Object>
+    internal class Tile : GameObject
     {
         public Vector2 Coordinates;
         public Collider Collider;
@@ -18,6 +18,8 @@ namespace Projecto
         public bool isWall;
         private Color Color;
         //------------->CONSTRUCTORS<-------------//
+
+        public Tile() { }
 
         public Tile(int tileNumber, Vector2 coordinates, int size) : base("Tile" + tileNumber, coordinates * size, new Vector2(size, size), 0f)
         {
@@ -41,6 +43,12 @@ namespace Projecto
         {
             this.Rectangle = camera.CalculatePixelRectangle(Position, Size);
             Game1.spriteBatch.Draw(Texture, Rectangle, Color);
+        }
+
+        public void DrawPathTile(Camera camera)
+        {
+            this.Rectangle = camera.CalculatePixelRectangle(Position, Size);
+            Game1.spriteBatch.Draw(Game1.textureList["DebugPixel"], Rectangle, Color);
         }
 
         public bool isWalkable(Object unused)

@@ -14,6 +14,7 @@ namespace Projecto
         private Texture2D openTexture;
         private Texture2D closedTexture;
         private Texture2D currentTexture;
+        public Vector2 Coordinates;
         private Collider portalCollider;
 
         public Portal(Vector2 position, Vector2 size) : base (null, position, size, 0f)
@@ -25,6 +26,7 @@ namespace Projecto
             if (Game1.textureList.ContainsKey("portal"))
                 closedTexture = Game1.textureList["portal"];
             currentTexture = closedTexture;
+            this.Coordinates = position / (int)Constants.GRIDSIZE;
         }
 
         public void Update(GameTime gameTime, ref List<Enemy> enemyList)

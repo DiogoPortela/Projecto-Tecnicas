@@ -14,6 +14,11 @@ namespace Projecto
         static public List<Enemy> EnemyList;
         static public List<ParticleSystem> ParticlesList;
         static public List<Bullet> BulletList;
+        
+        static private int levelCounter = 1;
+
+        static private PathFinder pathfinderToPortal;
+        static private Stack<Vector2> finalPath;
 
         static public Dictionary<string, Item> ItemDictionary;
         static public List<UI_Static_Item> UI_Static_ItemsList;
@@ -82,8 +87,10 @@ namespace Projecto
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
             portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * (int)Constants.GRIDSIZE);
 
+            finalPath = new Stack<Vector2>();
+
             #region Enemies
-            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(30);
+            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(1);
             for (int i = 0; i < enemyPosList.Count; i++)
             {
                 Enemy enemyAux = new Enemy("enemy", enemyPosList[i], Vector2.One * (int)Constants.GRIDSIZE, 10);
@@ -95,13 +102,17 @@ namespace Projecto
             UI_Static_ItemsList.Add(uiCentralBar);
             UI_Text_Box uiEnemyCounter = new UI_Text_Box(EnemyList.Count.ToString(), new Vector2(400, 0), TextAlignment.Central, 3);
             UI_Text_BoxList.Add(uiEnemyCounter);
+            //UI_Text_Box uiShowLevel = new UI_Text_Box(levelCounter.ToString(),
+            //    new Vector2(Game1.graphics.PreferredBackBufferWidth / 2, Game1.graphics.PreferredBackBufferHeight),
+            //    TextAlignment.Central, 3);
+            //UI_Text_BoxList.Add(uiShowLevel);
+
 
             isPaused = false;
             SoundManager.StopAllSounds();
             SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
-
             #endregion
 
         }
@@ -135,13 +146,20 @@ namespace Projecto
                 }
                 //Particle Update.
                 portal.Update(gameTime, ref EnemyList);
-                if (portal.isOpen && (PlayerOne.Rectangle.Intersects(portal.Rectangle) || PlayerTwo.Rectangle.Intersects(portal.Rectangle)))
-                {
-                    Start();
-                    //contador niveis
-                    //aparecer no ecra em q nivel estamos
-                }
 
+                if (portal.isOpen)
+                {
+                    pathfinderToPortal = new PathFinder(PlayerOne.Coordinates, portal.Coordinates, ref MapGenerator.infoMap);
+                    finalPath.Clear();
+                    finalPath = pathfinderToPortal.FindPath();
+
+                    if (PlayerOne.Rectangle.Intersects(portal.Rectangle) || PlayerTwo.Rectangle.Intersects(portal.Rectangle))
+                    {
+                        Start();
+                        levelCounter++;
+                        //UI_Text_BoxList[2].Text = levelCounter.ToString();
+                    }
+                }
                 UI_Text_BoxList[0].Text = EnemyList.Count.ToString();
             }
 
@@ -178,6 +196,7 @@ namespace Projecto
                 UI.DrawPauseMenu();
             Game1.spriteBatch.End();
             #endregion
+
         }
 
         /// <summary>
@@ -188,6 +207,10 @@ namespace Projecto
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
             map.Draw(camera);
+            foreach (Vector2 v in finalPath)
+            {
+                MapGenerator.TilesMap[(int)v.X, (int)v.Y].DrawPathTile(camera);
+            }
             portal.DrawObject(camera);
             PlayerOne.DrawObject(camera);
             PlayerTwo.DrawObject(camera);
@@ -198,6 +221,8 @@ namespace Projecto
                 p.Draw(camera);
             foreach (KeyValuePair<string, Item> i in ItemDictionary)
                 i.Value.Draw(camera);
+
+
 
             foreach (Bullet b in BulletList)
                 b.DrawObject(camera);
