@@ -15,6 +15,8 @@ namespace Projecto
         static private Vector2 quitBoxCenter;
         static private int quitBoxScale;
 
+        static private UI_Static_Item background;
+
         static private string start;
         static private string quit;
 
@@ -27,8 +29,8 @@ namespace Projecto
         {
             colors = new Color[2];
             startBoxScale = quitBoxScale = 2;
-            startBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 10));
-            quitBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 20));
+            startBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 34));
+            quitBoxPos = Game1.mainCamera.CalculatePixelPoint(new Vector2(50, 40));
 
             colors[0] = Color.Yellow;
             for(int i = 1; i < colors.Length; i++)
@@ -42,7 +44,7 @@ namespace Projecto
 
             startBoxCenter = UI.GameFont.MeasureString(start) / 2;
             quitBoxCenter = UI.GameFont.MeasureString(quit) / 2;
-
+            background = new UI_Static_Item("Screen", new Vector2(0, 75), new Vector2(100, 75), Game1.mainCamera);
         }
 
         static public void Update()
@@ -85,7 +87,7 @@ namespace Projecto
         static public void Draw()
         {
             Game1.spriteBatch.Begin(SpriteSortMode.Deferred, null, SamplerState.PointClamp, null, null, null, null);  //THIS WAY DOESNT AFFECT PIXEL ASPECT
-
+            background.Draw();
             Game1.spriteBatch.DrawString(UI.GameFont, start, startBoxPos, colors[0], 0f, startBoxCenter, startBoxScale, SpriteEffects.None, 0f);
             Game1.spriteBatch.DrawString(UI.GameFont, quit, quitBoxPos, colors[1], 0f, quitBoxCenter, quitBoxScale, SpriteEffects.None, 0f);
             Debug.DrawText();

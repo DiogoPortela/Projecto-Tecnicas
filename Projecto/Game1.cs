@@ -64,6 +64,7 @@ namespace Projecto
             auxString.Add("PlayerOne_stick");
 
             auxString.Add("Quadrado");
+            auxString.Add("Screen");
             auxString.Add("Fundo Icons");
             auxString.Add("enemy");
 
@@ -139,7 +140,7 @@ namespace Projecto
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(new Color(10, 10, 40));
             if (selectedScreen == ScreenSelect.MainMenu)
                 MainMenu.Draw();
             if (selectedScreen == ScreenSelect.Playing)

@@ -125,7 +125,7 @@ namespace Projecto
 
             isPaused = false;
             SoundManager.StopAllSounds();
-            //SoundManager.StartSound("mainGameTheme", true);
+            SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
             #endregion

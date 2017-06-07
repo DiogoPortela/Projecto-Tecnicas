@@ -254,12 +254,12 @@ namespace Projecto
             {
                 if (InputManager.PressedLastFrame.Numpad0 == ButtonState.Pressed)
                 {
-                     if (mainHandWeapon.isRanged == true)
+                    if (mainHandWeapon != null && mainHandWeapon.isRanged == true)
                     {
                         currentAnimation.Stop();
                         currentAnimation = animations[6];
                     }
-                    else
+                    else if (mainHandWeapon != null && mainHandWeapon.isRanged == false)
                     {
                         currentAnimation.Stop();
                         currentAnimation = animations[5];
