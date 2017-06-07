@@ -23,6 +23,10 @@ namespace Projecto
         static public Dictionary<string, Item> ItemDictionary;
         static public List<UI_Static_Item> UI_Static_ItemsList;
         static public List<UI_Text_Box> UI_Text_BoxList;
+        static public UI_Static_Item playerOneWeapon;
+        static public UI_Static_Item playerTwoWeapon;
+        static public UI_Text_Box playerOneCounter;
+        static public UI_Text_Box playerTwoCounter;
 
         static public bool isPaused;
         static public MapGenerator map;
@@ -77,7 +81,7 @@ namespace Projecto
             UI_Text_BoxList = new List<UI_Text_Box>();
 
             #region LoadWeapons
-            Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 30, 0, 25, 1.5f, 1, 1, 1, 1);
+            Weapon aux = new Weapon("Staff", "Staff", MapGenerator.GetPlayerStartingPosition(), true, 30, 0, 30, 1.5f, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
             aux = new Weapon("Sword", "Sword", MapGenerator.GetPlayerStartingPosition(), false, 0, 25, 1, 1, 1, 1, 1, 1);
             ItemDictionary.Add(aux.Name, aux);
@@ -90,7 +94,7 @@ namespace Projecto
             finalPath = new Stack<Vector2>();
 
             #region Enemies
-            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(1);
+            List<Vector2> enemyPosList = MapGenerator.FindEnemySpawns(30);
             for (int i = 0; i < enemyPosList.Count; i++)
             {
                 Enemy enemyAux = new Enemy("enemy", enemyPosList[i], Vector2.One * (int)Constants.GRIDSIZE, 10);
@@ -98,19 +102,30 @@ namespace Projecto
             }
             #endregion
 
+            
             UI_Static_Item uiCentralBar = new UI_Static_Item("ui_center", new Vector2(49, 75), new Vector2(2, 75), Game1.mainCamera);
             UI_Static_ItemsList.Add(uiCentralBar);
-            UI_Text_Box uiEnemyCounter = new UI_Text_Box(EnemyList.Count.ToString(), new Vector2(400, 0), TextAlignment.Central, 3);
+            UI_Static_Item uiCentraSquare = new UI_Static_Item("Quadrado", new Vector2(44, 75), new Vector2(12, 6), Game1.mainCamera);
+            UI_Static_ItemsList.Add(uiCentraSquare);
+            UI_Text_Box uiEnemyCounter = new UI_Text_Box(EnemyList.Count.ToString(), new Vector2(50, 0), TextAlignment.Central, 3);
             UI_Text_BoxList.Add(uiEnemyCounter);
-            //UI_Text_Box uiShowLevel = new UI_Text_Box(levelCounter.ToString(),
-            //    new Vector2(Game1.graphics.PreferredBackBufferWidth / 2, Game1.graphics.PreferredBackBufferHeight),
-            //    TextAlignment.Central, 3);
-            //UI_Text_BoxList.Add(uiShowLevel);
+            UI_Static_Item uiBox = new UI_Static_Item("Fundo Icons", new Vector2(5, 15), new Vector2(10, 10), Game1.mainCamera);
+            UI_Static_ItemsList.Add(uiBox);
+            uiBox = new UI_Static_Item("Fundo Icons", new Vector2(85, 15), new Vector2(10, 10), Game1.mainCamera);
+            UI_Static_ItemsList.Add(uiBox);
+            playerOneWeapon = new UI_Static_Item("", new Vector2(5, 15), new Vector2(10, 10), Game1.mainCamera);
+            playerTwoWeapon = new UI_Static_Item("", new Vector2(85, 15), new Vector2(10, 10), Game1.mainCamera);
+            UI_Static_ItemsList.Add(playerOneWeapon);
+            UI_Static_ItemsList.Add(playerTwoWeapon);
+            playerOneCounter = new UI_Text_Box("0", new Vector2(48, 65), TextAlignment.Right, 2);
+            playerTwoCounter = new UI_Text_Box("0", new Vector2(52, 65), TextAlignment.Left, 2);
+            UI_Text_BoxList.Add(playerOneCounter);
+            UI_Text_BoxList.Add(playerTwoCounter);
 
 
             isPaused = false;
             SoundManager.StopAllSounds();
-            SoundManager.StartSound("mainGameTheme", true);
+            //SoundManager.StartSound("mainGameTheme", true);
 
             #region TestZone
             #endregion
@@ -130,9 +145,8 @@ namespace Projecto
                 cameraLeft.LookAt(PlayerOne);
                 PlayerTwo.Update(gameTime);
                 cameraRight.LookAt(PlayerTwo);
-
+            
                 //Collider.UpdateMovingEnemies();
-
                 foreach (Enemy e in EnemyList)
                     e.Update(gameTime);
                 for (int i = 0; i < BulletList.Count; i++)
@@ -146,7 +160,6 @@ namespace Projecto
                 }
                 //Particle Update.
                 portal.Update(gameTime, ref EnemyList);
-
                 if (portal.isOpen)
                 {
                     pathfinderToPortal = new PathFinder(PlayerOne.Coordinates, portal.Coordinates, ref MapGenerator.infoMap);
@@ -167,8 +180,7 @@ namespace Projecto
                 UI.PauseUpdate();
         }
         /// <summary>
-        /// Draws the whole gamestate.
-        /// </summary>
+        /// Draws the whole gamestate.        /// </summary>
         static public void Draw()
         {
             //Draws the left side
@@ -211,8 +223,8 @@ namespace Projecto
             {
                 MapGenerator.TilesMap[(int)v.X, (int)v.Y].DrawPathTile(camera);
             }
-            portal.DrawObject(camera);
-            PlayerOne.DrawObject(camera);
+            portal.DrawObject(camera);        
+            PlayerOne.DrawObject(camera);        
             PlayerTwo.DrawObject(camera);
 
             foreach (Enemy e in EnemyList)

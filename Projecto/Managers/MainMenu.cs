@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -62,7 +63,7 @@ namespace Projecto
                 colors[selected] = Color.Yellow;
             }
 
-            if (InputManager.PressedLastFrame.Enter == ButtonState.Pressed)
+            if (InputManager.PressedLastFrame.Space == ButtonState.Pressed || InputManager.PressedLastFrame.Numpad0 == ButtonState.Pressed)
             {
                 switch (selected)
                 {

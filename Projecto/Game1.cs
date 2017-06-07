@@ -63,6 +63,8 @@ namespace Projecto
             auxString.Add("PlayerOne_attack");
             auxString.Add("PlayerOne_stick");
 
+            auxString.Add("Quadrado");
+            auxString.Add("Fundo Icons");
             auxString.Add("enemy");
 
             auxString.Add("portal");

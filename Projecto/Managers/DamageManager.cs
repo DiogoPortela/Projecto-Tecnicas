@@ -54,7 +54,14 @@ namespace Projecto
                 {
                     (parent as DamageManager).EnemyTakeDamage(auxList[i]);
                     if (auxList[i].HP <= 0)
+                    {
+                        if ((parent as PlayerManager).pNumber == PlayerNumber.playerOne)
+                            GameState.playerOneCounter.Text = (int.Parse(GameState.playerOneCounter.Text) + 1).ToString();
+                        else
+                            GameState.playerTwoCounter.Text = (int.Parse(GameState.playerTwoCounter.Text) + 1).ToString();
                         GameState.EnemyList.Remove(auxList[i]);
+
+                    }
                 }
 
             }
@@ -117,6 +124,11 @@ namespace Projecto
         {
             if (mainHandWeapon != null)
             {
+                if ((this as PlayerManager).pNumber == PlayerNumber.playerOne)
+                    GameState.playerOneWeapon.Texture = mainHandWeapon.Texture;
+                else
+                    GameState.playerTwoWeapon.Texture = mainHandWeapon.Texture;
+
                 this.PhysDmg = this.mainHandWeapon.MainPhysicalDamage;
                 this.MagicDmg = this.mainHandWeapon.MainMagicalDamage;
                 this.Range = this.mainHandWeapon.MainAtackRange;
@@ -142,6 +154,7 @@ namespace Projecto
             Weapon aux = this.mainHandWeapon;
             this.mainHandWeapon = this.offHandWeapon;
             this.offHandWeapon = aux;
+            GetDamageValues();
             SoundManager.StartSound("troca_arma", false);
         }
         /// <summary>
@@ -187,7 +200,15 @@ namespace Projecto
                     GameState.ParticlesList.Add(p);
                     EnemyTakeDamage(enemy);
                     if (enemy.HP <= 0)
+                    {
+                        if ((this as PlayerManager).pNumber == PlayerNumber.playerOne)
+                            GameState.playerOneCounter.Text = (int.Parse(GameState.playerOneCounter.Text) + 1).ToString();
+                        else
+                            GameState.playerTwoCounter.Text = (int.Parse(GameState.playerTwoCounter.Text) + 1).ToString();
+
                         GameState.EnemyList.Remove(enemy);
+
+                    }
                     SoundManager.StartSound("morrer", false);
                 }
                 SoundManager.StartSound("attack1", false);
@@ -261,7 +282,7 @@ namespace Projecto
                 if (!auxEnemy1[i].IsInRange(GameState.PlayerOne) == false)
                     auxEnemy1.Remove(auxEnemy1[i]);
             }
-        
+
             for (int i = 0; i < auxEnemy2.Count; i++)
             {
                 if (gameTime.TotalGameTime.TotalSeconds > auxEnemy2[i].enemyTimerStart + auxEnemy2[i].enemyCooldown)

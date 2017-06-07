@@ -10,13 +10,13 @@ namespace Projecto
         public Texture2D spriteTexture;
         Vector2 size;
         public Rectangle currentFrameRec;
+        public bool isDone;
 
         int maxFrames;
         int currentFrame;
         float frameRate;
         float LastFrameTime;
 
-        public bool isDone;
 
         //------------->CONSTRUCTORS<-------------//
 
@@ -58,6 +58,7 @@ namespace Projecto
         }
         public void Stop()
         {
+            isDone = false;
             currentFrame = 0;
             LastFrameTime = 0;
         }

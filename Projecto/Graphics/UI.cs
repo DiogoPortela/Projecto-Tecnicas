@@ -12,16 +12,17 @@ namespace Projecto
 
         public UI_Static_Item(string texture, Vector2 position, Vector2 size, Camera camera)
         {
-            if(Game1.textureList.ContainsKey(texture))
+            if (Game1.textureList.ContainsKey(texture))
             {
-                this.Texture = Game1.textureList[texture];           
+                this.Texture = Game1.textureList[texture];
             }
             this.Rectangle = camera.CalculatePixelRectangle(position, size);
         }
 
         public void Draw()
         {
-            Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
+            if (Texture != null)
+                Game1.spriteBatch.Draw(Texture, Rectangle, Color.White);
         }
     }
     internal enum TextAlignment
@@ -42,9 +43,9 @@ namespace Projecto
         public UI_Text_Box(string text, Vector2 position, TextAlignment alignment, float scale)
         {
             this.Text = text;
-            this.Position = position;
+            this.Position = Game1.mainCamera.CalculatePixelPoint(position);
             this.Alignment = alignment;
-            if(this.Alignment == TextAlignment.Right)
+            if (this.Alignment == TextAlignment.Right)
             {
                 this.Center = new Vector2(UI.GameFont.MeasureString(text).X, 0);
             }
@@ -124,7 +125,7 @@ namespace Projecto
             colorsOne = new Color[3];
             colorsTwo = new Color[3];
 
-            for ( int i = 0; i < 3; i++)
+            for (int i = 0; i < 3; i++)
             {
                 colorsOne[i] = Color.White;
                 colorsTwo[i] = Color.White;
@@ -132,13 +133,13 @@ namespace Projecto
             colorsOne[0] = Color.Yellow;
             colorsTwo[0] = Color.Yellow;
 
-            ContinueOne = new UI_Text_Box(cont, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 10)), TextAlignment.Left, 2);
-            MainMenuOne = new UI_Text_Box(mainMenu, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 20)), TextAlignment.Left, 2);
-            QuitOne = new UI_Text_Box(quit, Game1.mainCamera.CalculatePixelPoint(new Vector2(5, 30)), TextAlignment.Left, 2);
+            ContinueOne = new UI_Text_Box(cont, new Vector2(5, 10), TextAlignment.Left, 2);
+            MainMenuOne = new UI_Text_Box(mainMenu, new Vector2(5, 20), TextAlignment.Left, 2);
+            QuitOne = new UI_Text_Box(quit, new Vector2(5, 30), TextAlignment.Left, 2);
 
-            ContinueTwo = new UI_Text_Box(cont, Game1.mainCamera.CalculatePixelPoint(new Vector2(95, 10)), TextAlignment.Right, 2);
-            MainMenuTwo = new UI_Text_Box(mainMenu, Game1.mainCamera.CalculatePixelPoint(new Vector2(95, 20)), TextAlignment.Right, 2);
-            QuitTwo = new UI_Text_Box(quit, Game1.mainCamera.CalculatePixelPoint(new Vector2(95, 30)), TextAlignment.Right, 2);
+            ContinueTwo = new UI_Text_Box(cont, new Vector2(95, 10), TextAlignment.Right, 2);
+            MainMenuTwo = new UI_Text_Box(mainMenu, new Vector2(95, 20), TextAlignment.Right, 2);
+            QuitTwo = new UI_Text_Box(quit, new Vector2(95, 30), TextAlignment.Right, 2);
 
         }
         /// <summary>
@@ -146,13 +147,13 @@ namespace Projecto
         /// </summary>
         static public void PauseUpdate()
         {
-            if (InputManager.PressedLastFrame.UpTwo == ButtonState.Pressed  && selectedTwo > 0)
+            if (InputManager.PressedLastFrame.UpTwo == ButtonState.Pressed && selectedTwo > 0)
             {
                 colorsTwo[selectedTwo] = Color.White;
                 selectedTwo--;
                 colorsTwo[selectedTwo] = Color.Yellow;
             }
-            
+
             else if (InputManager.PressedLastFrame.DownTwo == ButtonState.Pressed && selectedTwo < 2)
             {
                 colorsTwo[selectedTwo] = Color.White;
@@ -166,7 +167,7 @@ namespace Projecto
                 selectedOne--;
                 colorsOne[selectedOne] = Color.Yellow;
             }
-            else if (InputManager.PressedLastFrame.DownOne == ButtonState.Pressed  && selectedOne < 2)
+            else if (InputManager.PressedLastFrame.DownOne == ButtonState.Pressed && selectedOne < 2)
             {
                 colorsOne[selectedOne] = Color.White;
                 selectedOne++;

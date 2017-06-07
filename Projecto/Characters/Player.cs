@@ -43,7 +43,7 @@ namespace Projecto
                 animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
-                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 2, 4);
+                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 6, 12);
                 animations[6] = new Animation("StaffAttack", "PlayerOne_stick", Vector2.One * 32, 2, 4);
                 this.currentAnimation = animations[0];
             }
@@ -54,7 +54,7 @@ namespace Projecto
                 animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
-                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 2, 4);
+                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 6, 12);
                 animations[6] = new Animation("StaffAttack", "PlayerOne_stick", Vector2.One * 32, 2, 4);
                 this.currentAnimation = animations[0];
             }
@@ -254,6 +254,17 @@ namespace Projecto
             {
                 if (InputManager.PressedLastFrame.Numpad0 == ButtonState.Pressed)
                 {
+                     if (mainHandWeapon.isRanged == true)
+                    {
+                        currentAnimation.Stop();
+                        currentAnimation = animations[6];
+                    }
+                    else
+                    {
+                        currentAnimation.Stop();
+                        currentAnimation = animations[5];
+
+                    }
                     Attack();
                 }
                 if (InputManager.PressedLastFrame.Numpad1 == ButtonState.Pressed)
