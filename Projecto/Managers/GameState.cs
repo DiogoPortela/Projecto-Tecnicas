@@ -85,7 +85,7 @@ namespace Projecto
 
             PlayerOne = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerOne, 3);
             PlayerTwo = new PlayerManager(MapGenerator.GetPlayerStartingPosition(), Vector2.One * (int)Constants.GRIDSIZE, PlayerNumber.playerTwo, 3);
-            portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * (int)Constants.GRIDSIZE);
+            portal = new Portal(MapGenerator.GetPortalSpawn(), Vector2.One * 2 *(int)Constants.GRIDSIZE);
 
             finalPath = new Stack<Vector2>();
 

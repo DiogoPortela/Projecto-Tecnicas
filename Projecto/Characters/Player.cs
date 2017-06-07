@@ -43,6 +43,8 @@ namespace Projecto
                 animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 2, 4);
+                animations[6] = new Animation("StaffAttack", "PlayerOne_stick", Vector2.One * 32, 2, 4);
                 this.currentAnimation = animations[0];
             }
             else
@@ -52,6 +54,8 @@ namespace Projecto
                 animations[2] = new Animation("BackWalking", "PlayerOne_BackWalking_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[3] = new Animation("SideWalking", "PlayerOne_SideWalk_NoWeapon", Vector2.One * 32, 2, 4);
                 animations[4] = new Animation("SideWalking2", "PlayerOne_SideWalk2_NoWeapon", Vector2.One * 32, 2, 4);
+                animations[5] = new Animation("SwordAttack", "PlayerOne_attack", Vector2.One * 32, 2, 4);
+                animations[6] = new Animation("StaffAttack", "PlayerOne_stick", Vector2.One * 32, 2, 4);
                 this.currentAnimation = animations[0];
             }
         }
@@ -59,6 +63,12 @@ namespace Projecto
         //------------->FUNCTIONS && METHODS<-------------//
         public void Update(GameTime gameTime)
         {
+            if (currentAnimation.isDone)
+            {
+                currentAnimation = animations[0];
+                currentInput = CurrentInput.NoInput;
+            }
+
             PlayerMovement(gameTime);
             PlayerDamage();
 
@@ -71,16 +81,12 @@ namespace Projecto
                     auxList.Add(i.Value);
                 }
             }
-            foreach(Item i in auxList)
+            foreach (Item i in auxList)
             {
                 GameState.ItemDictionary.Remove(i.Name);
             }
 
-            if (Game1.lastFrameState.GetPressedKeys().Length == 0)
-            {
-                currentAnimation = animations[0];
-                currentInput = CurrentInput.NoInput;
-            }
+
             currentAnimation.Play(gameTime);
         }
         /// <summary>
@@ -205,7 +211,7 @@ namespace Projecto
                     this.playerCollider.UpdateBounds(Position, Size);
                 }
             }
-         
+
         }
         /// <summary>
         /// Deals with all player/enemy damage.
@@ -218,7 +224,21 @@ namespace Projecto
             {
                 if (InputManager.PressedLastFrame.Space == ButtonState.Pressed)
                 {
-                     Attack();
+                    if (mainHandWeapon != null)
+                    {
+                        if (mainHandWeapon.isRanged == true)
+                        {
+                            currentAnimation.Stop();
+                            currentAnimation = animations[6];
+                        }
+                        else
+                        {
+                            currentAnimation.Stop();
+                            currentAnimation = animations[5];
+
+                        }
+                    }
+                    Attack();
                 }
                 if (InputManager.PressedLastFrame.V == ButtonState.Pressed)
                 {

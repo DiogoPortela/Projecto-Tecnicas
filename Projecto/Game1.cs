@@ -60,6 +60,8 @@ namespace Projecto
             auxString.Add("PlayerOne_Standing_NoWeapon");
             auxString.Add("PlayerOne_Walking_NoWeapon");
             auxString.Add("PlayerOne_BackWalking_NoWeapon");
+            auxString.Add("PlayerOne_attack");
+            auxString.Add("PlayerOne_stick");
 
             auxString.Add("enemy");
 

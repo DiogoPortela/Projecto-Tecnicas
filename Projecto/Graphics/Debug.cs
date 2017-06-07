@@ -20,7 +20,6 @@ namespace Projecto
         static public Texture2D debugTexture;
         static private int counter;
         static private Stopwatch watch;
-
         static private Color debugColor;
         
         //------------->FUNCTIONS && METHODS<-------------//

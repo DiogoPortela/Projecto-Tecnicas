@@ -16,6 +16,8 @@ namespace Projecto
         float frameRate;
         float LastFrameTime;
 
+        public bool isDone;
+
         //------------->CONSTRUCTORS<-------------//
 
         public Animation(string name, string texture, Vector2 size, int numberFrames, float frameRate)
@@ -37,6 +39,7 @@ namespace Projecto
 
         public void Play(GameTime gameTime)
         {
+            isDone = false;
             LastFrameTime += gameTime.ElapsedGameTime.Milliseconds;
             if(LastFrameTime > frameRate)
             {
@@ -48,6 +51,7 @@ namespace Projecto
                 LastFrameTime = 0;
                 if(currentFrame == maxFrames)
                 {
+                    isDone = true;
                     currentFrame = 0;
                 }
             }
